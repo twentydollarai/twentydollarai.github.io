@@ -36,3 +36,14 @@ export const formatDate = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
 
 export const isoDate = (d: Date) => d.toISOString().slice(0, 10);
+
+/** Rough reading time for a Markdown body at 220 words per minute (an estimate, shown as "~N min read"). */
+export function readingMinutes(body: string | undefined): number {
+  const text = (body ?? '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1');
+  const words = text.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
+  return Math.max(1, Math.round(words / 220));
+}

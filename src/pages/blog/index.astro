@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import EntryCard from '../../components/EntryCard.astro';
+import PostList from '../../components/PostList.astro';
 import EmptyState from '../../components/EmptyState.astro';
 import { getVisible, url, slugify } from '../../lib/content';
 
@@ -17,11 +17,9 @@ const categories = [...new Set(posts.flatMap((p) => p.data.categories))].sort();
     {posts.length > 0 ? (
       <>
         {categories.length > 0 && (
-          <nav aria-label="Categories"><ul class="tags">{categories.map((c) => <li><a href={url(`/blog/category/${slugify(c)}/`)}>{c}</a></li>)}</ul></nav>
+          <nav aria-label="Browse by category"><ul class="tags">{categories.map((c) => <li><a href={url(`/blog/category/${slugify(c)}/`)}>{c}</a></li>)}</ul></nav>
         )}
-        <div class="grid">
-          {posts.map((p) => <EntryCard href={url(`/blog/${p.id}/`)} title={p.data.title} description={p.data.description} date={p.data.date} type={p.data.categories[0]} demo={p.data.demo} draft={p.data.status === 'draft'} headingLevel="h2" />)}
-        </div>
+        <PostList posts={posts} />
       </>
     ) : (
       <EmptyState

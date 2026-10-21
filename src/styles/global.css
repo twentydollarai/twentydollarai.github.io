@@ -22,6 +22,7 @@
   --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --measure: 65ch;
+  --article: 40rem; /* article column: about 65–70 characters per line */
   --wrap: 72rem;
   --radius: 6px;
   --shadow: 0 1px 0 var(--line), 0 6px 18px -12px rgb(0 0 0 / 0.25);
@@ -236,11 +237,45 @@ html:not(.js) .theme-toggle { display: none; }
 /* Article */
 .article-head { padding: 2.75rem 0 1.5rem; }
 .article-head h1 { max-width: 24ch; }
-.article-meta { display: flex; gap: 0.5rem 1rem; flex-wrap: wrap; align-items: center; font: 0.85rem var(--mono); color: var(--ink-2); }
+.article-meta { display: flex; gap: 0.25rem 0; flex-wrap: wrap; align-items: center; font: 0.85rem var(--mono); color: var(--ink-2); margin: 0 0 0.75rem; }
+.article-meta > span + span::before { content: '·'; margin: 0 0.6rem; }
 .article-meta a { color: inherit; }
-.prose { max-width: var(--measure); font-size: 1.075rem; line-height: 1.72; }
-.prose h2 { margin-top: 2.2em; font-size: 1.5rem; }
-.prose h3 { margin-top: 1.8em; }
+.measure-wide { max-width: var(--article); }
+.prose { max-width: var(--article); font-size: 1.075rem; line-height: 1.72; }
+.prose h2 { margin: 2.4em 0 0.6em; font-size: 1.5rem; padding-top: 0.9em; border-top: 1px solid var(--line); }
+.prose h3 { margin: 1.8em 0 0.5em; }
+.prose h2, .prose h3 { scroll-margin-top: 1rem; }
+.prose li { margin-bottom: 0.35em; }
+.prose ul, .prose ol { padding-left: 1.3rem; }
+
+/* "At a glance" brief at the top of a post */
+.glance { border: 1px solid var(--line); border-left: 4px solid var(--green); border-radius: var(--radius); background: var(--paper-2); padding: 1rem 1.2rem; margin: 0 0 1.75rem; }
+.glance-title, .toc-title { font: 600 0.78rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--green-strong); margin: 0 0 0.7rem; }
+.glance-summary { font-size: 1.05rem; margin: 0; }
+.glance-list { margin: 0.85rem 0 0; display: grid; gap: 0.6rem; }
+.glance-summary + .glance-list { border-top: 1px solid var(--line); padding-top: 0.85rem; }
+.glance-list > div { display: grid; grid-template-columns: 9.5rem 1fr; gap: 0.25rem 1rem; }
+.glance-list dt { font: 600 0.75rem/1.6 var(--mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-2); }
+.glance-list dd { margin: 0; font-size: 0.97rem; }
+@media (max-width: 600px) { .glance-list > div { grid-template-columns: 1fr; } }
+
+/* Table of contents */
+.toc { margin: 0 0 1.75rem; padding: 0.9rem 1.2rem; border: 1px solid var(--line); border-radius: var(--radius); }
+.toc ol { margin: 0; padding-left: 1.3rem; columns: 2 14rem; column-gap: 2rem; font-size: 0.95rem; }
+.toc li { margin-bottom: 0.3rem; break-inside: avoid; }
+
+/* Blog index: compact list */
+.post-list { list-style: none; margin: 0; padding: 0; max-width: 46rem; }
+.post-item { padding: 1.25rem 0; border-bottom: 1px solid var(--line); }
+.post-item:first-child { padding-top: 0.25rem; }
+.post-item-meta { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; font: 0.8rem var(--mono); color: var(--ink-2); margin: 0 0 0.4rem; }
+.post-item h2 { font-size: 1.3rem; margin: 0 0 0.4rem; }
+.post-item h2 a { color: var(--ink); text-decoration: none; }
+.post-item h2 a:hover { color: var(--green); text-decoration: underline; }
+.post-item-desc { color: var(--ink-2); margin: 0 0 0.6rem; max-width: var(--measure); }
+.tag-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
+.tag-pills a { font: 0.78rem var(--mono); padding: 0.2rem 0.55rem; border: 1px solid var(--line); border-radius: 999px; color: var(--ink-2); text-decoration: none; }
+.tag-pills a:hover { border-color: var(--green); color: var(--green); }
 .prose img { border-radius: 4px; border: 1px solid var(--line); margin: 1.5rem 0; }
 .prose blockquote { margin: 1.5rem 0; padding: 0.25rem 1.1rem; border-left: 4px solid var(--hl); color: var(--ink-2); }
 .prose pre { background: var(--paper-2) !important; border: 1px solid var(--line); padding: 1rem; border-radius: var(--radius); overflow-x: auto; font-size: 0.88rem; line-height: 1.55; }

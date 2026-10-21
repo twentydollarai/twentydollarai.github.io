@@ -33,6 +33,16 @@ export const blogSchema = z.object({
   updated: date.optional(),
   categories: z.array(z.string().min(1)).default([]),
   cover: image.optional(),
+  // Optional "At a glance" box at the top of the post. Each line shows only if filled in.
+  // Write only what actually happened; leave a field out rather than guess.
+  glance: z
+    .object({
+      summary: z.string().trim().min(1).optional(),
+      tested: z.string().trim().min(1).optional(),
+      result: z.string().trim().min(1).optional(),
+      cost: z.string().trim().min(1).optional(),
+    })
+    .optional(),
   status,
   demo,
 });

@@ -1,0 +1,27 @@
+---
+// Compact list of blog posts: date and reading time, title, one-line summary, tags.
+import type { CollectionEntry } from 'astro:content';
+import { url, slugify, formatDate, isoDate, readingMinutes } from '../lib/content';
+interface Props { posts: CollectionEntry<'blog'>[]; }
+const { posts } = Astro.props;
+---
+<ol class="post-list" role="list">
+  {posts.map((p) => (
+    <li class="post-item">
+      <p class="post-item-meta">
+        {p.data.demo && <span class="chip chip-demo">Demo</span>}
+        {p.data.status === 'draft' && !p.data.demo && <span class="chip chip-demo">Draft</span>}
+        <time datetime={isoDate(p.data.date)}>{formatDate(p.data.date)}</time>
+        <span aria-hidden="true">·</span>
+        <span>~{readingMinutes(p.body)} min read</span>
+      </p>
+      <h2><a href={url(`/blog/${p.id}/`)}>{p.data.title}</a></h2>
+      <p class="post-item-desc">{p.data.description}</p>
+      {p.data.categories.length > 0 && (
+        <ul class="tag-pills" aria-label="Categories">
+          {p.data.categories.map((c) => <li><a href={url(`/blog/category/${slugify(c)}/`)}>{c}</a></li>)}
+        </ul>
+      )}
+    </li>
+  ))}
+</ol>

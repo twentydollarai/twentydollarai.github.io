@@ -2,29 +2,68 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import DemoBanner from '../../components/DemoBanner.astro';
-import { getVisible, url, asset, slugify, formatDate, isoDate } from '../../lib/content';
+import { getVisible, url, asset, slugify, formatDate, isoDate, readingMinutes } from '../../lib/content';
 
 export async function getStaticPaths() {
   const posts = await getVisible('blog');
   return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const d = post.data;
+const minutes = readingMinutes(post.body);
+
+// "At a glance": only the lines the author filled in.
+const glanceRows = [
+  ['What was tested', d.glance?.tested],
+  ['Result', d.glance?.result],
+  ['Cost', d.glance?.cost],
+].filter((r): r is [string, string] => Boolean(r[1]));
+const hasGlance = Boolean(d.glance?.summary) || glanceRows.length > 0;
+
+// Table of contents for longer posts: top-level (##) sections, shown when there are at least 4.
+const toc = headings.filter((h) => h.depth === 2);
+const showToc = toc.length >= 4;
 ---
 <Base title={d.title} description={d.description} type="article" published={d.date} image={d.cover?.src}>
   <article class="wrap">
-    <header class="article-head">
+    <header class="article-head measure-wide">
       <DemoBanner status={d.status} demo={d.demo} />
       <span class="kicker">Blog</span>
       <h1>{d.title}</h1>
-      <div class="article-meta">
-        <time datetime={isoDate(d.date)}>{formatDate(d.date)}</time>
+      <p class="article-meta">
+        <span><time datetime={isoDate(d.date)}>{formatDate(d.date)}</time></span>
         {d.updated && <span>Updated <time datetime={isoDate(d.updated)}>{formatDate(d.updated)}</time></span>}
-        {d.categories.map((c) => <a class="chip" href={url(`/blog/category/${slugify(c)}/`)}>{c}</a>)}
-      </div>
+        <span>~{minutes} min read</span>
+      </p>
+      {d.categories.length > 0 && (
+        <ul class="tag-pills" aria-label="Categories">
+          {d.categories.map((c) => <li><a href={url(`/blog/category/${slugify(c)}/`)}>{c}</a></li>)}
+        </ul>
+      )}
     </header>
-    {d.cover && <figure class="cover measure"><img src={asset(d.cover.src)} alt={d.cover.alt} /></figure>}
+
+    {hasGlance && (
+      <aside class="glance measure-wide" aria-labelledby="glance-title">
+        <h2 id="glance-title" class="glance-title">At a glance</h2>
+        {d.glance?.summary && <p class="glance-summary">{d.glance.summary}</p>}
+        {glanceRows.length > 0 && (
+          <dl class="glance-list">
+            {glanceRows.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+          </dl>
+        )}
+      </aside>
+    )}
+
+    {showToc && (
+      <nav class="toc measure-wide" aria-labelledby="toc-title">
+        <h2 id="toc-title" class="toc-title">In this post</h2>
+        <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+      </nav>
+    )}
+
+    {d.cover && <figure class="cover measure-wide"><img src={asset(d.cover.src)} alt={d.cover.alt} /></figure>}
+
     <div class="prose"><Content /></div>
     <a class="back-link" href={url('/blog/')}>← All posts</a>
   </article>

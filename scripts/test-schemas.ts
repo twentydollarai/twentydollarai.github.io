@@ -41,6 +41,13 @@ check('status defaults to draft', blogSchema.parse({ title: 't', description: 'd
 check('image without alt is rejected',
   !blogSchema.safeParse({ title: 't', description: 'd', date: '2026-01-01', cover: { src: '/images/blog/a.png', alt: '' } }).success);
 
+check('blog glance is optional and accepts partial fields',
+  blogSchema.safeParse({ title: 't', description: 'd', date: '2026-01-01' }).success &&
+  blogSchema.safeParse({ title: 't', description: 'd', date: '2026-01-01', glance: { summary: 's' } }).success);
+
+check('blank glance field is rejected',
+  !blogSchema.safeParse({ title: 't', description: 'd', date: '2026-01-01', glance: { cost: '  ' } }).success);
+
 check('bad experiment outcome is rejected',
   !experimentSchema.safeParse({ title: 't', description: 'd', date: '2026-01-01', tool: 'x', assignment: 'a', outcome: 'great' }).success);
 

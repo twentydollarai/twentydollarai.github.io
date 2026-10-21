@@ -1,6 +1,6 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import EntryCard from '../../../components/EntryCard.astro';
+import PostList from '../../../components/PostList.astro';
 import { getVisible, url, slugify } from '../../../lib/content';
 
 export async function getStaticPaths() {
@@ -21,8 +21,6 @@ const { name, posts } = Astro.props;
       <h1>{name}</h1>
       <p class="lede">{posts.length} post{posts.length === 1 ? '' : 's'} in this category.</p>
     </header>
-    <div class="grid">
-      {posts.map((p) => <EntryCard href={url(`/blog/${p.id}/`)} title={p.data.title} description={p.data.description} date={p.data.date} demo={p.data.demo} draft={p.data.status === 'draft'} headingLevel="h2" />)}
-    </div>
+    <PostList posts={posts} />
   </div>
 </Base>

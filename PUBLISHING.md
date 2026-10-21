@@ -17,7 +17,12 @@ You never need to touch the site's code to publish. Every article is one Markdow
    Use lowercase letters, numbers and dashes only.
 3. **Fill in the fields** between the two `---` lines. Every field is explained in the template's comments
    (lines starting with `#`). Delete optional fields you don't use.
+   Blog posts can also have an optional **At a glance** box (`glance:` in the template) with a short summary,
+   what was tested, the result and the cost. Each line shows only if you fill it in. Leave out anything you
+   didn't actually record.
 4. **Write the body** below the second `---` in normal Markdown.
+   Use `##` for main sections. A blog post with 4 or more `##` sections gets an automatic contents list,
+   and every post shows an estimated reading time.
 5. **Add images** to the images folder for that section, then refer to them with a path starting with `/images/…`,
    for example `![A screenshot of the result](/images/blog/result.png)`. Always describe the image (alt text).
    Keep videos on YouTube/X/Vimeo and link them; GitHub rejects files over 100 MB.

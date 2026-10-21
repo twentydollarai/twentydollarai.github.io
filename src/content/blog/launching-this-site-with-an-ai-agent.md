@@ -6,6 +6,11 @@ categories: ["Building in public", "AI agents"]
 cover:
   src: /images/blog/launching-this-site-with-an-ai-agent/cover-home-desktop-light.jpg
   alt: "The Twenty Dollar AI homepage in light mode on a desktop screen, with the headline 'What can $20 a month of AI actually do?' and Follow on X and GitHub buttons"
+glance:
+  summary: "An AI agent planned, built, tested and deployed this site on free GitHub Pages hosting. Measured agent working time was 58 min 15 s, spread over about 23 h 44 min because I approved every phase and did the GitHub account steps myself."
+  tested: "Whether an AI agent could plan, build, test and publish a website on free hosting, with a human approving each of five phases."
+  result: "The site is live and passed its automated checks (Measured). It wasn't fully autonomous: the repository, the access token and one GitHub Pages setting needed me."
+  cost: "Hosting: $0 (free GitHub Pages). AI subscription usage and cost: not measured."
 status: published
 demo: false
 ---
