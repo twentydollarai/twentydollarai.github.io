@@ -32,7 +32,7 @@ When I approved the plan I added two requirements. Demo content must never appea
 
 ## Timeline
 
-All times are America/New_York (EDT). Times marked "~" are approximate. The rest come from the agent's `date` stamps at the start and end of each phase, except 11:03, which is GitHub's repository creation time (the API's `created_at`).
+All times are America/New_York (EDT). Times marked "~" are approximate. The rest come from `date` stamps in the agent's phase reports, taken at the start and end of each phase, except 11:03, which is GitHub's repository creation time (the API's `created_at`).
 
 | When | What happened | Agent time |
 |---|---|---|
@@ -90,7 +90,7 @@ The push was a normal push of one commit (`5c25cea`), with no force-push and not
 | Live site, every page | `/`, `/blog/`, `/benchmarks/`, `/experiments/`, `/projects/`, `/about/` all return 200 | Measured |
 | Unknown address | Returns 404 with the site's own error page | Measured |
 | HTTPS certificate | Valid (`*.github.io`, Let's Encrypt) | Measured |
-| Internal links on the live site | 13 checked, 0 broken | Measured |
+| Internal links on the live site | 19 checked, 0 broken (re-run Oct 21, after this post was added) | Measured |
 | RSS and sitemap | Valid, correct domain, no demo or draft pages | Measured |
 | Demo content on the live site | None; demo URLs return 404 | Measured |
 | Behavior checks (navigation, dark mode, mobile menu, 404, layouts from 320 to 1920 px wide) | 36/36 pass across Chromium, Firefox and WebKit | Measured |
@@ -117,7 +117,7 @@ Automated scores are a floor, not a verdict. A Lighthouse 100 on a site with alm
 - **An unhelpful error for a missing date.** The build said `Expected type "date", received "object"`. It now says "Add a valid date written as YYYY-MM-DD".
 - **The demo build wrote into the production folder**, which made it easy to mistake one for the other. Demo builds now go to their own folder.
 
-**Earlier in the build (Phase 2):** the first accessibility scan reported 78 issue groups, which the agent fixed to 0. The computer it worked on had Node 20, but Astro 7 needs 22.22 or newer, so it installed Node 24. Its first placeholder GitHub link pointed at a real, existing page, so it switched the placeholder to a username that can't exist.
+**Earlier in the build (Phase 2):** the first accessibility scan reported issues (the count wasn't saved), which the agent fixed to 0. The computer it worked on had Node 20, but Astro 7 needs 22.22 or newer, so it installed Node 24. Its first placeholder GitHub link pointed at a real, existing page, so it switched the placeholder to a username that can't exist.
 
 **The restart.** Right after I approved Phase 4, the agent's computer restarted and its tools failed for about 13 minutes. The files came back. The agent compared the project against the ZIP archive from Phase 3, and all 89 files were identical. It reinstalled Node and the test browsers and redid Phase 4. In that phase, its first portable copy of the git history (a "bundle") produced an empty checkout when cloned, because the bundle was missing a reference. The agent caught this by test-cloning it and fixed it.
 

@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import DemoBanner from '../../components/DemoBanner.astro';
+import ScrollTables from '../../components/ScrollTables.astro';
 import { getVisible, url, asset, slugify, formatDate, isoDate, readingMinutes } from '../../lib/content';
 
 export async function getStaticPaths() {
@@ -64,7 +65,7 @@ const showToc = toc.length >= 4;
 
     {d.cover && <figure class="cover measure-wide"><img src={asset(d.cover.src)} alt={d.cover.alt} /></figure>}
 
-    <div class="prose"><Content /></div>
+    <div class="prose"><ScrollTables><Content /></ScrollTables></div>
     <a class="back-link" href={url('/blog/')}>← All posts</a>
   </article>
 </Base>

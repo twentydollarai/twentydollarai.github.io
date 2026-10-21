@@ -280,7 +280,9 @@ html:not(.js) .theme-toggle { display: none; }
 .prose blockquote { margin: 1.5rem 0; padding: 0.25rem 1.1rem; border-left: 4px solid var(--hl); color: var(--ink-2); }
 .prose pre { background: var(--paper-2) !important; border: 1px solid var(--line); padding: 1rem; border-radius: var(--radius); overflow-x: auto; font-size: 0.88rem; line-height: 1.55; }
 .prose :not(pre) > code { background: var(--paper-2); padding: 0.1em 0.35em; border-radius: 3px; font-size: 0.9em; }
-.prose table { border-collapse: collapse; display: block; overflow-x: auto; max-width: 100%; font-size: 0.95rem; }
+.prose table { border-collapse: collapse; font-size: 0.95rem; }
+.table-wrap { overflow-x: auto; max-width: 100%; margin: 0 0 1em; }
+.table-wrap:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .prose th, .prose td { border: 1px solid var(--line); padding: 0.45rem 0.7rem; text-align: left; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .cover { margin: 0 0 2rem; }

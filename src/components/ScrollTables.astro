@@ -1,0 +1,16 @@
+---
+// Wraps every table in the slotted Markdown in a keyboard-focusable scroll region, so wide tables
+// that scroll sideways on small screens can be reached and scrolled with the keyboard.
+// No dependencies: Astro 7's default Markdown processor doesn't take rehype plugins.
+// The aria-label comes from the table's header cells so screen readers can tell tables apart.
+const html = await Astro.slots.render('default');
+const plain = (s: string) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+const attr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+const wrapped = html.replace(/<table[\s>][\s\S]*?<\/table>/g, (table) => {
+  const head = table.match(/<thead[\s>][\s\S]*?<\/thead>/)?.[0] ?? '';
+  const cols = [...head.matchAll(/<th[\s>][\s\S]*?<\/th>/g)].map((m) => plain(m[0])).filter(Boolean);
+  const label = cols.length ? `Table: ${cols.join(', ')} (scrollable)` : 'Table (scrollable)';
+  return `<div class="table-wrap" tabindex="0" role="region" aria-label="${attr(label)}">${table}</div>`;
+});
+---
+<Fragment set:html={wrapped} />
