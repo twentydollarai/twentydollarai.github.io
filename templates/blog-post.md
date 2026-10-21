@@ -27,20 +27,22 @@ categories: ["Learning AI"]
 
 # Optional cover image. Put the file in public/images/blog/ and refer to it
 # starting with /images/blog/. alt describes the image for screen readers.
-# Delete these three lines for no cover.
-# cover:
-#   src: /images/blog/your-image.png
-#   alt: "Describe what the image shows"
+# To add a cover, delete the # at the start of these three lines.
+#cover:
+#  src: /images/blog/your-image.png
+#  alt: "Describe what the image shows"
 
 # Optional "At a glance" box shown at the top of the post. Each line appears
 # only if you fill it in, so delete any you don't need (or the whole block).
+# To use it, delete the # at the start of each line, but keep the spaces
+# before summary, tested, result and cost.
 # Write only what really happened. If you didn't measure something, say
 # "Not measured" or leave the line out. Never guess a number.
-# glance:
-#   summary: "One or two plain sentences: what you did and what happened."
-#   tested: "What you tried, e.g. which tool, plan or task."
-#   result: "What happened, including what didn't work."
-#   cost: "What it cost and where that figure came from (receipt, pricing page)."
+#glance:
+#  summary: "One or two plain sentences: what you did and what happened."
+#  tested: "What you tried, e.g. which tool, plan or task."
+#  result: "What happened, including what didn't work."
+#  cost: "What it cost and where that figure came from (receipt, pricing page)."
 
 # draft = hidden from the public site.  published = live after the next deploy.
 status: draft
@@ -50,6 +52,8 @@ demo: false
 ---
 
 Write your article here in Markdown.
+
+Label every number in the post Measured, Estimate, Not measured or Not tested.
 
 Use ## for each main section. Posts with 4 or more ## sections get an
 automatic "In this post" contents list at the top.

@@ -7,9 +7,9 @@ cover:
   src: /images/blog/launching-this-site-with-an-ai-agent/cover-home-desktop-light.jpg
   alt: "The Twenty Dollar AI homepage in light mode on a desktop screen, with the headline 'What can $20 a month of AI actually do?' and Follow on X and GitHub buttons"
 glance:
-  summary: "An AI agent planned, built, tested and deployed this site on free GitHub Pages hosting. Measured agent working time was 58 min 15 s, spread over about 23 h 44 min because I approved every phase and did the GitHub account steps myself."
-  tested: "Whether an AI agent could plan, build, test and publish a website on free hosting, with a human approving each of five phases."
-  result: "The site is live and passed its automated checks (Measured). It wasn't fully autonomous: the repository, the access token and one GitHub Pages setting needed me."
+  summary: "An AI agent planned, built, tested and deployed this site on free GitHub Pages hosting. Measured agent working time was 58 min 15 s, spread over about 23 h 44 min, mostly overnight and waiting on my approvals and GitHub steps."
+  tested: "Can an AI agent plan, build, test and publish a website on free hosting, with me approving each of Phases 2 to 5 before it started?"
+  result: "Live and passing its automated checks (Measured). Not fully autonomous: I created the repository and token, and one Pages setting was left for me."
   cost: "Hosting: $0 (free GitHub Pages). AI subscription usage and cost: not measured."
 status: published
 demo: false
@@ -17,11 +17,11 @@ demo: false
 
 The site you're reading is the project's first experiment. I gave an AI agent (Grok Bot, whose commits are signed "Website Bot") a written brief: plan, build, test and publish a website for Twenty Dollar AI on free hosting. This post covers what happened from that brief to a live site, including the parts that needed a human.
 
-Every number here comes from the project's own records: the agent's phase reports, the test logs in the repository's `verification/` folder, the git history, and GitHub's API responses. Each figure is labeled **Measured**, **Estimate** or **Not tested**.
+Every number here comes from the project's own records: the agent's phase reports, the test logs in the repository's `verification/` folder, the git history, and GitHub's API responses. Each figure is labeled **Measured**, **Estimate**, **Not measured** or **Not tested**.
 
 ## The brief and its ground rules
 
-The brief split the work into five phases: planning, build, verification, deployment preparation, and publication. The agent had to stop for my approval before each phase. It also set rules for the agent:
+The brief split the work into five phases: planning, build, verification, deployment preparation, and publication. The agent had to stop for my approval before each of Phases 2 to 5. It also set rules for the agent:
 
 - **Never invent anything**: no benchmark scores, prices, usage numbers, testimonials or personal experiences. Missing facts get clearly marked placeholders.
 - **$0 to start**: free hosting and a free address, no paid APIs, no databases.
@@ -32,12 +32,12 @@ When I approved the plan I added two requirements. Demo content must never appea
 
 ## Timeline
 
-All times are America/New_York (EDT). Times marked "~" are approximate; the rest come from the agent's `date` stamps at the start and end of each phase.
+All times are America/New_York (EDT). Times marked "~" are approximate. The rest come from the agent's `date` stamps at the start and end of each phase, except 11:03, which is GitHub's repository creation time (the API's `created_at`).
 
 | When | What happened | Agent time |
 |---|---|---|
 | Tue Oct 20, ~11:36 | I sent the brief. | — |
-| ~11:41 | Phase 1 plan delivered: Astro on GitHub Pages, templates, and a "lab notebook that keeps receipts" design. I approved it, adding the two requirements above. | Not timed |
+| ~11:41 | Phase 1 plan delivered: Astro on GitHub Pages, templates, and a "lab notebook that keeps receipts" design. I approved it, adding the two requirements above. | Not measured |
 | 11:42:25–12:00:36 | **Phase 2, build.** Site, templates, dark mode, demo safeguards. | 18 min 11 s (Measured) |
 | ~12:14 | I approved Phase 3. | — |
 | 12:15:35–12:37:26 | **Phase 3, verification.** Browser, accessibility, Lighthouse, link and security tests. 4 defects fixed. | 21 min 51 s (Measured) |
@@ -61,7 +61,7 @@ All times are America/New_York (EDT). Times marked "~" are approximate; the rest
 - Wrote the plan and recommended the stack (Astro 7.4.1, GitHub Pages, GitHub Actions).
 - Built the whole site: layouts, navigation, dark mode, mobile menu, RSS, sitemap, the 404 page, and templates for blog posts, benchmarks, agent experiments and projects.
 - Added build-time checks that block bad content. A benchmark price without a source fails the build, and so does an image without alt text.
-- Wrote and ran the test suite: behaviour tests in three browser engines, axe accessibility scans, link checks, feed checks, a security scan, Lighthouse, and a script that tests the publishing workflow end to end.
+- Wrote and ran the test suite: behavior tests in three browser engines, axe accessibility scans, link checks, feed checks, a security scan, Lighthouse, and a script that tests the publishing workflow end to end.
 - Wrote the deployment and maintenance guides and made the git commit.
 - Pushed the code, watched the deployment, and checked the live site.
 
@@ -85,7 +85,7 @@ The push was a normal push of one commit (`5c25cea`), with no force-push and not
 
 | Check | Result | Label |
 |---|---|---|
-| Hosting cost | $0 (free GitHub Pages and a github.io address) | Fact of the free plan |
+| Hosting cost | $0 (free GitHub Pages and a github.io address) | [Source: GitHub](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages) |
 | AI subscription usage and cost for this build | Not recorded | **Not measured** |
 | Live site, every page | `/`, `/blog/`, `/benchmarks/`, `/experiments/`, `/projects/`, `/about/` all return 200 | Measured |
 | Unknown address | Returns 404 with the site's own error page | Measured |
@@ -93,7 +93,7 @@ The push was a normal push of one commit (`5c25cea`), with no force-push and not
 | Internal links on the live site | 13 checked, 0 broken | Measured |
 | RSS and sitemap | Valid, correct domain, no demo or draft pages | Measured |
 | Demo content on the live site | None; demo URLs return 404 | Measured |
-| Behaviour checks (navigation, dark mode, mobile menu, 404, layouts from 320 to 1920 px wide) | 36/36 pass across Chromium, Firefox and WebKit | Measured |
+| Behavior checks (navigation, dark mode, mobile menu, 404, layouts from 320 to 1920 px wide) | 36/36 pass across Chromium, Firefox and WebKit | Measured |
 | Accessibility (axe-core) | 28 page scans, 0 violations | Measured |
 | Lighthouse on the live site (`/`, `/blog/`, `/about/`) | 100 for Performance, Accessibility, Best Practices and SEO, desktop and mobile; mobile Largest Contentful Paint 1.2–1.4 s | Measured |
 | Live files vs. local build | Homepage, About, RSS and sitemap are byte-identical to the local production build | Measured |
@@ -126,7 +126,7 @@ Automated scores are a floor, not a verdict. A Lighthouse 100 on a site with alm
 - The token couldn't switch Pages to deploy from GitHub Actions. Both attempts returned HTTP 403 "Resource not accessible by personal access token".
 - When the code arrived, GitHub turned Pages on by itself in its older "deploy from a branch" mode. That started an automatic Jekyll build of the raw source, which [failed](https://github.com/twentydollarai/twentydollarai.github.io/actions/runs/39623635619) and deployed nothing.
 - The project's own workflow [succeeded](https://github.com/twentydollarai/twentydollarai.github.io/actions/runs/39623642078), and that's the version that's live.
-- Until the Pages setting is changed by hand, every future push will also start a doomed Jekyll build.
+- Until the Pages setting is changed by hand, every future push will also start a failing Jekyll build.
 
 ## Lessons from this run
 

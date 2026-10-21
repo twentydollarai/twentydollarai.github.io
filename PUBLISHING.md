@@ -27,7 +27,7 @@ You never need to touch the site's code to publish. Every article is one Markdow
    for example `![A screenshot of the result](/images/blog/result.png)`. Always describe the image (alt text).
    Keep videos on YouTube/X/Vimeo and link them; GitHub rejects files over 100 MB.
 6. **Set `status: published`.** Anything left as `status: draft` stays off the public site.
-7. **Commit.** On GitHub, pushing to `main` rebuilds and publishes the site automatically in a minute or two.
+7. **Save your change (commit) to the `main` branch on GitHub**, and the site updates itself in a minute or two.
 
 ### Doing it in the GitHub website (no installs)
 
@@ -36,7 +36,9 @@ You never need to touch the site's code to publish. Every article is one Markdow
    (e.g. `first-week-with-grok.md`), paste, and fill it in.
 3. To upload an image: open `public/images/blog/`, **Add file → Upload files**.
 4. Click **Commit changes**. The **Actions** tab shows the build; a green tick means it's live.
-   A red cross means a field is wrong: open the failed run and the error names the file and the field.
+   A red cross on a **Deploy to GitHub Pages** run means a field is wrong: open the failed run and the error
+   names the file and the field. Only that workflow publishes the site. If you also see a failed run called
+   **pages build and deployment**, ignore it: it comes from an old GitHub Pages setting and doesn't affect the site.
 
 ### Previewing on your own computer (optional)
 

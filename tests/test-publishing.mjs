@@ -52,6 +52,10 @@ try {
   ]);
   await put('blog', 'test-post.md', blog);
   await put('blog', 'test-draft.md', sub(blog, [['TEST post from template', 'TEST draft entry'], ['status: published', 'status: draft']]));
+  // Follow the template's own instructions for its commented blocks: delete only the leading # on the
+  // cover and glance lines. The result must be valid YAML that builds and renders.
+  const uncommented = blog.replace(/^#((?:cover|glance):|  (?:src|alt|summary|tested|result|cost):)/gm, '$1');
+  await put('blog', 'test-uncommented.md', sub(uncommented, [['TEST post from template', 'TEST uncommented blocks']]));
   await put('blog', 'test-demo.md', sub(blog, [['TEST post from template', 'TEST demo entry'], ['demo: false', 'demo: true']]));
 
   await put('benchmarks', 'test-benchmark.md', sub(await tpl('benchmark.md'), [
@@ -86,6 +90,10 @@ try {
   const post = await read('blog/test-post/index.html');
   r.check(post.includes('TEST post from template') && post.includes('TEST category'), 'blog post page renders title + category');
   r.check(!post.includes('demo-banner'), 'published post has no demo/draft banner');
+  const unc = await read('blog/test-uncommented/index.html');
+  r.check(unc.includes('At a glance') && unc.includes('What was tested') && unc.includes('class="cover'),
+    'uncommenting the template cover + glance blocks as instructed builds and renders them');
+  r.check(!post.includes('At a glance'), 'post without glance fields shows no At a glance box');
   r.check((await read('blog/index.html')).includes('href="/blog/test-post/"'), 'blog list links the post');
   r.check(await exists('blog/category/test-category/index.html'), 'category page generated');
   const bench = await read('benchmarks/test-benchmark/index.html');
@@ -120,7 +128,7 @@ try {
   const cases = [
     ['blog', 'bad-missing-title.md', sub(blog, [['title: "TEST post from template"\n', '']]), /title/i],
     ['blog', 'bad-missing-date.md', sub(blog, [['date: 2026-01-31\n', '']]), /YYYY-MM-DD/],
-    ['blog', 'bad-image-no-alt.md', sub(blog, [['# cover:\n#   src: /og-default.png\n#   alt: "Describe what the image shows"', 'cover:\n  src: /og-default.png']]), /cover\.alt|alt/i],
+    ['blog', 'bad-image-no-alt.md', sub(blog, [['#cover:\n#  src: /og-default.png\n#  alt: "Describe what the image shows"', 'cover:\n  src: /og-default.png']]), /cover\.alt|alt/i],
     ['benchmarks', 'bad-price.md', sub(await readFile(path.join(tmp, 'src/content/benchmarks/test-benchmark.md'), 'utf8'), [['      source: "TEST note: not a real price"   # REQUIRED with a price: a URL or a note like "My receipt, Jan 2026"\n', '']]), /has no source/],
     ['benchmarks', 'bad-no-method.md', sub(await readFile(path.join(tmp, 'src/content/benchmarks/test-benchmark.md'), 'utf8'), [['    method: "Stopwatch from pressing send to the last word appearing"\n  - model: "TEST model B"', '  - model: "TEST model B"']]), /method/],
     ['experiments', 'bad-outcome.md', sub(await readFile(path.join(tmp, 'src/content/experiments/test-experiment.md'), 'utf8'), [['outcome: in-progress', 'outcome: great']]), /outcome/],
