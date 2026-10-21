@@ -1,0 +1,28 @@
+---
+import Base from '../../../layouts/Base.astro';
+import EntryCard from '../../../components/EntryCard.astro';
+import { getVisible, url, slugify } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getVisible('blog');
+  const cats = new Map<string, string>();
+  posts.forEach((p) => p.data.categories.forEach((c) => cats.set(slugify(c), c)));
+  return [...cats].map(([slug, name]) => ({
+    params: { cat: slug },
+    props: { name, posts: posts.filter((p) => p.data.categories.some((c) => slugify(c) === slug)) },
+  }));
+}
+const { name, posts } = Astro.props;
+---
+<Base title={`Category: ${name}`} description={`Blog posts filed under ${name}.`}>
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker"><a href={url('/blog/')}>Blog</a> / Category</span>
+      <h1>{name}</h1>
+      <p class="lede">{posts.length} post{posts.length === 1 ? '' : 's'} in this category.</p>
+    </header>
+    <div class="grid">
+      {posts.map((p) => <EntryCard href={url(`/blog/${p.id}/`)} title={p.data.title} description={p.data.description} date={p.data.date} demo={p.data.demo} draft={p.data.status === 'draft'} headingLevel="h2" />)}
+    </div>
+  </div>
+</Base>

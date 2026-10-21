@@ -1,0 +1,33 @@
+{
+  "name": "twenty-dollar-ai",
+  "version": "1.0.0",
+  "description": "Twenty Dollar AI: real-world tests of affordable AI subscriptions.",
+  "scripts": {
+    "dev": "astro dev",
+    "dev:demo": "SHOW_DEMO=true astro dev",
+    "build": "astro build",
+    "build:demo": "SHOW_DEMO=true astro build --outDir dist-demo",
+    "preview": "astro preview",
+    "preview:demo": "astro preview --outDir dist-demo",
+    "check": "astro check",
+    "test:schema": "node scripts/test-schemas.ts",
+    "test": "npm run test:schema && npm run check && npm run build && node scripts/check-no-demo.mjs"
+  },
+  "license": "UNLICENSED",
+  "type": "module",
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "astro": "^7.4.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.11",
+    "typescript": "^6.0.3"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22.22.0"
+  }
+}

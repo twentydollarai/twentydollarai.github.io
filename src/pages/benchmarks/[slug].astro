@@ -1,0 +1,95 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import DemoBanner from '../../components/DemoBanner.astro';
+import Evidence from '../../components/Evidence.astro';
+import { getVisible, url, formatDate, isoDate } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const items = await getVisible('benchmarks');
+  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const hasTake = (entry.body ?? '').trim().length > 0;
+const money = (amount: number, currency: string) =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
+const isUrl = (s: string) => /^https?:\/\//.test(s);
+---
+<Base title={d.title} description={d.description} type="article" published={d.date}>
+  <article class="wrap">
+    <header class="article-head">
+      <DemoBanner status={d.status} demo={d.demo} />
+      <span class="kicker">Benchmark</span>
+      <h1>{d.title}</h1>
+      <p class="lede measure">{d.description}</p>
+      <div class="article-meta">
+        <span>Run <time datetime={isoDate(d.date)}>{formatDate(d.date)}</time></span>
+        {d.updated && <span>Updated <time datetime={isoDate(d.updated)}>{formatDate(d.updated)}</time></span>}
+        <span>{d.models.length} model{d.models.length === 1 ? '' : 's'}</span>
+      </div>
+    </header>
+
+    <section class="block" aria-labelledby="models-title">
+      <div class="block-head"><h2 id="models-title">Models tested</h2></div>
+      <div class="models">
+        {d.models.map((m) => (
+          <div class="model-card">
+            <h3>{m.name}</h3>
+            <dl>
+              <dt>Plan</dt><dd>{m.plan ?? 'Not recorded'}</dd>
+              {m.price && (
+                <>
+                  <dt>Price</dt>
+                  <dd><span class="price">{money(m.price.amount, m.price.currency)}</span> / {m.price.period}</dd>
+                  <dt>Source</dt>
+                  <dd>{isUrl(m.price.source!) ? <a href={m.price.source} rel="noopener noreferrer" target="_blank">Price source<span class="visually-hidden"> (opens in a new tab)</span></a> : m.price.source}{m.price.checked && <>, checked <time datetime={isoDate(m.price.checked)}>{formatDate(m.price.checked)}</time></>}</dd>
+                </>
+              )}
+            </dl>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="prompt-title">
+      <div class="block-head"><h2 id="prompt-title">The prompt</h2><span class="chip">Verbatim</span></div>
+      <pre class="prompt-box">{d.prompt}</pre>
+    </section>
+
+    <section class="block measured-zone" aria-labelledby="results-title">
+      <div class="block-head"><h2 id="results-title">Measured results</h2><span class="chip chip-measured">Measured</span></div>
+      <p class="block-note">Numbers and checks recorded during the test. Each row says how it was measured.</p>
+      {d.results.length > 0 ? (
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Measured results table, scrollable">
+          <table class="results">
+            <caption>Swipe or scroll sideways on small screens. The model column stays fixed.</caption>
+            <thead><tr><th scope="col">Model</th><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">How it was measured</th></tr></thead>
+            <tbody>
+              {d.results.map((r) => (
+                <tr><th scope="row">{r.model}</th><td>{r.metric}</td><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td><td class="method">{r.method}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : <p class="block-note"><em>No measured results recorded yet.</em></p>}
+    </section>
+
+    {d.evidence.length > 0 && (
+      <section class="block" aria-labelledby="evidence-title">
+        <div class="block-head"><h2 id="evidence-title">Evidence</h2><span class="chip">Screenshots &amp; video</span></div>
+        <Evidence items={d.evidence} />
+      </section>
+    )}
+
+    {hasTake && (
+      <section class="block opinion-zone" aria-labelledby="take-title">
+        <div class="block-head"><h2 id="take-title">My take</h2><span class="chip chip-opinion">Opinion</span></div>
+        <p class="block-note">Personal judgment, not a measurement.</p>
+        <div class="prose"><Content /></div>
+      </section>
+    )}
+    <a class="back-link" href={url('/benchmarks/')}>← All benchmarks</a>
+  </article>
+</Base>

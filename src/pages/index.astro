@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import EntryCard from '../components/EntryCard.astro';
+import Icons from '../components/Icons.astro';
+import { getFeed } from '../lib/feed';
+import { getVisible, url } from '../lib/content';
+import { siteConfig } from '../site.config.mjs';
+
+const latest = await getFeed(6);
+const counts = {
+  blog: (await getVisible('blog')).length,
+  benchmarks: (await getVisible('benchmarks')).length,
+  experiments: (await getVisible('experiments')).length,
+  projects: (await getVisible('projects')).length,
+};
+const plural = (n: number, w: string) => (n === 0 ? `No ${w}s yet` : `${n} ${w}${n === 1 ? '' : 's'}`);
+const sections = [
+  { href: '/blog/', title: 'Blog', text: 'First-person notes on learning AI, building things, and whether a subscription earned its keep.', count: plural(counts.blog, 'post') },
+  { href: '/benchmarks/', title: 'Benchmarks', text: 'Same prompt, several models. Measured results kept apart from opinions.', count: plural(counts.benchmarks, 'benchmark') },
+  { href: '/experiments/', title: 'Agent experiments', text: 'Real assignments handed to AI agents like Grok Bot and Muse: time, usage, outcome, limits.', count: plural(counts.experiments, 'experiment') },
+  { href: '/projects/', title: 'Projects', text: 'Things built along the way, with links to their public GitHub repositories.', count: plural(counts.projects, 'project') },
+];
+---
+<Base>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div class="hero-inner">
+        <span class="kicker">An everyday-user AI lab</span>
+        <h1 id="hero-title">What can <span class="hl">$20 a month</span> of AI actually do?</h1>
+        <p class="lede">
+          Twenty Dollar AI tests affordable AI subscriptions on real tasks, the kind everyday people actually have.
+          Every result comes with its receipts: the prompt, the time it took, the usage it burned, and what went wrong.
+          No hype, and the failures stay in.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={siteConfig.xUrl} rel="noopener noreferrer" target="_blank"><Icons name="x" />Follow on X<span class="visually-hidden"> (opens in a new tab)</span></a>
+          <a class="btn" href={siteConfig.githubUrl} rel="noopener noreferrer" target="_blank"><Icons name="github" />GitHub<span class="visually-hidden"> (opens in a new tab)</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="latest-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="latest-title">Latest</h2>
+      </div>
+      {latest.length > 0 ? (
+        <div class="grid">
+          {latest.map((i) => <EntryCard href={i.href} title={i.title} description={i.description} date={i.date} type={i.type} demo={i.demo} draft={i.draft} />)}
+        </div>
+      ) : (
+        <div class="empty">
+          <div>
+            <h3>First experiments coming soon</h3>
+            <p>The notebook is open and the first tests are being set up. New posts, benchmarks, and agent experiments will show up here as soon as they have real results behind them.</p>
+          </div>
+          <div>
+            <h3>Want to know when?</h3>
+            <p>Follow <a href={siteConfig.xUrl} rel="noopener noreferrer" target="_blank">{siteConfig.xHandle}<span class="visually-hidden"> (opens in a new tab)</span></a> or subscribe to the <a href={url('/rss.xml')}>RSS feed</a>.</p>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="sections-title">
+    <div class="wrap">
+      <div class="section-head"><h2 id="sections-title">Explore the notebook</h2></div>
+      <div class="grid grid-4">
+        {sections.map((s) => (
+          <article class="card section-card">
+            <h3><a href={url(s.href)}>{s.title}</a></h3>
+            <p>{s.text}</p>
+            <span class="count">{s.count}</span>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="principles" aria-labelledby="principles-title">
+    <div class="wrap">
+      <h2 id="principles-title" class="visually-hidden">Principles</h2>
+      <ul>
+        <li><strong>Real tests</strong><span>Every result comes from an actual run, with the prompt and method shown.</span></li>
+        <li><strong>Failures included</strong><span>What didn't work gets written up just like what did.</span></li>
+        <li><strong>No hype</strong><span>Measured results and personal opinions are labeled separately.</span></li>
+        <li><strong>For nonexperts</strong><span>Practical tasks, plain language, and costs you can check.</span></li>
+      </ul>
+    </div>
+  </section>
+</Base>

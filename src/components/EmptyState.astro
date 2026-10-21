@@ -1,0 +1,15 @@
+---
+interface Props { title: string; expect: string[]; integrity: string[]; status?: string }
+const { title, expect, integrity, status = 'Nothing is published here yet. The first entries will appear once the tests are actually run.' } = Astro.props;
+---
+<section class="empty" aria-labelledby="empty-title">
+  <div>
+    <h2 id="empty-title">{title}</h2>
+    <ul>{expect.map((e) => <li>{e}</li>)}</ul>
+  </div>
+  <div>
+    <h3>How results are recorded</h3>
+    <ul>{integrity.map((e) => <li>{e}</li>)}</ul>
+  </div>
+  <p class="status-line"><span aria-hidden="true">▢ </span>{status}</p>
+</section>

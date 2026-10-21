@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { getVisible, url, slugify } from '../../lib/content';
+
+const posts = await getVisible('blog');
+const categories = [...new Set(posts.flatMap((p) => p.data.categories))].sort();
+---
+<Base title="Blog" description="First-person notes on learning AI, building projects, and evaluating affordable AI subscriptions.">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Blog</span>
+      <h1>Notes from the notebook</h1>
+      <p class="lede">First-person writing about learning AI by doing: building small projects, testing subscriptions, and figuring out what's actually worth paying for.</p>
+    </header>
+    {posts.length > 0 ? (
+      <>
+        {categories.length > 0 && (
+          <nav aria-label="Categories"><ul class="tags">{categories.map((c) => <li><a href={url(`/blog/category/${slugify(c)}/`)}>{c}</a></li>)}</ul></nav>
+        )}
+        <div class="grid">
+          {posts.map((p) => <EntryCard href={url(`/blog/${p.id}/`)} title={p.data.title} description={p.data.description} date={p.data.date} type={p.data.categories[0]} demo={p.data.demo} draft={p.data.status === 'draft'} headingLevel="h2" />)}
+        </div>
+      </>
+    ) : (
+      <EmptyState
+        title="What you'll find here"
+        expect={[
+          'Write-ups of learning AI as a nonexpert, mistakes and all',
+          'Build logs from small, practical projects',
+          'Plain-language takes on whether a subscription was worth it',
+        ]}
+        integrity={[
+          'Experiences are written first-hand, never made up',
+          'Prices and usage figures link to where they came from',
+          'Corrections are noted with an "updated" date',
+        ]}
+        status="No posts are published yet. The first one goes up when there's something real to report."
+      />
+    )}
+  </div>
+</Base>

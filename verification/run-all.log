@@ -1,0 +1,363 @@
+
+> twenty-dollar-ai@1.0.0 test:schema
+> node scripts/test-schemas.ts
+
+PASS  valid benchmark passes
+PASS  price without source is rejected  (Price for "A" has no source. Add price.source (a URL or a note), or remove the price.)
+PASS  price with blank source is rejected
+PASS  price with source passes
+PASS  result for unlisted model is rejected
+PASS  result without method is rejected
+PASS  missing date is rejected with a clear message  (Add a valid date written as YYYY-MM-DD)
+PASS  status defaults to draft
+PASS  image without alt is rejected
+PASS  bad experiment outcome is rejected
+PASS  non-GitHub repoUrl is rejected
+
+All schema checks passed
+
+> twenty-dollar-ai@1.0.0 check
+> astro check
+
+09:44:39 [content] Syncing content
+09:44:40 [content] Synced content
+09:44:40 [types] Generated 2.24s
+09:44:40 [check] Getting diagnostics for Astro files in <project>...
+Result (31 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+
+
+> twenty-dollar-ai@1.0.0 build
+> astro build
+
+09:44:45 [content] Syncing content
+09:44:45 [content] Synced content
+09:44:45 [types] Generated 596ms
+09:44:45 [build] output: "static"
+09:44:45 [build] mode: "static"
+09:44:45 [build] directory: <project>/dist/
+09:44:45 [build] Collecting build info...
+09:44:45 [build] ✓ Completed in 630ms.
+09:44:45 [build] Building static entrypoints...
+09:44:45 [vite] ✓ built in 200ms
+09:44:45 [vite] ✓ built in 17ms
+09:44:45 [build] Rearranging server assets...
+
+ generating static routes 
+09:44:45   ├─ /404.html (+13ms) 
+09:44:45   ├─ /about/index.html (+3ms) 
+09:44:45   ├─ /benchmarks/index.html (+3ms) 
+09:44:45   ├─ /blog/index.html (+3ms) 
+09:44:45   ├─ /experiments/index.html (+3ms) 
+09:44:45   ├─ /projects/index.html (+3ms) 
+09:44:45   ├─ /rss.xml (+27ms) 
+09:44:45   ├─ /index.html (+3ms) 
+09:44:45 ✓ Completed in 82ms.
+
+09:44:45 [build] ✓ Completed in 336ms.
+09:44:45 [@astrojs/sitemap] `sitemap-index.xml` created at `dist`
+09:44:45 [tda-build-hooks] Removed demo images from production output.
+09:44:45 [build] 7 page(s) built in 980ms
+09:44:45 [build] Complete!
+No demo content found in 27 files under dist
+
+> twenty-dollar-ai@1.0.0 build:demo
+> SHOW_DEMO=true astro build --outDir dist-demo
+
+09:44:46 [content] Syncing content
+09:44:46 [content] Synced content
+09:44:46 [types] Generated 523ms
+09:44:46 [build] output: "static"
+09:44:46 [build] mode: "static"
+09:44:46 [build] directory: <project>/dist-demo/
+09:44:46 [build] Collecting build info...
+09:44:46 [build] ✓ Completed in 560ms.
+09:44:46 [build] Building static entrypoints...
+09:44:47 [vite] ✓ built in 257ms
+09:44:47 [vite] ✓ built in 21ms
+09:44:47 [build] Rearranging server assets...
+
+ generating static routes 
+09:44:47   ├─ /404.html (+15ms) 
+09:44:47   ├─ /about/index.html (+4ms) 
+09:44:47   ├─ /benchmarks/demo-example-benchmark/index.html (+5ms) 
+09:44:47   ├─ /benchmarks/index.html (+5ms) 
+09:44:47   ├─ /blog/category/example-category/index.html (+3ms) 
+09:44:47   ├─ /blog/category/layout-test/index.html (+2ms) 
+09:44:47   ├─ /blog/demo-example-post/index.html (+2ms) 
+09:44:47   ├─ /blog/index.html (+3ms) 
+09:44:47   ├─ /experiments/demo-example-experiment/index.html (+3ms) 
+09:44:47   ├─ /experiments/index.html (+3ms) 
+09:44:47   ├─ /projects/index.html (+3ms) 
+09:44:47   ├─ /rss.xml (+24ms) 
+09:44:47   ├─ /index.html (+4ms) 
+09:44:47 ✓ Completed in 105ms.
+
+09:44:47 [build] ✓ Completed in 428ms.
+09:44:47 [@astrojs/sitemap] `sitemap-index.xml` created at `dist-demo`
+09:44:47 [build] 12 page(s) built in 1.00s
+09:44:47 [build] Complete!
+
+# Behaviour (chromium)
+PASS  header has 5 nav links (Blog, Benchmarks, Experiments, Projects, About)
+PASS  nav "Blog" -> /blog/, aria-current set
+PASS  nav "Benchmarks" -> /benchmarks/, aria-current set
+PASS  nav "Experiments" -> /experiments/, aria-current set
+PASS  nav "Projects" -> /projects/, aria-current set
+PASS  nav "About" -> /about/, aria-current set
+PASS  logo links to homepage
+PASS  prefers-color-scheme: light -> background rgb(250, 248, 243)
+PASS  toggle aria-pressed reflects system light
+PASS  prefers-color-scheme: dark -> background rgb(18, 20, 18)
+PASS  toggle aria-pressed reflects system dark
+PASS  toggle switches to dark
+PASS  dark choice persists to the next page
+PASS  dark choice persists after reload
+PASS  toggle back stores light
+PASS  stored light choice overrides system dark
+PASS  first Tab focuses skip link (got "Skip to content")
+PASS  skip link moves to #main
+PASS  mobile: nav collapsed by default
+PASS  mobile: menu opens, aria-expanded=true
+PASS  mobile: Escape closes menu
+PASS  mobile: menu link navigates
+PASS  no JavaScript: nav links still visible on mobile
+PASS  no JavaScript: non-working theme toggle hidden
+PASS  unknown route -> HTTP 404 with 404 page
+PASS  prod: demo entry URL -> HTTP 404
+PASS  astro preview: unknown route -> HTTP 404 with 404 page
+PASS  320px: no horizontal overflow on 17 pages 
+PASS  320px: no console/page errors 
+PASS  390px: no horizontal overflow on 17 pages 
+PASS  390px: no console/page errors 
+PASS  768px: no horizontal overflow on 17 pages 
+PASS  768px: no console/page errors 
+PASS  1280px: no horizontal overflow on 17 pages 
+PASS  1280px: no console/page errors 
+PASS  1920px: no horizontal overflow on 17 pages 
+PASS  1920px: no console/page errors 
+PASS  demo build: demo banner shown on demo benchmark
+-- Behaviour (chromium): 38 passed, 0 failed
+
+# Behaviour (firefox)
+PASS  header has 5 nav links (Blog, Benchmarks, Experiments, Projects, About)
+PASS  nav "Blog" -> /blog/, aria-current set
+PASS  nav "Benchmarks" -> /benchmarks/, aria-current set
+PASS  nav "Experiments" -> /experiments/, aria-current set
+PASS  nav "Projects" -> /projects/, aria-current set
+PASS  nav "About" -> /about/, aria-current set
+PASS  logo links to homepage
+PASS  prefers-color-scheme: light -> background rgb(250, 248, 243)
+PASS  toggle aria-pressed reflects system light
+PASS  prefers-color-scheme: dark -> background rgb(18, 20, 18)
+PASS  toggle aria-pressed reflects system dark
+PASS  toggle switches to dark
+PASS  dark choice persists to the next page
+PASS  dark choice persists after reload
+PASS  toggle back stores light
+PASS  stored light choice overrides system dark
+PASS  first Tab focuses skip link (got "Skip to content")
+PASS  skip link moves to #main
+PASS  mobile: nav collapsed by default
+PASS  mobile: menu opens, aria-expanded=true
+PASS  mobile: Escape closes menu
+PASS  mobile: menu link navigates
+PASS  no JavaScript: nav links still visible on mobile
+PASS  no JavaScript: non-working theme toggle hidden
+PASS  unknown route -> HTTP 404 with 404 page
+PASS  prod: demo entry URL -> HTTP 404
+PASS  astro preview: unknown route -> HTTP 404 with 404 page
+PASS  320px: no horizontal overflow on 17 pages 
+PASS  320px: no console/page errors 
+PASS  390px: no horizontal overflow on 17 pages 
+PASS  390px: no console/page errors 
+PASS  768px: no horizontal overflow on 17 pages 
+PASS  768px: no console/page errors 
+PASS  1280px: no horizontal overflow on 17 pages 
+PASS  1280px: no console/page errors 
+PASS  1920px: no horizontal overflow on 17 pages 
+PASS  1920px: no console/page errors 
+PASS  demo build: demo banner shown on demo benchmark
+-- Behaviour (firefox): 38 passed, 0 failed
+
+# Behaviour (webkit)
+PASS  header has 5 nav links (Blog, Benchmarks, Experiments, Projects, About)
+PASS  nav "Blog" -> /blog/, aria-current set
+PASS  nav "Benchmarks" -> /benchmarks/, aria-current set
+PASS  nav "Experiments" -> /experiments/, aria-current set
+PASS  nav "Projects" -> /projects/, aria-current set
+PASS  nav "About" -> /about/, aria-current set
+PASS  logo links to homepage
+PASS  prefers-color-scheme: light -> background rgb(250, 248, 243)
+PASS  toggle aria-pressed reflects system light
+PASS  prefers-color-scheme: dark -> background rgb(18, 20, 18)
+PASS  toggle aria-pressed reflects system dark
+PASS  toggle switches to dark
+PASS  dark choice persists to the next page
+PASS  dark choice persists after reload
+PASS  toggle back stores light
+PASS  stored light choice overrides system dark
+PASS  first Tab focuses skip link (got "Skip to content")
+PASS  skip link moves to #main
+PASS  mobile: nav collapsed by default
+PASS  mobile: menu opens, aria-expanded=true
+PASS  mobile: Escape closes menu
+PASS  mobile: menu link navigates
+PASS  no JavaScript: nav links still visible on mobile
+PASS  no JavaScript: non-working theme toggle hidden
+PASS  unknown route -> HTTP 404 with 404 page
+PASS  prod: demo entry URL -> HTTP 404
+PASS  astro preview: unknown route -> HTTP 404 with 404 page
+PASS  320px: no horizontal overflow on 17 pages 
+PASS  320px: no console/page errors 
+PASS  390px: no horizontal overflow on 17 pages 
+PASS  390px: no console/page errors 
+PASS  768px: no horizontal overflow on 17 pages 
+PASS  768px: no console/page errors 
+PASS  1280px: no horizontal overflow on 17 pages 
+PASS  1280px: no console/page errors 
+PASS  1920px: no horizontal overflow on 17 pages 
+PASS  1920px: no console/page errors 
+PASS  demo build: demo banner shown on demo benchmark
+-- Behaviour (webkit): 38 passed, 0 failed
+
+# Accessibility (axe-core, WCAG 2.1 A/AA + best-practice)
+PASS  68 page scans, 0 violation groups
+-- Accessibility (axe-core, WCAG 2.1 A/AA + best-practice): 1 passed, 0 failed
+
+# Links (linkinator)
+PASS  prod: 12 links checked, 0 broken
+      prod external links (9): https://github.com/twentydollarai https://twentydollarai.github.io/ https://twentydollarai.github.io/about/ https://twentydollarai.github.io/benchmarks/ https://twentydollarai.github.io/blog/ https://twentydollarai.github.io/experiments/ https://twentydollarai.github.io/og-default.png https://twentydollarai.github.io/projects/ https://x.com/TwentyDollarAI
+PASS  demo: 18 links checked, 0 broken
+      demo external links (15): https://github.com/twentydollarai https://twentydollarai.github.io/ https://twentydollarai.github.io/about/ https://twentydollarai.github.io/benchmarks/ https://twentydollarai.github.io/benchmarks/demo-example-benchmark/ https://twentydollarai.github.io/blog/ https://twentydollarai.github.io/blog/category/example-category/ https://twentydollarai.github.io/blog/category/layout-test/ https://twentydollarai.github.io/blog/demo-example-post/ https://twentydollarai.github.io/experiments/ https://twentydollarai.github.io/experiments/demo-example-experiment/ https://twentydollarai.github.io/images/demo/example-screenshot.svg https://twentydollarai.github.io/og-default.png https://twentydollarai.github.io/projects/ https://x.com/TwentyDollarAI
+-- Links (linkinator): 2 passed, 0 failed
+
+# Feeds (dist)
+PASS  rss.xml is well-formed RSS (ok)
+PASS  RSS channel link = https://twentydollarai.github.io/
+PASS  RSS has 0 item(s), each with a link
+PASS  all RSS item links absolute on https://twentydollarai.github.io/
+PASS  all RSS pubDates parse
+PASS  no demo/draft URLs in RSS
+PASS  sitemap-index.xml well-formed
+PASS  sitemap index points to https://twentydollarai.github.io/sitemap-0.xml
+PASS  sitemap-0.xml well-formed
+PASS  all 6 sitemap URLs on https://twentydollarai.github.io/
+PASS  404 page not in sitemap
+PASS  no demo/draft URLs in sitemap
+PASS  every sitemap URL has a built page 
+      sitemap: https://twentydollarai.github.io/ https://twentydollarai.github.io/about/ https://twentydollarai.github.io/benchmarks/ https://twentydollarai.github.io/blog/ https://twentydollarai.github.io/experiments/ https://twentydollarai.github.io/projects/
+-- Feeds (dist): 13 passed, 0 failed
+
+# Security review
+PASS  no secret-like strings in 56 source + 27 output files
+PASS  no emails or local paths in built output or site source
+PASS  no source maps in dist (0 files, 0 references)
+PASS  no external scripts/styles/fonts/images referenced in dist 
+PASS  every target="_blank" link has rel=noopener (0 missing)
+      inline scripts (2 distinct, all first-party):
+        sha256:JXjXE+dXxO5x19eo… classic 275 chars: (function () { var d = document.documentElement; d.cla…
+        sha256:12eo1dIkzRibvkUM… module 806 chars: var e=document.documentElement,t=document.querySelector(`[data-theme-t…
+PASS  inline scripts contain no eval/new Function/document.write/innerHTML
+PASS  no requests to external hosts while loading 17 pages 
+-- Security review: 7 passed, 0 failed
+
+# Publishing workflow (temporary copy)
+      temp copy: <tmp>
+PASS  production build with template-based entries succeeds (exit 0)
+PASS  blog post page renders title + category
+PASS  published post has no demo/draft banner
+PASS  blog list links the post
+PASS  category page generated
+PASS  benchmark page renders models, price source, Measured and Opinion sections
+PASS  benchmarks list links the benchmark
+PASS  experiment page renders tool, outcome, limitations
+PASS  experiments list links the experiment
+PASS  projects page shows the project card
+PASS  homepage Latest feed lists all three, empty state gone
+PASS  RSS + sitemap contain the new entries and are valid (feeds.mjs)
+PASS  draft and demo entries absent from production output 
+PASS  demo build (SHOW_DEMO=true) does include the draft and demo entries
+PASS  draft/demo entries show their banner
+PASS  invalid blog/bad-missing-title.md fails the build: [InvalidContentEntryDataError] blog → bad-missing-title data does not match collection schema. / title**: **title: Required / https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+PASS  invalid blog/bad-missing-date.md fails the build: [InvalidContentEntryDataError] blog → bad-missing-date data does not match collection schema. / date: Add a valid date written as YYYY-MM-DD / https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+PASS  invalid blog/bad-image-no-alt.md fails the build: [InvalidContentEntryDataError] blog → bad-image-no-alt data does not match collection schema. / cover.alt**: **cover.alt: Required / https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+PASS  invalid benchmarks/bad-price.md fails the build: [InvalidContentEntryDataError] benchmarks → bad-price data does not match collection schema. / models.0.price.source: Price for "TEST model A" has no source. Add price.source (a URL or a note), or remove the price. / https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+PASS  invalid benchmarks/bad-no-method.md fails the build: [InvalidContentEntryDataError] benchmarks → bad-no-method data does not match collection schema. / results.0.method**: **results.0.method: Required / https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+PASS  invalid experiments/bad-outcome.md fails the build: [InvalidContentEntryDataError] experiments → bad-outcome data does not match collection schema. / outcome: Invalid option: expected one of "worked"|"partial"|"failed"|"in-progress" / https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+PASS  invalid projects/bad-repo.md fails the build: [InvalidContentEntryDataError] projects → bad-repo data does not match collection schema. / repoUrl: repoUrl must be a public https://github.com/<user>/<repo> link / https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+PASS  build passes again after removing invalid entries
+PASS  temporary copy deleted
+PASS  real project files unchanged (content hash identical before/after)
+-- Publishing workflow (temporary copy): 25 passed, 0 failed
+
+# GitHub Pages URL structure
+PASS  root site: no page-relative links that would break between folders (0)
+PASS  root site: 7 absolute self-links (canonical/og) all on https://twentydollarai.github.io/
+      root site: 102 root-relative refs, e.g. /_astro/inter-latin-400-normal.C38fXH4l.woff2 /_astro/inter-latin-700-normal.Yt3aPRUw.woff2 /favicon.svg /rss.xml /sitemap-index.xml /_astro/Base.CNKrid6I.css / /blog/
+PASS  project site prod build succeeds
+PASS  project site prod: all 102 root-relative refs start with /twenty-dollar-ai/
+PASS  project site prod: canonical/og URLs include the base
+PASS  project site prod: 12 links crawled, 0 broken
+PASS  project site prod: RSS + sitemap URLs include the base
+PASS  project site demo build succeeds
+PASS  project site demo: all 191 root-relative refs start with /twenty-dollar-ai/
+PASS  project site demo: canonical/og URLs include the base
+PASS  project site demo: 18 links crawled, 0 broken
+PASS  project site demo: RSS + sitemap URLs include the base
+      astro preview /blog -> HTTP 200
+PASS  astro preview: /blog -> HTTP 200
+      astro preview /blog/ -> HTTP 200
+PASS  astro preview: /blog/ -> HTTP 200
+      astro preview /blog/index.html -> HTTP 200
+PASS  astro preview: /blog/index.html -> HTTP 200
+      astro preview /about -> HTTP 200
+PASS  astro preview: /about -> HTTP 200
+      astro preview /nope/ -> HTTP 404
+PASS  astro preview: /nope/ -> HTTP 404
+      pages-like server /blog -> HTTP 301 -> /blog/
+PASS  pages-like server: /blog -> HTTP 301 /blog/
+      pages-like server /blog/ -> HTTP 200
+PASS  pages-like server: /blog/ -> HTTP 200
+      pages-like server /blog/index.html -> HTTP 200
+PASS  pages-like server: /blog/index.html -> HTTP 200
+      pages-like server /about -> HTTP 301 -> /about/
+PASS  pages-like server: /about -> HTTP 301 /about/
+      pages-like server /nope/ -> HTTP 404
+PASS  pages-like server: /nope/ -> HTTP 404
+PASS  workflow uses withastro/action + actions/deploy-pages
+PASS  workflow permissions: contents read, pages write, id-token write
+PASS  workflow uses no secrets
+PASS  workflow runs the production build (no SHOW_DEMO)
+-- GitHub Pages URL structure: 26 passed, 0 failed
+
+# Lighthouse
+desktop /          P100 A100 BP100 SEO100  network-dependency-tree-insight, render-blocking-insight
+desktop /blog/     P100 A100 BP100 SEO100  network-dependency-tree-insight, render-blocking-insight
+desktop /about/    P100 A100 BP100 SEO100  network-dependency-tree-insight, render-blocking-insight
+desktop /404.html  P100 A100 BP100 SEO63  is-crawlable, network-dependency-tree-insight, render-blocking-insight
+mobile  /          P100 A100 BP100 SEO100  network-dependency-tree-insight, render-blocking-insight (Est savings of 650 ms)
+mobile  /blog/     P100 A100 BP100 SEO100  network-dependency-tree-insight, render-blocking-insight (Est savings of 730 ms)
+mobile  /about/    P100 A100 BP100 SEO100  network-dependency-tree-insight, render-blocking-insight (Est savings of 560 ms)
+mobile  /404.html  P100 A100 BP100 SEO63  is-crawlable, network-dependency-tree-insight, render-blocking-insight (Est savings of 730 ms)
+PASS  8 Lighthouse runs completed
+-- Lighthouse: 1 passed, 0 failed
+
+=== SUMMARY ===
+PASS  schema tests (0.3s)
+PASS  astro check (7.3s)
+PASS  production build (1.8s)
+PASS  no demo content in dist (0.0s)
+PASS  demo build (dist-demo/) (1.6s)
+PASS  behaviour (chromium) (7.9s)
+PASS  behaviour (firefox) (14.0s)
+PASS  behaviour (webkit) (14.2s)
+PASS  axe accessibility (32.3s)
+PASS  links (0.6s)
+PASS  RSS + sitemap (0.5s)
+PASS  security review (9.5s)
+PASS  publishing workflow (13.0s)
+PASS  GitHub Pages URL structure (5.4s)
+PASS  lighthouse (50.6s)

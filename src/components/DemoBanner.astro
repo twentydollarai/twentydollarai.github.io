@@ -1,0 +1,14 @@
+---
+interface Props { status?: string; demo?: boolean }
+const { status, demo } = Astro.props;
+---
+{(demo || status === 'draft') && (
+  <aside class="demo-banner" role="note" aria-label="Content notice">
+    <span class="chip chip-demo">{demo ? 'Demo' : 'Draft'}</span>
+    <p>
+      {demo
+        ? <><strong>Demo content, not real data.</strong> This page only exists to preview the layout. Nothing here was tested, and it is never included in the public site.</>
+        : <><strong>Draft.</strong> Not published. It is visible only in demo/dev builds.</>}
+    </p>
+  </aside>
+)}

@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/content';
+---
+<Base title="Page not found" description="This page doesn't exist." noindex>
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Error 404</span>
+      <h1>No receipt for that page</h1>
+      <p class="lede">The page you were looking for isn't here. It may have moved, or the link may be wrong.</p>
+    </header>
+    <p><a class="btn btn-primary" href={url('/')}>Back to the homepage</a></p>
+  </div>
+</Base>

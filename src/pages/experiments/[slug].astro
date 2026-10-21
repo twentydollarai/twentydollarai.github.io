@@ -1,0 +1,77 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import DemoBanner from '../../components/DemoBanner.astro';
+import Evidence from '../../components/Evidence.astro';
+import { getVisible, url, formatDate, isoDate } from '../../lib/content';
+import { outcomeLabel } from '../../lib/outcome';
+
+export async function getStaticPaths() {
+  const items = await getVisible('experiments');
+  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const hasBody = (entry.body ?? '').trim().length > 0;
+const facts: [string, string | undefined][] = [
+  ['Tool', d.tool],
+  ['Plan', d.plan],
+  ['Time required', d.timeRequired],
+  ['Usage consumed', d.usageConsumed],
+];
+---
+<Base title={d.title} description={d.description} type="article" published={d.date}>
+  <article class="wrap">
+    <header class="article-head">
+      <DemoBanner status={d.status} demo={d.demo} />
+      <span class="kicker">Agent experiment</span>
+      <h1>{d.title}</h1>
+      <p class="lede measure">{d.description}</p>
+      <div class="article-meta">
+        <time datetime={isoDate(d.date)}>{formatDate(d.date)}</time>
+        {d.updated && <span>Updated <time datetime={isoDate(d.updated)}>{formatDate(d.updated)}</time></span>}
+        <span class={`chip chip-outcome-${d.outcome}`}>Outcome: {outcomeLabel[d.outcome]}</span>
+      </div>
+    </header>
+
+    <section class="block measured-zone" aria-labelledby="record-title">
+      <div class="block-head"><h2 id="record-title">The record</h2><span class="chip chip-measured">Recorded</span></div>
+      <dl class="facts">
+        {facts.map(([k, v]) => <div><dt>{k}</dt><dd class={v ? '' : 'not-recorded'}>{v ?? 'Not recorded'}</dd></div>)}
+        <div><dt>Outcome</dt><dd>{outcomeLabel[d.outcome]}</dd></div>
+      </dl>
+      <h3>Assignment</h3>
+      <pre class="prompt-box">{d.assignment}</pre>
+    </section>
+
+    {hasBody && (
+      <section class="block" aria-labelledby="log-title">
+        <div class="block-head"><h2 id="log-title">What happened</h2></div>
+        <div class="prose"><Content /></div>
+      </section>
+    )}
+
+    {d.limitations.length > 0 && (
+      <section class="block" aria-labelledby="limits-title">
+        <div class="block-head"><h2 id="limits-title">Limitations</h2></div>
+        <ul class="list-plain">{d.limitations.map((l) => <li>{l}</li>)}</ul>
+      </section>
+    )}
+
+    {d.evidence.length > 0 && (
+      <section class="block" aria-labelledby="evidence-title">
+        <div class="block-head"><h2 id="evidence-title">Evidence</h2><span class="chip">Screenshots &amp; video</span></div>
+        <Evidence items={d.evidence} />
+      </section>
+    )}
+
+    {d.usefulness && (
+      <section class="block opinion-zone" aria-labelledby="useful-title">
+        <div class="block-head"><h2 id="useful-title">Overall usefulness</h2><span class="chip chip-opinion">Opinion</span></div>
+        <p class="prose">{d.usefulness}</p>
+      </section>
+    )}
+    <a class="back-link" href={url('/experiments/')}>← All experiments</a>
+  </article>
+</Base>

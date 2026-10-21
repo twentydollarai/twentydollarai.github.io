@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { getVisible, url } from '../../lib/content';
+import { outcomeLabel } from '../../lib/outcome';
+
+const items = await getVisible('experiments');
+---
+<Base title="Agent experiments" description="Real assignments given to AI agents such as Grok Bot and Muse, with time, usage, outcome, and limitations recorded.">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Agent experiments</span>
+      <h1>Handing real work to AI agents</h1>
+      <p class="lede">What happens when an everyday user gives an AI agent an actual job? Each experiment records the assignment, how long it took, how much usage it consumed, what came out, and where it fell short.</p>
+    </header>
+    {items.length > 0 ? (
+      <div class="grid">
+        {items.map((x) => <EntryCard href={url(`/experiments/${x.id}/`)} title={x.data.title} description={x.data.description} date={x.data.date} type={x.data.tool} extra={outcomeLabel[x.data.outcome]} extraClass={`chip-outcome-${x.data.outcome}`} demo={x.data.demo} draft={x.data.status === 'draft'} headingLevel="h2" />)}
+      </div>
+    ) : (
+      <EmptyState
+        title="What each experiment will record"
+        expect={[
+          'The tool used, such as Grok Bot or Muse',
+          'The assignment, in the words it was given',
+          'Time required and usage consumed',
+          'The outcome: worked, partly worked, or failed',
+          'Limitations, plus an honest call on usefulness',
+        ]}
+        integrity={[
+          'Failed and half-finished runs get published too',
+          'Time and usage are recorded, not estimated afterwards',
+          'Opinions about usefulness are labeled as opinions',
+        ]}
+        status="No experiments are published yet. The first write-ups will come from real runs."
+      />
+    )}
+  </div>
+</Base>

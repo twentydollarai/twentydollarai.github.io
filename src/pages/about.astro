@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import { siteConfig } from '../site.config.mjs';
+import { url } from '../lib/content';
+---
+<Base title="About" description="Why Twenty Dollar AI exists: an everyday AI enthusiast learning by doing, and testing what affordable AI subscriptions can really do.">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">About</span>
+      <h1>Learning AI by actually using it</h1>
+      <p class="lede">Twenty Dollar AI is an independent project run by an everyday AI enthusiast who is learning by doing, not by an AI lab or a company.</p>
+    </header>
+    <div class="prose">
+      <!-- TODO (owner): add your own voice here: why you started, what you want to learn. Keep it true; nothing below is biographical. -->
+      <h2>The question</h2>
+      <p>Most AI coverage is either breathless launch hype or deep technical benchmarking. This project asks something simpler: <strong>what can an ordinary person actually get done with an affordable AI subscription?</strong> The name comes from the price range this notebook focuses on: AI subscriptions around $20 a month.</p>
+
+      <h2>How it works</h2>
+      <p>Everything here is learning in public. I pick real tasks, run them with the tools, and write down what happened, including the parts that didn't work.</p>
+      <ul>
+        <li><a href={url('/blog/')}>Blog</a>: first-person notes on learning, building, and deciding whether a subscription earns its keep.</li>
+        <li><a href={url('/benchmarks/')}>Benchmarks</a>: one task, several models, with the exact prompt and measured results.</li>
+        <li><a href={url('/experiments/')}>Agent experiments</a>: real assignments given to AI agents, with time, usage, outcome, and limitations.</li>
+        <li><a href={url('/projects/')}>Projects</a>: things built along the way, linked to public code.</li>
+      </ul>
+
+      <h2>The rules this site follows</h2>
+      <ul>
+        <li><strong>No invented results.</strong> Scores, timings, usage, and outcomes come from actual runs, or they don't appear.</li>
+        <li><strong>Failures stay in.</strong> A test that went badly is still a result.</li>
+        <li><strong>Measured and opinion are labeled.</strong> On benchmark and experiment pages, recorded numbers carry a <span class="chip chip-measured">Measured</span> label and personal judgments carry an <span class="chip chip-opinion">Opinion</span> label.</li>
+        <li><strong>Prices need a source.</strong> A subscription price is only shown with where it came from and when it was checked.</li>
+        <li><strong>Corrections are visible.</strong> Updated pages show an updated date.</li>
+      </ul>
+
+      <h2>Follow along</h2>
+      <p>Updates go out on X at <a href={siteConfig.xUrl} rel="noopener noreferrer" target="_blank">{siteConfig.xHandle}<span class="visually-hidden"> (opens in a new tab)</span></a>, code lives on <a href={siteConfig.githubUrl} rel="noopener noreferrer" target="_blank">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a>, and there's an <a href={url('/rss.xml')}>RSS feed</a> for new posts.</p>
+    </div>
+  </div>
+</Base>

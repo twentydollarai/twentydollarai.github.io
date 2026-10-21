@@ -1,0 +1,28 @@
+---
+import { formatDate, isoDate } from '../lib/content';
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  date?: Date;
+  type?: string;
+  extra?: string;
+  extraClass?: string;
+  demo?: boolean;
+  draft?: boolean;
+  headingLevel?: 'h2' | 'h3';
+}
+const { href, title, description, date, type, extra, extraClass, demo, draft, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+<article class="card">
+  <div class="card-meta">
+    {type && <span class="chip chip-type">{type}</span>}
+    {extra && <span class={`chip ${extraClass ?? ''}`}>{extra}</span>}
+    {demo && <span class="chip chip-demo">Demo</span>}
+    {draft && !demo && <span class="chip chip-demo">Draft</span>}
+    {date && <time datetime={isoDate(date)}>{formatDate(date)}</time>}
+  </div>
+  <H><a href={href}>{title}</a></H>
+  <p>{description}</p>
+</article>

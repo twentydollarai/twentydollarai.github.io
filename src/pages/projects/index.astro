@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { getVisible, asset } from '../../lib/content';
+
+const items = (await getVisible('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Projects" description="Projects built while testing affordable AI subscriptions, with links to their public GitHub repositories.">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Projects</span>
+      <h1>Things built along the way</h1>
+      <p class="lede">Small, practical projects made with affordable AI tools. Each one links to its public repository so you can see the actual code, not just the screenshot.</p>
+    </header>
+    {items.length > 0 ? (
+      <div class="grid">
+        {items.map((p) => (
+          <article class="card">
+            {p.data.screenshots[0] && <img src={asset(p.data.screenshots[0].src)} alt={p.data.screenshots[0].alt} loading="lazy" decoding="async" />}
+            <div class="card-meta">
+              <span class={`chip ${p.data.progress === 'completed' ? 'chip-outcome-worked' : 'chip-outcome-partial'}`}>{p.data.progress === 'completed' ? 'Completed' : 'Ongoing'}</span>
+              {p.data.demo && <span class="chip chip-demo">Demo</span>}
+              {p.data.status === 'draft' && !p.data.demo && <span class="chip chip-demo">Draft</span>}
+            </div>
+            <h2 style="font-size:1.12rem;margin:0">{p.data.name}</h2>
+            <p>{p.data.summary}</p>
+            <div class="card-links">
+              {p.data.repoUrl && <a href={p.data.repoUrl} rel="noopener noreferrer" target="_blank">Code on GitHub<span class="visually-hidden">: {p.data.name} (opens in a new tab)</span></a>}
+              {p.data.siteUrl && <a href={p.data.siteUrl} rel="noopener noreferrer" target="_blank">Live site<span class="visually-hidden">: {p.data.name} (opens in a new tab)</span></a>}
+              {!p.data.repoUrl && !p.data.siteUrl && <span class="mono" style="font-size:.85rem;color:var(--ink-2)">No public link yet</span>}
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <EmptyState
+        title="What will be showcased"
+        expect={[
+          'Completed and ongoing projects, clearly labeled as such',
+          'A short description and screenshots',
+          'A link to the public GitHub repository',
+        ]}
+        integrity={[
+          'Only public repositories are linked',
+          'Unfinished work is marked Ongoing, never Completed',
+          'Unpublished or private work stays off the site',
+        ]}
+        status="No projects are listed yet. They'll appear once their repositories are public."
+      />
+    )}
+  </div>
+</Base>

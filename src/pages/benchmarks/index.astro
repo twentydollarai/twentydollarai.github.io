@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { getVisible, url } from '../../lib/content';
+
+const items = await getVisible('benchmarks');
+---
+<Base title="Benchmarks" description="Side-by-side tests of affordable AI models: the exact prompt, measured results, and opinions kept separate.">
+  <div class="wrap">
+    <header class="page-head">
+      <span class="kicker">Benchmarks</span>
+      <h1>Same task, different models</h1>
+      <p class="lede">Each benchmark runs one real task across several subscriptions and records what happened: the exact prompt, measured results with how they were measured, and screenshots or video as evidence.</p>
+    </header>
+    {items.length > 0 ? (
+      <div class="grid">
+        {items.map((b) => <EntryCard href={url(`/benchmarks/${b.id}/`)} title={b.data.title} description={b.data.description} date={b.data.date} type={`${b.data.models.length} model${b.data.models.length === 1 ? '' : 's'}`} demo={b.data.demo} draft={b.data.status === 'draft'} headingLevel="h2" />)}
+      </div>
+    ) : (
+      <EmptyState
+        title="What each benchmark will include"
+        expect={[
+          'The models tested and the plan each one was on',
+          'The exact prompt, word for word',
+          'Measured results: runtime, usage, and pass/fail checks',
+          'Screenshots or video of the actual outputs',
+        ]}
+        integrity={[
+          'Measured results are labeled Measured and show how they were measured',
+          'Personal judgments are labeled Opinion and kept in their own section',
+          'A price is only shown with a source; the site build rejects it otherwise',
+        ]}
+        status="No benchmarks are published yet. Nothing here will be estimated or simulated."
+      />
+    )}
+  </div>
+</Base>

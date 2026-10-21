@@ -1,0 +1,30 @@
+# Dependencies (root and tests/)
+node_modules/
+
+# Build output and caches
+dist/
+dist-demo/
+.astro/
+
+# Environment / secrets (never commit)
+.env
+.env.*
+
+# Playwright / test artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Large generated verification artifacts (regenerate with tests/lighthouse.mjs and tests/screenshots.mjs;
+# summaries in verification/lighthouse/summary.* stay tracked)
+verification/screenshots/
+verification/lighthouse/*.html
+verification/lighthouse/*.json.gz
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+npm-debug.log*

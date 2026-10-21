@@ -1,0 +1,15 @@
+---
+import Icons from './Icons.astro';
+import { url } from '../lib/content';
+import { siteConfig } from '../site.config.mjs';
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <p><span class="mono">$20</span> · Twenty Dollar AI. Real tests, failures included.</p>
+    <ul aria-label="Elsewhere">
+      <li><a href={siteConfig.xUrl} rel="noopener noreferrer me" target="_blank"><Icons name="x" class="ficon" />X {siteConfig.xHandle}<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+      <li><a href={siteConfig.githubUrl} rel="noopener noreferrer me" target="_blank"><Icons name="github" class="ficon" />GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+      <li><a href={url('/rss.xml')}><Icons name="rss" class="ficon" />RSS</a></li>
+    </ul>
+  </div>
+</footer>

@@ -1,0 +1,68 @@
+---
+import Icons from './Icons.astro';
+import { url } from '../lib/content';
+
+const links = [
+  { href: '/blog/', label: 'Blog' },
+  { href: '/benchmarks/', label: 'Benchmarks' },
+  { href: '/experiments/', label: 'Experiments' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/about/', label: 'About' },
+];
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path.startsWith(url(href));
+---
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href={url('/')}>
+      <span class="stamp" aria-hidden="true">$20</span>
+      <span class="brand-name">Twenty Dollar AI</span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul>
+        {links.map((l) => (
+          <li><a href={url(l.href)} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn theme-toggle" type="button" aria-pressed="false" data-theme-toggle>
+        <Icons name="moon" class="icon-moon" /><Icons name="sun" class="icon-sun" />
+        <span class="visually-hidden">Dark theme</span>
+      </button>
+      <button class="icon-btn menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+        <Icons name="menu" class="icon-menu" /><Icons name="close" class="icon-close" /><span>Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const root = document.documentElement;
+  const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const current = () =>
+    root.dataset.theme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const sync = () => toggle?.setAttribute('aria-pressed', String(current() === 'dark'));
+  sync();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', sync);
+  toggle?.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch {}
+    sync();
+  });
+
+  const menuBtn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const nav = document.getElementById('site-nav');
+  const setOpen = (open: boolean) => {
+    menuBtn?.setAttribute('aria-expanded', String(open));
+    nav?.classList.toggle('open', open);
+  };
+  menuBtn?.addEventListener('click', () => setOpen(menuBtn.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuBtn?.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      menuBtn.focus();
+    }
+  });
+</script>
