@@ -25,7 +25,7 @@ export const siteConfig = {
   // Edit the text between the quotes; keep it to one paragraph.
   intro: {
     label: 'Why I started this',
-    text: "Twenty Dollar AI started with an interest in what AI could help me do, from researching trading ideas to building things I never thought I could make myself. It became more personal after I lost my best friend of 14 years. Learning and creating gave me something to focus on during a time when life felt painfully empty, and one of those projects was a photo app to keep his memories close. This website is a place to share what I’m trying, what works, and what doesn’t—with an everyday person’s budget and perspective. I’m still learning, and I hope sharing that process helps someone else.",
+    text: "Twenty Dollar AI started with an interest in what AI could help me do, from researching trading ideas to building things I never thought I could make myself. It became more personal after I lost my best friend of 14 years. Learning and creating gave me something to focus on during a time when life felt painfully empty, and one of the things I made was a photo app to keep his memories close. This website is a place to share what I’m trying, what works, and what doesn’t—with an everyday person’s budget and perspective. I’m still learning, and I hope sharing that process helps someone else.",
   },
 
   locale: 'en',
