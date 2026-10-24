@@ -6,10 +6,9 @@ models:
   - name: "Grok 4.7 High"
     plan: "$30 plan"   # my plan for this run (confirmed 2026-10-24)
     # No price block: $3.2425 is an API-equivalent figure, not a subscription price (see results).
-# My standard benchmark prompt and data are private. Show only this label; never describe,
+# My standard benchmark prompt and data are private. Show only its name; never describe,
 # paraphrase or reconstruct the prompt.
 prompt: "Standard TwentyDollarAI Benchmarking"
-promptLabel: "Standard"
 resultsNote: "Figures from the Grok CLI’s end-of-run summary."
 results:
   - model: "Grok 4.7 High"

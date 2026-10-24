@@ -76,6 +76,7 @@ export const benchmarkSchema = z
       )
       .min(1, 'List at least one model'),
     prompt: z.string().min(1),
+    // No longer shown on the page (benchmark pages have no label chips). Still accepted so older files build.
     promptLabel: z.string().min(1).optional(),
     // Default: results show as a short Metric / Value table (no Model or "How it was measured" column).
     // Set compactResults: false for the older wide table, which shows model and method on every row.

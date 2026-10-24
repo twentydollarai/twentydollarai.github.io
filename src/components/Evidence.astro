@@ -1,8 +1,11 @@
 ---
 import { asset } from '../lib/content';
 interface Item { type: 'image' | 'video' | 'link'; src: string; caption: string; poster?: string }
-interface Props { items: Item[] }
-const { items } = Astro.props;
+// autoplay: local .mp4/.webm clips play muted, looping and inline, with no click needed.
+// They start from a script (not the autoplay attribute) so that visitors who ask for reduced motion
+// never see them move: for them the clip stays paused on its poster, with controls to play it.
+interface Props { items: Item[]; autoplay?: boolean }
+const { items, autoplay = false } = Astro.props;
 const isEmbed = (s: string) => /youtube\.com|youtu\.be|vimeo\.com/.test(s);
 const toEmbed = (s: string) => {
   const yt = s.match(/(?:youtu\.be\/|v=)([\w-]{6,})/);
@@ -22,7 +25,9 @@ const toEmbed = (s: string) => {
         {e.type === 'video' && (isEmbed(e.src)
           ? <iframe src={toEmbed(e.src)} title={e.caption} loading="lazy" style="width:100%;aspect-ratio:16/9;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
           : /\.(mp4|webm)$/i.test(e.src)
-            ? <video src={asset(e.src)} poster={e.poster ? asset(e.poster) : undefined} controls preload="metadata"></video>
+            ? (autoplay
+              ? <video src={asset(e.src)} poster={e.poster ? asset(e.poster) : undefined} muted loop playsinline controls preload="metadata" data-autoplay></video>
+              : <video src={asset(e.src)} poster={e.poster ? asset(e.poster) : undefined} controls preload="metadata"></video>)
             : <a href={e.src} rel="noopener noreferrer" target="_blank">Watch video<span class="visually-hidden"> (opens in a new tab)</span></a>)}
         {e.type === 'link' && (
           <a href={asset(e.src)} rel="noopener noreferrer" target="_blank">{e.src.replace(/^https?:\/\//, '')}<span class="visually-hidden"> (opens in a new tab)</span></a>
@@ -32,3 +37,24 @@ const toEmbed = (s: string) => {
     ))}
   </div>
 )}
+<script>
+    // Only clips rendered with autoplay carry data-autoplay; on other pages this finds nothing.
+    // Start muted, looping clips automatically unless the visitor prefers reduced motion.
+    // Native controls stay available so anyone can pause (WCAG 2.2.2), and they fade out while playing.
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const clips = document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]');
+    const apply = () => {
+      clips.forEach((v) => {
+        if (reduce.matches) {
+          v.pause();
+          v.dataset.motion = 'reduced';
+        } else {
+          v.muted = true;
+          v.dataset.motion = 'auto';
+          v.play().catch(() => { v.dataset.motion = 'blocked'; });
+        }
+      });
+    };
+    apply();
+    reduce.addEventListener('change', apply);
+  </script>

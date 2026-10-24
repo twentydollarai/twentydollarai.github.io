@@ -15,6 +15,13 @@
 #  • Show just four things: Time, Tokens, Cost, Weekly usage.
 #  • Put where the numbers came from in ONE line: resultsNote.
 #  • No per-row "how it was measured" text. It isn't shown in this format.
+#
+# THE WHOLE PAGE FITS ON ONE LAPTOP SCREEN (1280x800). On desktop it shows as two columns:
+# Results, Models tested and The prompt on the left; Evidence and My take on the right.
+#  • Keep the title short enough for one line (about 65 characters).
+#  • One evidence item works best: a short .mp4 clip (it plays by itself, muted and looping) or one screenshot.
+#  • Keep My take to about three short bullets.
+#  • The tests fail if the title wraps or My take runs past the first screen.
 # ─────────────────────────────────────────────────────────────────────────
 
 title: "What you tested, in plain words"
@@ -40,7 +47,6 @@ models:
 # The exact prompt, word for word. Keep the "|" and indent every line by two spaces.
 # PRIVATE or STANDARD prompt? Write only its name or "Private", never a summary, e.g.
 #   prompt: "Standard TwentyDollarAI Benchmarking"
-#   promptLabel: "Standard"        # the small label next to "The prompt" (default: Verbatim)
 # Never describe, summarize, paraphrase or reconstruct a private prompt.
 prompt: |
   Paste the exact prompt here.
@@ -75,6 +81,8 @@ results:
 #   type: image  -> file in public/images/benchmarks/, src starts with /images/benchmarks/
 #   type: video  -> YouTube/Vimeo link (embedded), or an .mp4 in public/images/benchmarks/ (under 1 MB)
 #                   optional for an .mp4:  poster: /images/benchmarks/your-still.webp  (shown before it plays)
+#                   An .mp4 on a benchmark page plays by itself, muted and looping, with controls to pause it.
+#                   Visitors who turn on "reduce motion" see it paused on the poster instead.
 #   type: link   -> any https:// page, e.g. a shared chat or an X post
 # Delete the list (write  evidence: []) if you have none.
 evidence:
@@ -87,4 +95,5 @@ demo: false
 ---
 
 Write "My take" here: your opinions, impressions, and conclusions.
-This section is automatically labeled **Opinion** on the page, separate from the measured results.
+It shows under the heading "My take", separate from the measured results. Keep it to about three short bullets
+so the page still fits on one screen.

@@ -34,67 +34,71 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
       </div>
     </header>
 
-    <section class="block measured-zone" aria-labelledby="results-title">
-      <div class="block-head"><h2 id="results-title">Results</h2><span class="chip chip-measured">Measured</span></div>
-      <p class="block-note">{d.resultsNote ?? (d.compactResults ? 'Numbers recorded during the test.' : 'Numbers and checks recorded during the test. Each row says how it was measured.')}</p>
-      {d.results.length > 0 && d.compactResults ? (
-        <table class="results results-compact">
-          <caption class="visually-hidden">Measured results: metric and value</caption>
-          <tbody>
-            {d.results.map((r) => (
-              <tr><th scope="row">{multiModel ? `${r.model} · ${r.metric}` : r.metric}</th><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td></tr>
+    <div class="bench-grid">
+      <div class="bench-main">
+        <section class="block" aria-labelledby="results-title">
+          <h2 id="results-title">Results</h2>
+          <p class="block-note">{d.resultsNote ?? (d.compactResults ? 'Numbers recorded during the test.' : 'Numbers and checks recorded during the test. Each row says how it was measured.')}</p>
+          {d.results.length > 0 && d.compactResults ? (
+            <table class="results results-compact">
+              <caption class="visually-hidden">Measured results: metric and value</caption>
+              <tbody>
+                {d.results.map((r) => (
+                  <tr><th scope="row">{multiModel ? `${r.model} · ${r.metric}` : r.metric}</th><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          ) : d.results.length > 0 ? (
+            <div class="table-scroll" tabindex="0" role="region" aria-label="Measured results table, scrollable">
+              <table class="results">
+                <caption>Swipe or scroll sideways on small screens. The model column stays fixed.</caption>
+                <thead><tr><th scope="col">Model</th><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">How it was measured</th></tr></thead>
+                <tbody>
+                  {d.results.map((r) => (
+                    <tr><th scope="row">{r.model}</th><td>{r.metric}</td><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td><td class="method">{r.method}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : <p class="block-note"><em>No measured results recorded yet.</em></p>}
+        </section>
+
+        <section class="block" aria-labelledby="models-title">
+          <h2 id="models-title">Models tested</h2>
+          <ul class="model-lines">
+            {d.models.map((m) => (
+              <li class="model-line">
+                <strong>{m.name}</strong>
+                <span><span class="ml-label">Plan</span> {m.plan ?? 'Not recorded'}</span>
+                {m.price && (
+                  <span><span class="ml-label">Price</span> <span class="price">{money(m.price.amount, m.price.currency)}</span> / {m.price.period} ({isUrl(m.price.source!) ? <a href={m.price.source} rel="noopener noreferrer" target="_blank">source<span class="visually-hidden"> (opens in a new tab)</span></a> : m.price.source}{m.price.checked && <>, checked <time datetime={isoDate(m.price.checked)}>{formatDate(m.price.checked)}</time></>})</span>
+                )}
+              </li>
             ))}
-          </tbody>
-        </table>
-      ) : d.results.length > 0 ? (
-        <div class="table-scroll" tabindex="0" role="region" aria-label="Measured results table, scrollable">
-          <table class="results">
-            <caption>Swipe or scroll sideways on small screens. The model column stays fixed.</caption>
-            <thead><tr><th scope="col">Model</th><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">How it was measured</th></tr></thead>
-            <tbody>
-              {d.results.map((r) => (
-                <tr><th scope="row">{r.model}</th><td>{r.metric}</td><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td><td class="method">{r.method}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : <p class="block-note"><em>No measured results recorded yet.</em></p>}
-    </section>
+          </ul>
+        </section>
 
-    <section class="block" aria-labelledby="models-title">
-      <div class="block-head"><h2 id="models-title">Models tested</h2></div>
-      <ul class="model-lines">
-        {d.models.map((m) => (
-          <li class="model-line">
-            <strong>{m.name}</strong>
-            <span><span class="ml-label">Plan</span> {m.plan ?? 'Not recorded'}</span>
-            {m.price && (
-              <span><span class="ml-label">Price</span> <span class="price">{money(m.price.amount, m.price.currency)}</span> / {m.price.period} ({isUrl(m.price.source!) ? <a href={m.price.source} rel="noopener noreferrer" target="_blank">source<span class="visually-hidden"> (opens in a new tab)</span></a> : m.price.source}{m.price.checked && <>, checked <time datetime={isoDate(m.price.checked)}>{formatDate(m.price.checked)}</time></>})</span>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
+        <section class="block" aria-labelledby="prompt-title">
+          <h2 id="prompt-title">The prompt</h2>
+          <pre class="prompt-box">{d.prompt}</pre>
+        </section>
+      </div>
+      <div class="bench-side">
+        {d.evidence.length > 0 && (
+          <section class="block" aria-labelledby="evidence-title">
+            <h2 id="evidence-title">Evidence</h2>
+            <Evidence items={d.evidence} autoplay />
+          </section>
+        )}
 
-    <section class="block" aria-labelledby="prompt-title">
-      <div class="block-head"><h2 id="prompt-title">The prompt</h2><span class="chip">{d.promptLabel ?? 'Verbatim'}</span></div>
-      <pre class="prompt-box">{d.prompt}</pre>
-    </section>
-
-    {d.evidence.length > 0 && (
-      <section class="block" aria-labelledby="evidence-title">
-        <div class="block-head"><h2 id="evidence-title">Evidence</h2><span class="chip">Screenshots &amp; video</span></div>
-        <Evidence items={d.evidence} />
-      </section>
-    )}
-
-    {hasTake && (
-      <section class="block opinion-zone" aria-labelledby="take-title">
-        <div class="block-head"><h2 id="take-title">My take</h2><span class="chip chip-opinion">Opinion</span></div>
-        <p class="block-note">Personal judgment, not a measurement.</p>
-        <div class="prose"><Content /></div>
-      </section>
-    )}
+        {hasTake && (
+          <section class="block" aria-labelledby="take-title">
+            <h2 id="take-title">My take</h2>
+            <div class="prose"><Content /></div>
+          </section>
+        )}
+      </div>
+    </div>
     <p class="follow-line">I post new tests on X: <a href={siteConfig.xUrl} rel="me noopener noreferrer" target="_blank">{siteConfig.xHandle}<span class="visually-hidden"> (opens in a new tab)</span></a></p>
     <a class="back-link" href={url('/benchmarks/')}>← All benchmarks</a>
   </article>

@@ -98,8 +98,13 @@ try {
   r.check((await read('blog/index.html')).includes('href="/blog/test-post/"'), 'blog list links the post');
   r.check(await exists('blog/category/test-category/index.html'), 'category page generated');
   const bench = await read('benchmarks/test-benchmark/index.html');
-  r.check(bench.includes('TEST model A') && bench.includes('chip-measured') && bench.includes('chip-opinion') && bench.includes('TEST note: not a real price'),
-    'benchmark page renders models, price source, Measured and Opinion sections');
+  r.check(bench.includes('TEST model A') && bench.includes('TEST note: not a real price')
+    && /<section[^>]*aria-labelledby="results-title"[^>]*>\s*<h2 id="results-title">Results<\/h2>/.test(bench)
+    && /<section[^>]*aria-labelledby="take-title"[^>]*>\s*<h2 id="take-title">My take<\/h2>/.test(bench)
+    && bench.indexOf('id="results-title"') < bench.indexOf('id="take-title"'),
+    'benchmark page renders models, price source, and separate Results and My take sections with plain headings');
+  r.check(!/class="chip/.test(bench) && !bench.includes('Personal judgment, not a measurement'),
+    'benchmark page has no label chips or repeated labels (plain headings only)');
   r.check(bench.includes('results-compact') && !bench.includes('How it was measured') && !bench.includes('table-scroll'),
     'benchmark from template uses the compact Metric / Value results table by default');
   r.check(bench.indexOf('id="results-title"') > -1 && bench.indexOf('id="results-title"') < bench.indexOf('id="models-title"'),

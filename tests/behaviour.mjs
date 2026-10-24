@@ -130,6 +130,62 @@ try {
     await ctx.close();
   }
 
+  // Benchmark pages (production build): one-screen layout and the autoplaying evidence clip.
+  {
+    const ctx = await b.newContext({ viewport: { width: 1280, height: 800 } });
+    const p = await ctx.newPage();
+    await p.goto(prod.url + '/benchmarks/');
+    const pages = [...new Set(await p.$$eval('a[href^="/benchmarks/"]', (as) => as.map((a) => a.getAttribute('href')).filter((h) => /^\/benchmarks\/[^/]+\/$/.test(h))))];
+    r.check(pages.length > 0, `production build has benchmark pages to check (${pages.length})`);
+    let videos = 0;
+    for (const path of pages) {
+      await p.goto(prod.url + path, { waitUntil: 'load' });
+      await p.evaluate(() => document.fonts.ready);
+      const fit = await p.evaluate(() => {
+        const h1 = document.querySelector('h1');
+        const lines = Math.round(h1.getBoundingClientRect().height / parseFloat(getComputedStyle(h1).lineHeight));
+        const take = [...document.querySelectorAll('section[aria-labelledby="take-title"] li, section[aria-labelledby="take-title"] p')].pop();
+        const results = document.querySelector('section[aria-labelledby="results-title"]');
+        return { lines, takeBottom: take ? take.getBoundingClientRect().bottom : null, resultsBottom: results.getBoundingClientRect().bottom,
+          chips: document.querySelectorAll('.bench .chip').length };
+      });
+      r.check(fit.lines === 1, `1280x800 ${path}: title on one line (${fit.lines})`);
+      r.check(fit.resultsBottom <= 800 && (fit.takeBottom === null || fit.takeBottom <= 800 - 40),
+        `1280x800 ${path}: results and the end of My take fit on the first screen with 40px spare (take ends ${fit.takeBottom?.toFixed(0)})`);
+      r.check(fit.chips === 0, `${path}: no label chips on benchmark pages`);
+      const clips = await p.$$('video[src^="/"]');
+      for (let i = 0; i < clips.length; i++) {
+        videos++;
+        const a = await p.evaluate((i) => { const v = document.querySelectorAll('video[src^="/"]')[i];
+          return { autoplayAttr: v.hasAttribute('autoplay'), flagged: v.hasAttribute('data-autoplay'), muted: v.muted && v.hasAttribute('muted'), loop: v.loop,
+            inline: v.hasAttribute('playsinline'), controls: v.controls, poster: !!v.getAttribute('poster'), width: v.getBoundingClientRect().width }; }, i);
+        r.check(a.flagged && a.muted && a.loop && a.inline && a.controls && a.poster && !a.autoplayAttr,
+          `${path} video ${i + 1}: muted, loop, playsinline, poster and controls; started by script, not the autoplay attribute`);
+        r.check(a.width >= 360 && a.width <= 420, `${path} video ${i + 1}: shown 360-420px wide at 1280 (${a.width.toFixed(0)}px)`);
+        const playing = await p.waitForFunction((i) => { const v = document.querySelectorAll('video[src^="/"]')[i]; return v.dataset.motion === 'auto' && !v.paused && v.currentTime > 0.2; }, i, { timeout: 8000 }).then(() => true, () => false);
+        r.check(playing, `${path} video ${i + 1}: plays by itself with no click`);
+      }
+      const rctx = await b.newContext({ reducedMotion: 'reduce' });
+      const rp = await rctx.newPage();
+      await rp.goto(prod.url + path, { waitUntil: 'load' });
+      await rp.waitForTimeout(1000);
+      const still = await rp.$$eval('video[src^="/"]', (vs) => vs.map((v) => ({ motion: v.dataset.motion, paused: v.paused, t: v.currentTime, controls: v.controls })));
+      r.check(still.every((v) => v.motion === 'reduced' && v.paused && v.t === 0 && v.controls),
+        `${path}: prefers-reduced-motion keeps the clip paused on its poster, with controls (${still.length} clip(s))`);
+      await rctx.close();
+      if (touch) {
+        const mctx = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+        const mp = await mctx.newPage();
+        await mp.goto(prod.url + path, { waitUntil: 'load' });
+        const rb = await mp.evaluate(() => document.querySelector('section[aria-labelledby="results-title"]').getBoundingClientRect().bottom);
+        r.check(rb <= 844, `390x844 ${path}: results on the first screen (ends ${rb.toFixed(0)})`);
+        await mctx.close();
+      }
+    }
+    r.check(videos > 0, `checked autoplay on ${videos} benchmark evidence clip(s)`);
+    await ctx.close();
+  }
+
   // Demo banner visible in demo build.
   {
     const p = await (await b.newContext()).newPage();

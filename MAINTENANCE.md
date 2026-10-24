@@ -21,7 +21,7 @@ the Models tested card, so it fits on the first screen on desktop and mobile. Us
 Cost, Weekly usage) and one source line in `resultsNote`. `method` is optional and not displayed unless a page
 sets `compactResults: false` (the old wide table with Model and "How it was measured" columns, where `method`
 is required again). With more than one model, each compact row is labeled "Model · Metric".
-A private or standard prompt shows only its name and `promptLabel` (e.g. "Standard"); never summarize it.
+A private or standard prompt shows only its name (e.g. "Standard TwentyDollarAI Benchmarking"); never summarize it.
 Template values say `FILL IN`, and the build refuses a published page that still contains one.
 
 **In the GitHub website:**
