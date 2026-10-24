@@ -6,12 +6,12 @@ import { getVisible, url } from '../../lib/content';
 
 const items = await getVisible('benchmarks');
 ---
-<Base title="Benchmarks" description="Real tests of AI subscriptions: measured time, tokens, cost and usage, plus the output.">
+<Base title="Benchmarks" description="Real tests of AI subscriptions: measured time, tokens, cost and weekly usage, plus the output.">
   <div class="wrap">
     <header class="page-head">
       <span class="kicker">Benchmarks</span>
       <h1>One task, one model</h1>
-      <p class="lede">In each benchmark I run one real task on one model and record what happened: the measured results, where the numbers came from, and the output as evidence.</p>
+      <p class="lede">In each benchmark I run one real task and record what happened: the measured results, where the numbers came from, and the output as evidence.</p>
     </header>
     {items.length > 0 ? (
       <div class="grid">
