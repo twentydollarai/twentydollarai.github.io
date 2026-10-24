@@ -40,26 +40,29 @@ const html = (d, still) => `<!doctype html><html><head><meta charset="utf-8"><st
 @font-face{font-family:'IBM Plex Mono';font-weight:600;src:url(${fonts.mono600}) format('woff2')}
 *{margin:0;box-sizing:border-box}
 html,body{width:1200px;height:630px;overflow:hidden}
-body{background:${C.paper};color:${C.ink};font-family:Inter,sans-serif;padding:52px 64px 48px;display:flex;flex-direction:column}
-.site{display:flex;align-items:center;gap:14px;font-weight:600;font-size:30px;letter-spacing:-0.01em}
-.site img{width:46px;height:46px}
-.top{display:flex;gap:48px;margin-top:34px;flex:1;min-height:0}
-.text{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:18px}
-h1{font-weight:700;font-size:62px;line-height:1.08;letter-spacing:-0.02em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.plan{font-size:34px;color:${C.ink2}}
-.still{width:${still ? 520 : 0}px;flex:none;align-self:center;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:${C.line}}
+body{background:${C.paper};color:${C.ink};font-family:Inter,sans-serif;padding:40px 60px 36px;display:flex;flex-direction:column}
+/* Top: site name, title and plan on the left; the output still on the right. */
+.top{display:flex;gap:44px;flex:1;min-height:0}
+.text{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+.site{display:flex;align-items:center;gap:12px;font-weight:600;font-size:30px;letter-spacing:-0.01em}
+.site img{width:42px;height:42px}
+h1{font-weight:700;font-size:56px;line-height:1.06;letter-spacing:-0.02em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.plan{font-size:38px;color:${C.ink2};margin-top:10px}
+.still{height:100%;flex:none;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:${C.line}}
 .still img{width:100%;height:100%;object-fit:cover;display:block}
-.results{display:grid;grid-template-columns:repeat(${Math.min(4, Math.max(1, d.results.length))},1fr);gap:18px 28px;border-top:2px solid ${C.line};padding-top:22px;margin-top:30px}
-.label{font-size:24px;color:${C.ink2};line-height:1.2}
-.value{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:46px;line-height:1.1;margin-top:6px;white-space:nowrap}
+/* Bottom: the measured results, two per row, label above value. Sized to read at ~350px wide (X's phone feed). */
+.results{display:grid;grid-template-columns:repeat(${d.results.length > 1 ? 2 : 1},1fr);column-gap:56px;margin-top:16px}
+.cell{border-top:2px solid ${C.line};padding:10px 0 8px;min-width:0}
+.label{font-size:38px;color:${C.ink2};line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.value{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:58px;line-height:1.1;white-space:nowrap}
 </style></head><body>
-<div class="site"><img src="${logo}" alt="">${esc(siteName)}</div>
 <div class="top">
-  <div class="text"><h1>${esc(d.cardTitle)}</h1>
-  <div class="plan">${d.models.length === 1 ? esc(d.models[0].plan) : d.models.map((m) => `${esc(m.name)} · ${esc(m.plan)}`).join('<br>')}</div></div>
+  <div class="text"><div class="site"><img src="${logo}" alt="">${esc(siteName)}</div>
+  <div><h1>${esc(d.cardTitle)}</h1>
+  <div class="plan">${d.models.length === 1 ? esc(d.models[0].plan) : d.models.map((m) => `${esc(m.name)} · ${esc(m.plan)}`).join('<br>')}</div></div></div>
   ${still ? `<div class="still"><img src="${still}" alt=""></div>` : ''}
 </div>
-${d.results.length ? `<div class="results">${d.results.map((r) => `<div><div class="label">${esc(r.label)}</div><div class="value">${esc(r.value)}</div></div>`).join('')}</div>` : ''}
+${d.results.length ? `<div class="results">${d.results.map((r) => `<div class="cell"><div class="label">${esc(r.label)}</div><div class="value">${esc(r.value)}</div></div>`).join('')}</div>` : ''}
 </body></html>`;
 
 build();

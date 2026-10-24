@@ -11,7 +11,7 @@ const decode = (s) => s.replace(/<[^>]+>/g, '').replace(/&#(\d+);/g, (_, n) => S
 export function cardData(html) {
   const title = decode(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)[1]);
   // "Model in Tool: Prompt name" → the card shows the part before ": " (model + tool).
-  const cardTitle = title.includes(': ') ? title.slice(0, title.indexOf(': ')) : title;
+  const cardTitle = cardTitleOf(title);
   const models = [...html.matchAll(/<li class="model-line"><strong>([\s\S]*?)<\/strong>[\s\S]*?<span class="visually-hidden">Plan: <\/span>([\s\S]*?)<\/span>/g)]
     .map(([, name, plan]) => ({ name: decode(name), plan: decode(plan) }));
   const table = html.match(/<table class="results[^"]*">([\s\S]*?)<\/table>/)?.[1] ?? '';
@@ -48,3 +48,13 @@ export function withPngText(buf, key, value) {
   chunk.writeUInt32BE(crc32(Buffer.concat([Buffer.from('tEXt', 'latin1'), data])) >>> 0, 8 + data.length);
   return Buffer.concat([buf.subarray(0, 33), chunk, buf.subarray(33)]);
 }
+
+/** Alt text for the share card, from the same data: title, plan(s), each result as "label value". */
+export function cardAlt({ cardTitle, models, results, video }) {
+  const plans = models.length === 1 ? models[0].plan : models.map((m) => `${m.name} · ${m.plan}`).join('; ');
+  const res = results.map((r) => `${r.label} ${r.value}`).join(', ');
+  return `${cardTitle}, ${plans}${res ? `: ${res}` : ''}.${video ? ' With a still from the output video.' : ''}`;
+}
+
+/** The page's card title: the part of the title before ": " (model + tool), or the whole title. */
+export const cardTitleOf = (title) => (title.includes(': ') ? title.slice(0, title.indexOf(': ')) : title);

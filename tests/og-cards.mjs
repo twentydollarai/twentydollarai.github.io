@@ -6,7 +6,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { reporter, arg, ROOT, SITE } from './lib.mjs';
-import { cardData, cardHash, pngInfo, CARD_KEY } from '../scripts/og-card-data.mjs';
+import { cardData, cardHash, cardAlt, pngInfo, CARD_KEY } from '../scripts/og-card-data.mjs';
 
 const dir = path.resolve(ROOT, arg('dir', 'dist'));
 const prefix = arg('site', SITE).replace(/\/$/, '') + arg('base', '/');
@@ -37,6 +37,12 @@ for (const f of benchPages) {
   const video = d.video ? await read(path.join(ROOT, 'public', decodeURIComponent(d.video))) : null;
   r.check(info?.text[CARD_KEY] === cardHash(d, video),
     `${slug}: card is up to date with the page's title, plan, results and video (if not, run node scripts/make-og-cards.mjs)`);
+  const decodeAttr = (s) => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  const ogAlt = metas(html, 'property', 'og:image:alt').map(decodeAttr), twAlt = metas(html, 'name', 'twitter:image:alt').map(decodeAttr);
+  r.check(ogAlt.length === 1 && twAlt.length === 1 && ogAlt[0] === twAlt[0] && ogAlt[0].length > 0, `${slug}: og:image:alt and twitter:image:alt exist and match ("${ogAlt[0] ?? ''}")`);
+  r.check(ogAlt[0] === cardAlt(d), `${slug}: alt text is built from the page's title, plan and results`);
+  r.check(d.results.length > 0 && d.results.every((x) => ogAlt[0]?.includes(x.value)) && d.models.every((m) => ogAlt[0]?.includes(m.plan)),
+    `${slug}: alt text contains every result value and the plan (${d.results.map((x) => x.value).join(', ')})`);
   r.check(d.results.length > 0 && d.models.length > 0, `${slug}: card data read from the page (${d.models.map((m) => m.plan).join(', ')}; ${d.results.map((x) => x.value).join(', ')})`);
 }
 
@@ -47,7 +53,7 @@ for (const f of htmlFiles.filter((x) => !benchPages.includes(x))) {
   const cover = /^blog[\/\\][^\/\\]+[\/\\]index\.html$/.test(f) && !/^blog[\/\\]category/.test(f) && og[0] && !og[0].endsWith('/og-default.png') && /\/images\/blog\//.test(og[0]);
   const ok = og.length === 1 && tw.length === 1 && og[0] === tw[0] && (cover || (og[0] === `${prefix}og-default.png`
     && metas(html, 'property', 'og:image:width').join() === '1200' && metas(html, 'property', 'og:image:height').join() === '630'));
-  if (!ok || og[0].includes('/og/benchmarks/')) bad.push(`${f}: ${og.join(' ')}`);
+  if (!ok || og[0].includes('/og/benchmarks/') || /image:alt/.test(html)) bad.push(`${f}: ${og.join(' ')}`);
 }
-r.check(bad.length === 0, `${htmlFiles.length - benchPages.length} other pages use og-default.png (1200x630), or a blog post's own cover ${bad.join('; ')}`);
+r.check(bad.length === 0, `${htmlFiles.length - benchPages.length} other pages use og-default.png (1200x630), or a blog post's own cover, and no card alt text ${bad.join('; ')}`);
 process.exit(r.done() ? 1 : 0);

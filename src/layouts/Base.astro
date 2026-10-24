@@ -20,11 +20,13 @@ interface Props {
   /** Pixel size of `image`, when known (the benchmark share cards are 1200x630). */
   imageWidth?: number;
   imageHeight?: number;
+  /** Alt text for `image` (og:image:alt and twitter:image:alt). */
+  imageAlt?: string;
   type?: 'website' | 'article';
   published?: Date;
   noindex?: boolean;
 }
-const { title, description = siteConfig.description, image, imageWidth, imageHeight, type = 'website', published, noindex } = Astro.props;
+const { title, description = siteConfig.description, image, imageWidth, imageHeight, imageAlt, type = 'website', published, noindex } = Astro.props;
 // og-default.png is 1200x630; other images report their size only when the page passes it.
 const ogSize = image ? (imageWidth && imageHeight ? { w: imageWidth, h: imageHeight } : null) : { w: 1200, h: 630 };
 const fullTitle = title ? `${title} · ${siteConfig.name}` : `${siteConfig.name}: ${siteConfig.tagline}`;
@@ -59,12 +61,14 @@ const robots = noindex || SHOW_DEMO ? 'noindex, nofollow' : 'index, follow';
     <meta property="og:image" content={ogImage} />
     {ogSize && <meta property="og:image:width" content={String(ogSize.w)} />}
     {ogSize && <meta property="og:image:height" content={String(ogSize.h)} />}
+    {image && imageAlt && <meta property="og:image:alt" content={imageAlt} />}
     {published && <meta property="article:published_time" content={published.toISOString()} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content={siteConfig.xHandle} />
     <meta name="twitter:title" content={title ?? siteConfig.name} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    {image && imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
 
     <!-- Sets theme before paint to avoid a flash. First-party, no external calls. -->
     <script is:inline>

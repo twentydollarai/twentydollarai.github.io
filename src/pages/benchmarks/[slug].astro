@@ -7,6 +7,8 @@ import { getVisible, url, formatDate, isoDate } from '../../lib/content';
 import { siteConfig } from '../../site.config.mjs';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+// @ts-ignore: plain JS module shared with the card script and tests
+import { cardAlt, cardTitleOf } from '../../../scripts/og-card-data.mjs';
 
 export async function getStaticPaths() {
   const items = await getVisible('benchmarks');
@@ -24,8 +26,17 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
 // Share card (1200x630) made by scripts/make-og-cards.mjs. Until it exists, the page falls back to og-default.png.
 const card = `/og/benchmarks/${entry.id}.png`;
 const hasCard = !d.demo && existsSync(path.join(process.cwd(), 'public', card));
+// Alt text from the same data the card shows (as the page shows it).
+const cardAltText = cardAlt({
+  cardTitle: cardTitleOf(d.title),
+  models: d.models.map((m) => ({ name: m.name, plan: m.plan ?? 'Not recorded' })),
+  results: d.compactResults
+    ? d.results.map((r) => ({ label: multiModel ? `${r.model} · ${r.metric}` : r.metric, value: `${r.value}${r.unit ? ` ${r.unit}` : ''}` }))
+    : d.results.map((r) => ({ label: `${r.model} · ${r.metric}`, value: `${r.value}${r.unit ? ` ${r.unit}` : ''}` })),
+  video: d.evidence.find((e) => e.type === 'video')?.src ?? null,
+});
 ---
-<Base title={d.title} description={d.description} type="article" published={d.date} image={hasCard ? card : undefined} imageWidth={hasCard ? 1200 : undefined} imageHeight={hasCard ? 630 : undefined}>
+<Base title={d.title} description={d.description} type="article" published={d.date} image={hasCard ? card : undefined} imageWidth={hasCard ? 1200 : undefined} imageHeight={hasCard ? 630 : undefined} imageAlt={hasCard ? cardAltText : undefined}>
   <article class="wrap bench">
     <header class="article-head bench-head">
       <DemoBanner status={d.status} demo={d.demo} />
