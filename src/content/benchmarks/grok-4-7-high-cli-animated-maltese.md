@@ -23,31 +23,31 @@ results:
   - model: "Grok 4.7 High"
     metric: "Total runtime"
     value: "36m 34s"
-    method: "Owner-reported, from the Grok CLI's end-of-run summary."
+    method: "Owner-reported. Not yet checked against the CLI summary."
   - model: "Grok 4.7 High"
     metric: "API execution time"
     value: "24m 13s"
-    method: "Owner-reported, from the Grok CLI's end-of-run summary."
+    method: "Owner-reported. Not yet checked against the CLI summary."
   - model: "Grok 4.7 High"
     metric: "Model calls"
     value: 53
-    method: "Owner-reported, from the Grok CLI's end-of-run summary."
+    method: "Owner-reported. Not yet checked against the CLI summary."
   - model: "Grok 4.7 High"
     metric: "Input tokens"
     value: "4,685,888"
-    method: "Owner-reported, from the Grok CLI's end-of-run summary."
+    method: "Owner-reported. Not yet checked against the CLI summary."
   - model: "Grok 4.7 High"
     metric: "Cached input tokens (part of input)"
     value: "4,436,656"
-    method: "Owner-reported, from the Grok CLI's end-of-run summary."
+    method: "Owner-reported. Not yet checked against the CLI summary."
   - model: "Grok 4.7 High"
     metric: "Output tokens"
     value: "88,125"
-    method: "Owner-reported, from the Grok CLI's end-of-run summary."
+    method: "Owner-reported. Not yet checked against the CLI summary."
   - model: "Grok 4.7 High"
     metric: "Reasoning tokens"
     value: "63,336"
-    method: "Owner-reported, from the Grok CLI's end-of-run summary."
+    method: "Owner-reported. Not yet checked against the CLI summary."
   - model: "Grok 4.7 High"
     metric: "Total tokens"
     value: "4,774,013"
@@ -59,7 +59,7 @@ results:
   - model: "Grok 4.7 High"
     metric: "API-equivalent cost reported by the CLI"
     value: "$3.2425"
-    method: "Owner-reported figure shown by the Grok CLI. This is not a confirmed additional subscription charge."
+    method: "Owner-reported API-equivalent cost, not yet checked against the CLI summary. This is not a confirmed additional subscription charge."
   - model: "Grok 4.7 High"
     metric: "Output: dog carries a toy"
     value: "Yes"
@@ -74,8 +74,8 @@ evidence:
     caption: "The output, recorded by the owner: about 5 seconds of a fluffy white dog running with a toy in its mouth through a meadow of grass and daisies. Silent."
   - type: image
     src: /images/benchmarks/grok-4-7-high-maltese-meadow-still.webp
-    caption: "Still from the output: a fluffy white dog carrying a yellow-and-red striped toy through a green meadow with white daisies, rolling hills, round trees, clouds and a pale sun in a sky fading to pink near the horizon."
-status: published
+    caption: "Still from the output: a fluffy white dog carrying a yellow-and-red striped toy through a green meadow with white daisies, rolling hills, round trees, clouds and a pale sun in a sky fading to peach near the horizon."
+status: draft
 demo: false
 ---
 
@@ -89,4 +89,3 @@ These are the owner's judgments of the run, not measurements.
 
 **Conclusion.** Grok 4.7 High delivered an impressive creative coding result with low displayed subscription usage, but the long execution time is a significant drawback.
 
-**About the cost.** The $3.2425 is the API-equivalent cost the CLI reported for the run. It is not a confirmed additional subscription charge.
