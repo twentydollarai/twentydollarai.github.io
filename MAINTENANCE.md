@@ -13,7 +13,7 @@ The live site is rebuilt and redeployed automatically on every push to `main`: h
 
 1. Copy the template and name the file with lowercase-and-dashes, e.g. `first-week-with-grok.md`. The file name becomes the page address.
 2. Fill in the fields; every field is explained in the template.
-3. Reference images as `/images/<section>/<file>` and always give them alt text. Keep images small (well under 1 MB), and host videos on YouTube, X or Vimeo.
+3. Reference images as `/images/<section>/<file>` and always give them alt text. Keep images small (well under 1 MB). Short clips under 1 MB can live in `public/images/`; host longer videos on YouTube, X or Vimeo.
 4. Set `status: published`, then commit and push.
 
 **Benchmark results format (default):** a two-column Metric / Value table shown right after the title, before

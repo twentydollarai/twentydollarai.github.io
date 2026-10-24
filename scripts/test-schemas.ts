@@ -44,6 +44,14 @@ check('published benchmark with a FILL IN result is rejected',
 check('draft benchmark with a FILL IN result still builds (work in progress)',
   benchmarkSchema.safeParse({ ...bench, status: 'draft', results: [{ model: 'A', metric: 'Time', value: 'FILL IN' }] }).success);
 
+const vid = { type: 'video', src: '/images/benchmarks/clip.mp4', caption: 'c' };
+check('video evidence with a local poster passes',
+  benchmarkSchema.safeParse({ ...bench, evidence: [{ ...vid, poster: '/images/benchmarks/still.webp' }] }).success);
+check('poster on non-video evidence is rejected',
+  !benchmarkSchema.safeParse({ ...bench, evidence: [{ type: 'image', src: '/images/x.png', caption: 'c', poster: '/images/y.webp' }] }).success);
+check('external poster URL is rejected',
+  !benchmarkSchema.safeParse({ ...bench, evidence: [{ ...vid, poster: 'https://example.com/p.jpg' }] }).success);
+
 const noDate = blogSchema.safeParse({ title: 't', description: 'd' });
 check('missing date is rejected with a clear message', !noDate.success && noDate.error.issues.some((i) => /YYYY-MM-DD/.test(i.message)),
   noDate.success ? '' : noDate.error.issues.map((i) => i.message).join('; '));

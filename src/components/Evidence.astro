@@ -1,6 +1,6 @@
 ---
 import { asset } from '../lib/content';
-interface Item { type: 'image' | 'video' | 'link'; src: string; caption: string }
+interface Item { type: 'image' | 'video' | 'link'; src: string; caption: string; poster?: string }
 interface Props { items: Item[] }
 const { items } = Astro.props;
 const isEmbed = (s: string) => /youtube\.com|youtu\.be|vimeo\.com/.test(s);
@@ -22,7 +22,7 @@ const toEmbed = (s: string) => {
         {e.type === 'video' && (isEmbed(e.src)
           ? <iframe src={toEmbed(e.src)} title={e.caption} loading="lazy" style="width:100%;aspect-ratio:16/9;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
           : /\.(mp4|webm)$/i.test(e.src)
-            ? <video src={asset(e.src)} controls preload="metadata"></video>
+            ? <video src={asset(e.src)} poster={e.poster ? asset(e.poster) : undefined} controls preload="metadata"></video>
             : <a href={e.src} rel="noopener noreferrer" target="_blank">Watch video<span class="visually-hidden"> (opens in a new tab)</span></a>)}
         {e.type === 'link' && (
           <a href={asset(e.src)} rel="noopener noreferrer" target="_blank">{e.src.replace(/^https?:\/\//, '')}<span class="visually-hidden"> (opens in a new tab)</span></a>

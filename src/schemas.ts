@@ -20,11 +20,15 @@ const image = z.object({
   alt: z.string().min(1, 'Every image needs alt text describing it'),
 });
 
-const evidence = z.object({
-  type: z.enum(['image', 'video', 'link']),
-  src: mediaSrc,
-  caption: z.string().min(1, 'Describe what this evidence shows'),
-});
+const evidence = z
+  .object({
+    type: z.enum(['image', 'video', 'link']),
+    src: mediaSrc,
+    caption: z.string().min(1, 'Describe what this evidence shows'),
+    // Optional, videos only: a still image shown before the video plays. Must be a local /images/... file.
+    poster: z.string().startsWith('/images/', 'poster must be a local image path starting with /images/').optional(),
+  })
+  .refine((e) => !e.poster || e.type === 'video', { message: 'poster only works on type: video', path: ['poster'] });
 
 export const blogSchema = z.object({
   title: z.string().min(1),

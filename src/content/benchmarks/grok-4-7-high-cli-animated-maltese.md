@@ -4,7 +4,7 @@ description: "Time, tokens, cost and weekly usage for one run, plus the output."
 date: 2026-10-19
 models:
   - name: "Grok 4.7 High"
-    plan: "$30/month plan"   # my plan for this run (confirmed 2026-10-24)
+    plan: "$30 plan"   # my plan for this run (confirmed 2026-10-24)
     # No price block: $3.2425 is an API-equivalent figure, not a subscription price (see results).
 # My standard benchmark prompt and data are private. Show only this label; never describe,
 # paraphrase or reconstruct the prompt.
@@ -27,14 +27,12 @@ results:
 evidence:
   - type: video
     src: /images/benchmarks/grok-4-7-high-maltese-meadow.mp4
+    poster: /images/benchmarks/grok-4-7-high-maltese-meadow-still.webp
     caption: "The output: a white dog running through a meadow with a toy (about 5 seconds, silent)."
-  - type: image
-    src: /images/benchmarks/grok-4-7-high-maltese-meadow-still.webp
-    caption: "Still from the output."
 status: published
 demo: false
 ---
 
 - **Excellent visuals:** detailed scene, convincing dog, smooth running.
 - **Low usage:** about 2% of the weekly allowance.
-- **Slow:** 36m 34s.
+- **Slow:** over 36 minutes.

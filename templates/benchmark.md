@@ -73,7 +73,8 @@ results:
 
 # Screenshots, videos and links that back up the results.
 #   type: image  -> file in public/images/benchmarks/, src starts with /images/benchmarks/
-#   type: video  -> YouTube/Vimeo link (embedded), or an .mp4 in public/images/benchmarks/ (keep it small)
+#   type: video  -> YouTube/Vimeo link (embedded), or an .mp4 in public/images/benchmarks/ (under 1 MB)
+#                   optional for an .mp4:  poster: /images/benchmarks/your-still.webp  (shown before it plays)
 #   type: link   -> any https:// page, e.g. a shared chat or an X post
 # Delete the list (write  evidence: []) if you have none.
 evidence:

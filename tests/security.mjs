@@ -77,9 +77,12 @@ for (const f of html) {
     const h = createHash('sha256').update(m[2]).digest('base64').slice(0, 16);
     inline.set(h, { len: m[2].length, type: (m[1].match(/type="([^"]+)"/) ?? [, 'classic'])[1], sample: m[2].trim().slice(0, 70) });
   }
-  for (const m of t.matchAll(/<(?:link|img|iframe|video|source|audio)\b[^>]*\b(?:href|src)="([^"]+)"[^>]*>/g)) {
+  // Every href/src/poster on every media/link tag (a tag can carry more than one, e.g. <video src poster>).
+  for (const m of t.matchAll(/<(?:link|img|iframe|video|source|audio)\b[^>]*>/g)) {
     const tag = m[0];
-    if (/^https?:|^\/\//.test(m[1]) && !/rel="(canonical|alternate|sitemap)"/.test(tag)) extRes.add(m[1]);
+    for (const a of tag.matchAll(/\s(?:href|src|poster)="([^"]+)"/g)) {
+      if (/^https?:|^\/\//.test(a[1]) && !/rel="(canonical|alternate|sitemap)"/.test(tag)) extRes.add(a[1]);
+    }
   }
   for (const m of t.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)) if (!/rel="[^"]*noopener/.test(m[0])) badRel.push(`${path.relative(ROOT, f)}: ${m[0]}`);
 }
