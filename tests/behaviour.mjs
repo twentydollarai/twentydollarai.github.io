@@ -1,7 +1,7 @@
 // Behaviour checks: navigation, theme, mobile menu, skip link, 404, responsive overflow.
 // Needs: npm run build (dist/) and npm run build:demo (dist-demo/) in the project root.
 // Usage: node behaviour.mjs [--browser=chromium|firefox|webkit]
-import { launch, preview, astroPreview, reporter, arg, PROD_PAGES, DEMO_PAGES, PROD_PORT, DEMO_PORT } from './lib.mjs';
+import { launch, preview, astroPreview, reporter, arg, PROD_PAGES, DEMO_PAGES, PROD_PORT, DEMO_PORT, emptyRegionProbe } from './lib.mjs';
 
 const browserName = arg('browser', 'chromium');
 const r = reporter(`Behaviour (${browserName})`);
@@ -153,6 +153,28 @@ try {
       r.check(fit.resultsBottom <= 800 && (fit.takeBottom === null || fit.takeBottom <= 800 - 40),
         `1280x800 ${path}: results and the end of My take fit on the first screen with 40px spare (take ends ${fit.takeBottom?.toFixed(0)})`);
       r.check(fit.chips === 0, `${path}: no label chips on benchmark pages`);
+      // Balanced wide layout (owner: "a lot of white space").
+      const lay = await p.evaluate(() => {
+        const bb = (s) => document.querySelector(s)?.getBoundingClientRect();
+        const art = bb('article.bench'), foot = bb('.bench-foot'), x = bb('.follow-line'), back = bb('.back-link');
+        const sec = bb('.bench-results'), table = bb('.bench-results table');
+        const val = document.querySelector('.bench-results td.value');
+        const media = [...document.querySelectorAll('.bench-evidence video, .bench-evidence img, .bench-evidence iframe')].map((e) => e.getBoundingClientRect());
+        const area = (r) => r.width * r.height;
+        const others = [...document.querySelectorAll('article.bench h1, article.bench table, article.bench .prose, article.bench p, article.bench ul')].map((e) => area(e.getBoundingClientRect()));
+        return { left: art.left, right: innerWidth - art.right, width: art.width, footBottom: foot.bottom, xTop: x.top, backTop: back.top,
+          tableFull: table && sec ? table.width / sec.width : null, valueRight: val ? getComputedStyle(val).textAlign : null,
+          mediaArea: media.length ? Math.max(...media.map(area)) : null, otherMax: Math.max(...others) };
+      });
+      r.check(Math.abs(lay.left - lay.right) <= 2 && lay.width >= 1080 && lay.width <= 1160,
+        `1280x800 ${path}: centered container ~1120px with equal side margins (${lay.width.toFixed(0)}px, ${lay.left.toFixed(0)}/${lay.right.toFixed(0)})`);
+      const spare = 800 - lay.footBottom;
+      r.check(spare >= 24 && spare <= 60, `1280x800 ${path}: content through the X line ends with 24-60px spare (${spare.toFixed(1)}px)`);
+      r.check(Math.abs(lay.xTop - lay.backTop) <= 6, `${path}: X line and back link share one line`);
+      r.check(lay.tableFull === null || (lay.tableFull >= 0.98 && lay.valueRight === 'right'), `${path}: results table fills its column, values right-aligned`);
+      r.check(lay.mediaArea === null || lay.mediaArea > lay.otherMax, `${path}: the output (video/image) is the largest element on the page`);
+      const empty = await p.evaluate(emptyRegionProbe, { rootSel: 'article.bench', endSel: '.bench-foot', minH: 96 });
+      r.check(empty.widestTall.w < 256, `1280x800 ${path}: no empty region 96px+ tall wider than 20% of the screen (widest ${empty.widestTall.w}x${empty.widestTall.h})`);
       const clips = await p.$$('video[src^="/"]');
       for (let i = 0; i < clips.length; i++) {
         videos++;
@@ -161,7 +183,7 @@ try {
             inline: v.hasAttribute('playsinline'), controls: v.controls, poster: !!v.getAttribute('poster'), width: v.getBoundingClientRect().width }; }, i);
         r.check(a.flagged && a.muted && a.loop && a.inline && a.controls && a.poster && !a.autoplayAttr,
           `${path} video ${i + 1}: muted, loop, playsinline, poster and controls; started by script, not the autoplay attribute`);
-        r.check(a.width >= 360 && a.width <= 420, `${path} video ${i + 1}: shown 360-420px wide at 1280 (${a.width.toFixed(0)}px)`);
+        r.check(a.width >= 600 && a.width <= 700, `${path} video ${i + 1}: shown 600-700px wide at 1280, filling its column (${a.width.toFixed(0)}px)`);
         const playing = await p.waitForFunction((i) => { const v = document.querySelectorAll('video[src^="/"]')[i]; return v.dataset.motion === 'auto' && !v.paused && v.currentTime > 0.2; }, i, { timeout: 8000 }).then(() => true, () => false);
         r.check(playing, `${path} video ${i + 1}: plays by itself with no click`);
       }
@@ -177,8 +199,14 @@ try {
         const mctx = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
         const mp = await mctx.newPage();
         await mp.goto(prod.url + path, { waitUntil: 'load' });
-        const rb = await mp.evaluate(() => document.querySelector('section[aria-labelledby="results-title"]').getBoundingClientRect().bottom);
-        r.check(rb <= 844, `390x844 ${path}: results on the first screen (ends ${rb.toFixed(0)})`);
+        const mo = await mp.evaluate(() => {
+          const bb = (s) => document.querySelector(s)?.getBoundingClientRect();
+          return { rb: bb('section[aria-labelledby="results-title"]').bottom, h1: bb('h1').bottom, res: bb('.bench-results').top,
+            vid: bb('.bench-evidence')?.top ?? null, take: bb('.bench-take')?.top ?? null };
+        });
+        r.check(mo.rb <= 844, `390x844 ${path}: results on the first screen (ends ${mo.rb.toFixed(0)})`);
+        r.check(mo.h1 <= mo.res && (mo.vid === null || mo.res < mo.vid) && (mo.vid === null || mo.take === null || mo.vid < mo.take),
+          `390x844 ${path}: stacks title, results, output, my take`);
         await mctx.close();
       }
     }

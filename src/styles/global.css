@@ -326,20 +326,28 @@ html:not(.js) .theme-toggle { display: none; }
 .results-compact tr:last-child > * { border-bottom: 0; }
 .results-compact th[scope='row'] { position: static; box-shadow: none; border-right: 1px solid var(--line); }
 
-/* Benchmark pages: one screen at 1280x800, minimal chrome (no boxes, borders, chips or tinted panels) */
+/* Benchmark pages: one screen at 1280x800, balanced, minimal chrome (no boxes, borders, chips or tinted panels).
+   Same centered container as the site header and footer. Desktop: full-width header, then two columns (~40/60):
+   results, model, prompt and my take on the left; the output (video or image) on the right, the largest thing
+   on the page. Phones: one column. */
 .bench-head { padding: 1.5rem 0 0.25rem; }
-.bench-head h1 { max-width: none; font-size: clamp(1.45rem, 1.05rem + 1.6vw, 1.95rem); letter-spacing: -0.02em; margin-bottom: 0.3rem; }
-.bench-head .lede { font-size: 1.02rem; margin-bottom: 0.3rem; }
+.bench-head .kicker { margin-bottom: 0.75rem; }
+.bench-head h1 { max-width: none; font-size: clamp(1.45rem, 1.05rem + 1.6vw, 1.95rem); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+.bench-head .lede { max-width: none; font-size: 1.02rem; margin-bottom: 0.5rem; }
 .bench-head .article-meta { margin-bottom: 0; }
-.bench .block { margin: 1.25rem 0 0; }
-.bench .block h2 { font-size: 1.1rem; margin: 0 0 0.4rem; }
-.bench .block-note { font-size: 0.9rem; margin: 0 0 0.35rem; }
-.bench .results-compact { border: 0; border-radius: 0; background: none; font-size: 0.95rem; }
-.bench .results-compact th, .bench .results-compact td { padding: 0.3rem 2rem 0.3rem 0; background: none; border-right: 0; }
-.bench .results-compact td.value { padding-right: 0; }
-.bench .results-compact th[scope='row'] { font-weight: 500; }
+.bench .block { margin: 1.1rem 0 0; }
+.bench .block h2 { font-size: 1.1rem; margin: 0 0 0.35rem; }
+.bench .block-note { font-size: 0.9rem; margin: 0 0 0.3rem; }
+.bench .results-compact { width: 100%; border: 0; border-radius: 0; background: none; font-size: 0.95rem; }
+.bench .results-compact th, .bench .results-compact td { padding: 0.4rem 0; background: none; border-right: 0; }
+.bench .results-compact th[scope='row'] { font-weight: 500; padding-right: 1.5rem; }
+.bench .results-compact td.value { text-align: right; }
 .bench .results-compact tr:last-child > * { border-bottom: 1px solid var(--line); }
 .bench .prompt-box { background: none; border: 0; border-radius: 0; padding: 0; max-width: none; }
+/* One-line facts: heading and value share a line (wraps on narrow screens). */
+.bench-models, .bench-prompt { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 1rem; }
+.bench-models h2, .bench-prompt h2 { margin: 0; }
+.bench .bench-models, .bench .bench-prompt { margin-top: 0.75rem; }
 .model-lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.2rem; }
 .model-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.5rem; }
 .ml-sep { color: var(--ink-2); }
@@ -349,14 +357,18 @@ html:not(.js) .theme-toggle { display: none; }
 .bench .evidence figure { border: 0; border-radius: 0; padding: 0; background: none; }
 .bench .evidence video, .bench .evidence img { width: 100%; border-radius: 4px; }
 .bench .evidence figcaption { margin-top: 0.35rem; }
-.bench .prose { font-size: 1rem; line-height: 1.55; }
+.bench .prose { font-size: 1rem; line-height: 1.5; }
 .bench .prose ul { margin: 0; padding-left: 1.15rem; }
-.bench .prose li { margin: 0 0 0.15rem; }
+.bench .prose li { margin: 0 0 0.1rem; }
 .bench .prose > :first-child { margin-top: 0; }
-.bench .follow-line { font-size: 0.95rem; color: var(--ink-2); margin: 1.5rem 0 0; }
-.bench .back-link { margin-top: 0.75rem; }
+.bench-foot { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 2rem; margin: 1.25rem 0 0; font-size: 0.95rem; }
+.bench-foot .follow-line { color: var(--ink-2); margin: 0; }
+.bench-foot .back-link { margin: 0; }
 @media (min-width: 900px) {
-  .bench-grid { display: grid; grid-template-columns: minmax(0, 26rem) 25rem; justify-content: start; gap: 0 4rem; align-items: start; }
+  .bench-head { padding: 2.75rem 0 0.5rem; }
+  .bench-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); grid-template-rows: auto auto auto 1fr; column-gap: 3rem; align-items: start; }
+  .bench-grid > .block { grid-column: 1; }
+  .bench-grid > .bench-evidence { grid-column: 2; grid-row: 1 / span 4; }
 }
 
 

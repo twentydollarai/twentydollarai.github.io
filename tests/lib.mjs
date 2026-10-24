@@ -106,3 +106,48 @@ export function arg(name, fallback) {
   const a = process.argv.find((x) => x.startsWith(`--${name}=`));
   return a ? a.split('=')[1] : fallback;
 }
+
+// Runs in the page (pass to page.evaluate). Finds the largest empty rectangle inside `rootSel`
+// (from its top to the bottom of `endSel`, across its full width), on an 8px grid. "Occupied" means
+// covered by visible text, a video, an image or a table row. Returns the largest empty rectangle by
+// area and the widest empty rectangle that is at least `minH` px tall.
+export function emptyRegionProbe({ rootSel, endSel, minH }) {
+  const root = document.querySelector(rootSel).getBoundingClientRect();
+  const end = document.querySelector(endSel).getBoundingClientRect();
+  const G = 8, x0 = root.left, y0 = root.top, W = Math.floor(root.width / G), H = Math.ceil((end.bottom - root.top) / G);
+  const occ = Array.from({ length: H }, () => new Uint8Array(W));
+  const mark = (r) => {
+    if (r.width < 2 || r.height < 2) return;
+    for (let y = Math.max(0, Math.floor((r.top - y0) / G)); y < Math.min(H, Math.ceil((r.bottom - y0) / G)); y++)
+      for (let x = Math.max(0, Math.floor((r.left - x0) / G)); x < Math.min(W, Math.ceil((r.right - x0) / G)); x++) occ[y][x] = 1;
+  };
+  const scope = document.querySelector(rootSel);
+  const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
+  for (let n; (n = walker.nextNode());) {
+    if (!n.textContent.trim()) continue;
+    const el = n.parentElement;
+    if (el.closest('.visually-hidden') || getComputedStyle(el).visibility === 'hidden') continue;
+    const range = document.createRange(); range.selectNodeContents(n);
+    for (const r of range.getClientRects()) mark(r);
+  }
+  scope.querySelectorAll('video, img, iframe, tr').forEach((e) => mark(e.getBoundingClientRect()));
+  const heights = new Array(W).fill(0);
+  let best = { w: 0, h: 0, area: 0 }, widest = { w: 0, h: 0 };
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) heights[x] = occ[y][x] ? 0 : heights[x] + 1;
+    const stack = [];
+    for (let x = 0; x <= W; x++) {
+      const h = x === W ? 0 : heights[x];
+      let start = x;
+      while (stack.length && stack[stack.length - 1][1] >= h) {
+        const [s, sh] = stack.pop();
+        const w = (x - s) * G, hh = sh * G;
+        if (w * hh > best.area) best = { w, h: hh, area: w * hh, x: Math.round(x0 + s * G), y: Math.round(y0 + (y - sh + 1) * G) };
+        if (hh >= minH && w > widest.w) widest = { w, h: hh, x: Math.round(x0 + s * G), y: Math.round(y0 + (y - sh + 1) * G) };
+        start = s;
+      }
+      stack.push([start, h]);
+    }
+  }
+  return { gridW: W * G, largest: best, widestTall: widest };
+}

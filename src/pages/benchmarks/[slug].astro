@@ -33,74 +33,75 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
       </div>
     </header>
 
+    <!-- Desktop: two columns (about 40/60). Left: results, model, prompt, my take. Right: the output.
+         Phones: one column in source order: results, model, prompt, output, my take. -->
     <div class="bench-grid">
-      <div class="bench-main">
-        <section class="block" aria-labelledby="results-title">
-          <h2 id="results-title">Results</h2>
-          <p class="block-note">{d.resultsNote ?? (d.compactResults ? 'Numbers recorded during the test.' : 'Numbers and checks recorded during the test. Each row says how it was measured.')}</p>
-          {d.results.length > 0 && d.compactResults ? (
-            <table class="results results-compact">
-              <caption class="visually-hidden">Measured results: metric and value</caption>
+      <section class="block bench-results" aria-labelledby="results-title">
+        <h2 id="results-title">Results</h2>
+        <p class="block-note">{d.resultsNote ?? (d.compactResults ? 'Numbers recorded during the test.' : 'Numbers and checks recorded during the test. Each row says how it was measured.')}</p>
+        {d.results.length > 0 && d.compactResults ? (
+          <table class="results results-compact">
+            <caption class="visually-hidden">Measured results: metric and value</caption>
+            <tbody>
+              {d.results.map((r) => (
+                <tr><th scope="row">{multiModel ? `${r.model} · ${r.metric}` : r.metric}</th><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        ) : d.results.length > 0 ? (
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Measured results table, scrollable">
+            <table class="results">
+              <caption>Swipe or scroll sideways on small screens. The model column stays fixed.</caption>
+              <thead><tr><th scope="col">Model</th><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">How it was measured</th></tr></thead>
               <tbody>
                 {d.results.map((r) => (
-                  <tr><th scope="row">{multiModel ? `${r.model} · ${r.metric}` : r.metric}</th><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td></tr>
+                  <tr><th scope="row">{r.model}</th><td>{r.metric}</td><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td><td class="method">{r.method}</td></tr>
                 ))}
               </tbody>
             </table>
-          ) : d.results.length > 0 ? (
-            <div class="table-scroll" tabindex="0" role="region" aria-label="Measured results table, scrollable">
-              <table class="results">
-                <caption>Swipe or scroll sideways on small screens. The model column stays fixed.</caption>
-                <thead><tr><th scope="col">Model</th><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">How it was measured</th></tr></thead>
-                <tbody>
-                  {d.results.map((r) => (
-                    <tr><th scope="row">{r.model}</th><td>{r.metric}</td><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td><td class="method">{r.method}</td></tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : <p class="block-note"><em>No measured results recorded yet.</em></p>}
-        </section>
+          </div>
+        ) : <p class="block-note"><em>No measured results recorded yet.</em></p>}
+      </section>
 
-        <section class="block" aria-labelledby="models-title">
-          <h2 id="models-title">Models tested</h2>
-          <ul class="model-lines">
-            {d.models.map((m) => (
-              <li class="model-line">
-                <strong>{m.name}</strong>
+      <section class="block bench-models" aria-labelledby="models-title">
+        <h2 id="models-title">Models tested</h2>
+        <ul class="model-lines">
+          {d.models.map((m) => (
+            <li class="model-line">
+              <strong>{m.name}</strong>
+              <span class="ml-sep" aria-hidden="true">·</span>
+              <span><span class="visually-hidden">Plan: </span>{m.plan ?? 'Not recorded'}</span>
+              {m.price && (<>
                 <span class="ml-sep" aria-hidden="true">·</span>
-                <span><span class="visually-hidden">Plan: </span>{m.plan ?? 'Not recorded'}</span>
-                {m.price && (
-                  <span class="ml-sep" aria-hidden="true">·</span>
-                  <span><span class="ml-label">Price</span> <span class="price">{money(m.price.amount, m.price.currency)}</span> / {m.price.period} ({isUrl(m.price.source!) ? <a href={m.price.source} rel="noopener noreferrer" target="_blank">source<span class="visually-hidden"> (opens in a new tab)</span></a> : m.price.source}{m.price.checked && <>, checked <time datetime={isoDate(m.price.checked)}>{formatDate(m.price.checked)}</time></>})</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
+                <span><span class="ml-label">Price</span> <span class="price">{money(m.price.amount, m.price.currency)}</span> / {m.price.period} ({isUrl(m.price.source!) ? <a href={m.price.source} rel="noopener noreferrer" target="_blank">source<span class="visually-hidden"> (opens in a new tab)</span></a> : m.price.source}{m.price.checked && <>, checked <time datetime={isoDate(m.price.checked)}>{formatDate(m.price.checked)}</time></>})</span>
+              </>)}
+            </li>
+          ))}
+        </ul>
+      </section>
 
-        <section class="block" aria-labelledby="prompt-title">
-          <h2 id="prompt-title">The prompt</h2>
-          <pre class="prompt-box">{d.prompt}</pre>
-        </section>
-      </div>
-      <div class="bench-side">
-        {d.evidence.length > 0 && (
-          <section class="block" aria-labelledby="evidence-title">
-            <h2 id="evidence-title">Evidence</h2>
-            <Evidence items={d.evidence} autoplay />
-          </section>
-        )}
+      <section class="block bench-prompt" aria-labelledby="prompt-title">
+        <h2 id="prompt-title">The prompt</h2>
+        <pre class="prompt-box">{d.prompt}</pre>
+      </section>
 
-        {hasTake && (
-          <section class="block" aria-labelledby="take-title">
-            <h2 id="take-title">My take</h2>
-            <div class="prose"><Content /></div>
-          </section>
-        )}
-      </div>
+      {d.evidence.length > 0 && (
+        <section class="block bench-evidence" aria-labelledby="evidence-title">
+          <h2 id="evidence-title" class="visually-hidden">Evidence</h2>
+          <Evidence items={d.evidence} autoplay />
+        </section>
+      )}
+
+      {hasTake && (
+        <section class="block bench-take" aria-labelledby="take-title">
+          <h2 id="take-title">My take</h2>
+          <div class="prose"><Content /></div>
+        </section>
+      )}
     </div>
-    <p class="follow-line">I post new tests on X: <a href={siteConfig.xUrl} rel="me noopener noreferrer" target="_blank">{siteConfig.xHandle}<span class="visually-hidden"> (opens in a new tab)</span></a></p>
-    <a class="back-link" href={url('/benchmarks/')}>← All benchmarks</a>
+    <div class="bench-foot">
+      <p class="follow-line">I post new tests on X: <a href={siteConfig.xUrl} rel="me noopener noreferrer" target="_blank">{siteConfig.xHandle}<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+      <a class="back-link" href={url('/benchmarks/')}>← All benchmarks</a>
+    </div>
   </article>
 </Base>

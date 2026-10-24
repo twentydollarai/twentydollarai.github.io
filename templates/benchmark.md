@@ -16,12 +16,15 @@
 #  • Put where the numbers came from in ONE line: resultsNote.
 #  • No per-row "how it was measured" text. It isn't shown in this format.
 #
-# THE WHOLE PAGE FITS ON ONE LAPTOP SCREEN (1280x800). On desktop it shows as two columns:
-# Results, Models tested and The prompt on the left; Evidence and My take on the right.
+# THE WHOLE PAGE FITS ON ONE LAPTOP SCREEN (1280x800). On desktop: the title block across the top, then
+# two columns (about 40/60). Left: Results, Models tested, The prompt, My take. Right: the evidence clip or
+# screenshot, as large as the column (the biggest thing on the page), with its one-line caption.
+# On phones it stacks: title, results, evidence, my take.
 #  • Keep the title short enough for one line (about 65 characters).
 #  • One evidence item works best: a short .mp4 clip (it plays by itself, muted and looping) or one screenshot.
+#    Keep its caption to one line (about 90 characters).
 #  • Keep My take to about three short bullets.
-#  • The tests fail if the title wraps or My take runs past the first screen.
+#  • The tests fail if the title wraps, the page runs past the first screen, or it leaves a big empty area.
 # ─────────────────────────────────────────────────────────────────────────
 
 title: "What you tested, in plain words"
