@@ -115,6 +115,18 @@ export const benchmarkSchema = z
         }
       });
     }
+    // Template placeholders must never go live: a published page with "FILL IN" left in fails the build.
+    if (data.status === 'published') {
+      const left = (v: unknown) => typeof v === 'string' && /FILL IN/.test(v);
+      if (left(data.resultsNote)) {
+        ctx.addIssue({ code: 'custom', path: ['resultsNote'], message: 'resultsNote still says "FILL IN". Replace it with the real source, or delete the line.' });
+      }
+      data.results.forEach((r, i) => {
+        if (left(r.value) || left(r.metric)) {
+          ctx.addIssue({ code: 'custom', path: ['results', i, 'value'], message: `Result "${r.metric}" still says "FILL IN". Put in what you measured, or delete the row.` });
+        }
+      });
+    }
     const names = new Set(data.models.map((m) => m.name));
     data.results.forEach((r, i) => {
       if (!names.has(r.model)) {

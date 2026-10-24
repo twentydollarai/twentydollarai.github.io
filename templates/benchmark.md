@@ -9,6 +9,7 @@
 # RULES the build enforces (it stops with an error if broken):
 #  • A price must have a source, or the build fails.
 #  • Every result's "model" must match a name in the models list.
+#  • A published page can't still say "FILL IN" anywhere in its results.
 #
 # RESULTS FORMAT (the default): a short Metric / Value table that fits on one screen.
 #  • Show just four things: Time, Tokens, Cost, Weekly usage.
@@ -37,31 +38,38 @@ models:
     plan: "Its tier"
 
 # The exact prompt, word for word. Keep the "|" and indent every line by two spaces.
+# PRIVATE or STANDARD prompt? Write only its name or "Private", never a summary, e.g.
+#   prompt: "Standard TwentyDollarAI Benchmarking"
+#   promptLabel: "Standard"        # the small label next to "The prompt" (default: Verbatim)
+# Never describe, summarize, paraphrase or reconstruct a private prompt.
 prompt: |
   Paste the exact prompt here.
   Multiple lines are fine.
 
-# Where the numbers came from, in one short line. Shown above the results table.
-resultsNote: "Figures from the tool's end-of-run summary."
+# Optional: where the numbers came from, in one short line, shown above the results table.
+# Delete the # and replace FILL IN with the real source. Never claim a source you didn't use.
+#resultsNote: "FILL IN: where the numbers came from"
 
 # Measured results only: things you timed, counted, or checked. Keep to the four metrics below.
 # Delete a row you didn't record; never guess a number. Opinions go in the text below the second ---.
 # value can be a number (42) or short text ("About 2%").
 # Optional: compactResults: false switches to the old wide table with Model and
 # "How it was measured" columns. Then every row also needs  method: "how you measured it".
+# Replace every FILL IN with what you measured (e.g. "36m 34s", "4.77M", "$3.24", "About 2%").
+# The build refuses to publish a page that still says FILL IN.
 results:
   - model: "Model or product name"   # must match a name above
     metric: "Time"
-    value: "0m 0s"                   # replace with what you measured
+    value: "FILL IN"
   - model: "Model or product name"
     metric: "Tokens"
-    value: 0
+    value: "FILL IN"
   - model: "Model or product name"
     metric: "Cost"
-    value: "$0.00"
+    value: "FILL IN"
   - model: "Model or product name"
     metric: "Weekly usage"
-    value: "0%"
+    value: "FILL IN"
 
 # Screenshots, videos and links that back up the results.
 #   type: image  -> file in public/images/benchmarks/, src starts with /images/benchmarks/

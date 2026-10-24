@@ -1,14 +1,15 @@
 ---
-title: "Grok 4.7 High in the Grok CLI: an animated Maltese in a meadow"
-description: "Grok 4.7 High in the Grok CLI: time, tokens, cost and weekly usage for one run, plus the output."
+title: "Grok 4.7 High in Grok CLI: TwentyDollarAI Standard Benchmarking"
+description: "Time, tokens, cost and weekly usage for one run, plus the output."
 date: 2026-10-19
 models:
   - name: "Grok 4.7 High"
-    # plan left out: the subscription tier wasn't recorded, so the page shows "Not recorded".
+    plan: "$30/month plan"   # my plan for this run (confirmed 2026-10-24)
     # No price block: $3.2425 is an API-equivalent figure, not a subscription price (see results).
-# The owner's prompt and data are private. Do not paraphrase or reconstruct the prompt.
-prompt: "Private: the owner’s own prompt and data, not published."
-promptLabel: "Private"
+# My standard benchmark prompt and data are private. Show only this label; never describe,
+# paraphrase or reconstruct the prompt.
+prompt: "Standard TwentyDollarAI Benchmarking"
+promptLabel: "Standard"
 resultsNote: "Figures from the Grok CLI’s end-of-run summary."
 results:
   - model: "Grok 4.7 High"
@@ -18,7 +19,7 @@ results:
     metric: "Tokens (total)"
     value: "4.77M"
   - model: "Grok 4.7 High"
-    metric: "Cost (API-equivalent, not an extra charge)"
+    metric: "Cost (API-equivalent)"
     value: "$3.2425"
   - model: "Grok 4.7 High"
     metric: "Weekly usage"

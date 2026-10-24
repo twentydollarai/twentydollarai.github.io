@@ -22,7 +22,8 @@ You never need to touch the site's code to publish. Every article is one Markdow
    didn't actually record.
    **Benchmark results** show by default as a short Metric / Value table near the top of the page, so they fit
    on one screen without scrolling. Keep them to four rows: **Time, Tokens, Cost, Weekly usage**, plus one
-   `resultsNote` line saying where the numbers came from. Per-row `method` text isn't shown in this format.
+   `resultsNote` line saying where the numbers came from. If the prompt is private (or your standard benchmark prompt), write only its name or
+   "Private" and set `promptLabel`. Never summarize or paraphrase it. Per-row `method` text isn't shown in this format.
    (`compactResults: false` brings back the old wide table with Model and "How it was measured" columns;
    then every row needs a `method`.)
 4. **Write the body** below the second `---` in normal Markdown.
@@ -58,6 +59,7 @@ npm run dev:demo   # also shows drafts and demo entries
 The build stops with a clear error, so nothing broken goes live, if:
 
 - a benchmark shows a **price without a source**,
+- a published benchmark still has a template **`FILL IN`** placeholder in its results or `resultsNote`,
 - a benchmark result names a model that isn't in its `models` list, or has no `method` when the page uses the
   wide table (`compactResults: false`),
 - an image has no alt text, or a required field (title, description, date…) is missing,

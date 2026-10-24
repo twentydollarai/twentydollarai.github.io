@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import DemoBanner from '../../components/DemoBanner.astro';
 import Evidence from '../../components/Evidence.astro';
 import { getVisible, url, formatDate, isoDate } from '../../lib/content';
+import { siteConfig } from '../../site.config.mjs';
 
 export async function getStaticPaths() {
   const items = await getVisible('benchmarks');
@@ -20,8 +21,8 @@ const multiModel = d.models.length > 1;
 const isUrl = (s: string) => /^https?:\/\//.test(s);
 ---
 <Base title={d.title} description={d.description} type="article" published={d.date}>
-  <article class="wrap">
-    <header class="article-head">
+  <article class="wrap bench">
+    <header class="article-head bench-head">
       <DemoBanner status={d.status} demo={d.demo} />
       <span class="kicker">Benchmark</span>
       <h1>{d.title}</h1>
@@ -34,11 +35,11 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
     </header>
 
     <section class="block measured-zone" aria-labelledby="results-title">
-      <div class="block-head"><h2 id="results-title">Measured results</h2><span class="chip chip-measured">Measured</span></div>
+      <div class="block-head"><h2 id="results-title">Results</h2><span class="chip chip-measured">Measured</span></div>
       <p class="block-note">{d.resultsNote ?? (d.compactResults ? 'Numbers recorded during the test.' : 'Numbers and checks recorded during the test. Each row says how it was measured.')}</p>
       {d.results.length > 0 && d.compactResults ? (
         <table class="results results-compact">
-          <thead><tr><th scope="col">Metric</th><th scope="col">Value</th></tr></thead>
+          <caption class="visually-hidden">Measured results: metric and value</caption>
           <tbody>
             {d.results.map((r) => (
               <tr><th scope="row">{multiModel ? `${r.model} · ${r.metric}` : r.metric}</th><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td></tr>
@@ -62,24 +63,17 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
 
     <section class="block" aria-labelledby="models-title">
       <div class="block-head"><h2 id="models-title">Models tested</h2></div>
-      <div class="models">
+      <ul class="model-lines">
         {d.models.map((m) => (
-          <div class="model-card">
-            <h3>{m.name}</h3>
-            <dl>
-              <dt>Plan</dt><dd>{m.plan ?? 'Not recorded'}</dd>
-              {m.price && (
-                <>
-                  <dt>Price</dt>
-                  <dd><span class="price">{money(m.price.amount, m.price.currency)}</span> / {m.price.period}</dd>
-                  <dt>Source</dt>
-                  <dd>{isUrl(m.price.source!) ? <a href={m.price.source} rel="noopener noreferrer" target="_blank">Price source<span class="visually-hidden"> (opens in a new tab)</span></a> : m.price.source}{m.price.checked && <>, checked <time datetime={isoDate(m.price.checked)}>{formatDate(m.price.checked)}</time></>}</dd>
-                </>
-              )}
-            </dl>
-          </div>
+          <li class="model-line">
+            <strong>{m.name}</strong>
+            <span><span class="ml-label">Plan</span> {m.plan ?? 'Not recorded'}</span>
+            {m.price && (
+              <span><span class="ml-label">Price</span> <span class="price">{money(m.price.amount, m.price.currency)}</span> / {m.price.period} ({isUrl(m.price.source!) ? <a href={m.price.source} rel="noopener noreferrer" target="_blank">source<span class="visually-hidden"> (opens in a new tab)</span></a> : m.price.source}{m.price.checked && <>, checked <time datetime={isoDate(m.price.checked)}>{formatDate(m.price.checked)}</time></>})</span>
+            )}
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
 
     <section class="block" aria-labelledby="prompt-title">
@@ -101,6 +95,7 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
         <div class="prose"><Content /></div>
       </section>
     )}
+    <p class="follow-line">I post new tests on X: <a href={siteConfig.xUrl} rel="me noopener noreferrer" target="_blank">{siteConfig.xHandle}<span class="visually-hidden"> (opens in a new tab)</span></a></p>
     <a class="back-link" href={url('/benchmarks/')}>← All benchmarks</a>
   </article>
 </Base>

@@ -66,6 +66,7 @@ try {
     ['"https://link-to-pricing-page"', '"TEST note: not a real price"'],
     ['/images/benchmarks/your-screenshot.png', '/og-default.png'],
     ['status: draft', 'status: published'],
+    ['value: "FILL IN"', 'value: "TEST value"'],
   ]));
 
   await put('experiments', 'test-experiment.md', sub(await tpl('experiment.md'), [
@@ -135,7 +136,9 @@ try {
     ['blog', 'bad-image-no-alt.md', sub(blog, [['#cover:\n#  src: /og-default.png\n#  alt: "Describe what the image shows"', 'cover:\n  src: /og-default.png']]), /cover\.alt|alt/i],
     ['benchmarks', 'bad-price.md', sub(await readFile(path.join(tmp, 'src/content/benchmarks/test-benchmark.md'), 'utf8'), [['      source: "TEST note: not a real price"   # REQUIRED with a price: a URL or a note like "My receipt, Jan 2026"\n', '']]), /has no source/],
     // The compact table is the default and needs no method; the wide table (compactResults: false) still does.
-    ['benchmarks', 'bad-no-method.md', sub(await readFile(path.join(tmp, 'src/content/benchmarks/test-benchmark.md'), 'utf8'), [['\nresultsNote: ', '\ncompactResults: false\nresultsNote: ']]), /method/],
+    ['benchmarks', 'bad-no-method.md', sub(await readFile(path.join(tmp, 'src/content/benchmarks/test-benchmark.md'), 'utf8'), [['\nresults:\n', '\ncompactResults: false\nresults:\n']]), /method/],
+    // The template's FILL IN placeholders can't go live: publishing the template unedited stops the build.
+    ['benchmarks', 'bad-fill-in.md', sub(await tpl('benchmark.md'), [['"Model or product name"', '"TEST model A"'], ['"Second model"', '"TEST model B"'], ['"https://link-to-pricing-page"', '"TEST note"'], ['/images/benchmarks/your-screenshot.png', '/og-default.png'], ['status: draft', 'status: published']]), /FILL IN/],
     ['experiments', 'bad-outcome.md', sub(await readFile(path.join(tmp, 'src/content/experiments/test-experiment.md'), 'utf8'), [['outcome: in-progress', 'outcome: great']]), /outcome/],
     ['projects', 'bad-repo.md', sub(await readFile(path.join(tmp, 'src/content/projects/test-project.md'), 'utf8'), [['# repoUrl: "https://github.com/YOUR-USERNAME/your-repo"', 'repoUrl: "https://example.com/not-github"']]), /repoUrl/],
   ];

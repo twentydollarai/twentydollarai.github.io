@@ -320,6 +320,28 @@ html:not(.js) .theme-toggle { display: none; }
 .results td.value { font-family: var(--mono); font-weight: 600; white-space: nowrap; }
 .results td.method { color: var(--ink-2); min-width: 14rem; }
 .results-compact { min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
+/* Compact results: sized to content, tight rows, no header row */
+.results-compact { width: auto; max-width: 100%; }
+.results-compact th, .results-compact td { padding: 0.4rem 0.85rem; }
+.results-compact tr:last-child > * { border-bottom: 0; }
+.results-compact th[scope='row'] { position: static; box-shadow: none; border-right: 1px solid var(--line); }
+
+/* Benchmark pages: tighter spacing so the title and results fit on one screen */
+.bench-head { padding: 1.75rem 0 0.5rem; }
+.bench-head h1 { max-width: 34ch; font-size: clamp(1.75rem, 1.2rem + 2vw, 2.4rem); margin-bottom: 0.5rem; }
+.bench-head .lede { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.bench-head .article-meta { margin-bottom: 0; }
+.bench .block { margin: 1.5rem 0; }
+.bench .block-head { margin-bottom: 0.5rem; }
+.bench .block-head h2 { font-size: 1.25rem; }
+.bench .block-note { margin-bottom: 0.6rem; }
+.bench .prompt-box { padding: 0.6rem 0.9rem; }
+.model-lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; justify-items: start; }
+.model-line { max-width: 100%; }
+.model-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; border: 1px solid var(--line); border-radius: var(--radius); padding: 0.5rem 0.9rem; background: var(--paper); font-size: 0.95rem; }
+.ml-label { font: 600 0.72rem var(--mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-2); margin-right: 0.3rem; }
+.follow-line { font-size: 0.95rem; color: var(--ink-2); margin: 1.5rem 0 0.5rem; }
+
 
 .facts { display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin: 0 0 1rem; }
 .facts > div { padding: 0.85rem 1rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: -0 -1px -1px 0; }

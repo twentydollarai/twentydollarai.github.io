@@ -38,6 +38,12 @@ check('result without method passes in the default compact table',
 check('result without method is rejected when compactResults: false',
   !benchmarkSchema.safeParse({ ...bench, compactResults: false, results: [{ model: 'A', metric: 'm', value: 1 }] }).success);
 
+check('published benchmark with a FILL IN result is rejected',
+  !benchmarkSchema.safeParse({ ...bench, status: 'published', results: [{ model: 'A', metric: 'Time', value: 'FILL IN' }] }).success);
+
+check('draft benchmark with a FILL IN result still builds (work in progress)',
+  benchmarkSchema.safeParse({ ...bench, status: 'draft', results: [{ model: 'A', metric: 'Time', value: 'FILL IN' }] }).success);
+
 const noDate = blogSchema.safeParse({ title: 't', description: 'd' });
 check('missing date is rejected with a clear message', !noDate.success && noDate.error.issues.some((i) => /YYYY-MM-DD/.test(i.message)),
   noDate.success ? '' : noDate.error.issues.map((i) => i.message).join('; '));
