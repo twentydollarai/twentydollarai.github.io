@@ -1,7 +1,7 @@
 // RSS + sitemap validation for a build directory (default dist/).
 // XML is parsed with the browser's DOMParser (no extra dependency).
 // Usage: node feeds.mjs [--dir=dist] [--site=https://twentydollarai.github.io] [--base=/] [--expect=/blog/x/,/benchmarks/y/]
-import { readFile, access } from 'node:fs/promises';
+import { readFile, access, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { launch, reporter, arg, ROOT, SITE } from './lib.mjs';
 
@@ -58,5 +58,23 @@ try {
     r.check(itemLinks.includes(prefix + e.replace(/^\//, '')) || /projects|category/.test(e), `RSS includes ${e}`);
   }
   r.info(`sitemap: ${locs.join(' ')}`);
+
+  // Canonical links: every page's canonical is its own URL and resolves to a built page;
+  // the 404 page has none (its /404/ URL would itself return 404) and is noindex.
+  const htmlFiles = (await readdir(dir, { recursive: true })).filter((f) => f.endsWith('.html'));
+  const badCanon = [];
+  for (const f of htmlFiles) {
+    const html = await readFile(path.join(dir, f), 'utf8');
+    const canon = [...html.matchAll(/<link[^>]*rel="canonical"[^>]*>/g)].map((m) => (m[0].match(/href="([^"]*)"/) || [])[1]);
+    const ogUrl = [...html.matchAll(/<meta[^>]*property="og:url"[^>]*>/g)].length;
+    if (f === '404.html') {
+      r.check(canon.length === 0 && ogUrl === 0, `404.html has no canonical link or og:url (${canon.join(' ') || 'none'})`);
+      r.check(/<meta name="robots" content="noindex/.test(html), '404.html is noindex');
+      continue;
+    }
+    const own = prefix + f.replace(/(^|\/)index\.html$/, '$1').split(path.sep).join('/');
+    if (canon.length !== 1 || canon[0] !== own || ogUrl !== 1 || !(await exists(fileFor(canon[0])))) badCanon.push(`${f}: ${canon.join(' ') || 'none'}`);
+  }
+  r.check(htmlFiles.length > 1 && badCanon.length === 0, `${htmlFiles.length - 1} other pages: one canonical + og:url each, equal to the page's own URL and resolving to a built page ${badCanon.join('; ')}`);
 } finally { await b.close(); }
 process.exit(r.done() ? 1 : 0);

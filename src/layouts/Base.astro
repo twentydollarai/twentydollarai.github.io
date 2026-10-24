@@ -34,7 +34,8 @@ const robots = noindex || SHOW_DEMO ? 'noindex, nofollow' : 'index, follow';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {/* Pages marked noindex (the 404 page) have no URL of their own, so no canonical or og:url. */}
+    {!noindex && <link rel="canonical" href={canonical} />}
     <meta name="robots" content={robots} />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
@@ -49,7 +50,7 @@ const robots = noindex || SHOW_DEMO ? 'noindex, nofollow' : 'index, follow';
     <meta property="og:site_name" content={siteConfig.name} />
     <meta property="og:title" content={title ?? siteConfig.name} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {!noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={ogImage} />
     {!image && <meta property="og:image:width" content="1200" />}
     {!image && <meta property="og:image:height" content="630" />}
