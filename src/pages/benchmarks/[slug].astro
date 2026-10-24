@@ -60,8 +60,17 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
 
     <section class="block measured-zone" aria-labelledby="results-title">
       <div class="block-head"><h2 id="results-title">Measured results</h2><span class="chip chip-measured">Measured</span></div>
-      <p class="block-note">Numbers and checks recorded during the test. Each row says how it was measured.</p>
-      {d.results.length > 0 ? (
+      <p class="block-note">{d.resultsNote ?? 'Numbers and checks recorded during the test. Each row says how it was measured.'}</p>
+      {d.results.length > 0 && d.compactResults ? (
+        <table class="results results-compact">
+          <thead><tr><th scope="col">Metric</th><th scope="col">Value</th></tr></thead>
+          <tbody>
+            {d.results.map((r) => (
+              <tr><th scope="row">{r.metric}</th><td class="value">{r.value}{r.unit && ` ${r.unit}`}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      ) : d.results.length > 0 ? (
         <div class="table-scroll" tabindex="0" role="region" aria-label="Measured results table, scrollable">
           <table class="results">
             <caption>Swipe or scroll sideways on small screens. The model column stays fixed.</caption>

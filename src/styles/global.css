@@ -319,6 +319,7 @@ html:not(.js) .theme-toggle { display: none; }
 .results thead th:first-child { z-index: 2; }
 .results td.value { font-family: var(--mono); font-weight: 600; white-space: nowrap; }
 .results td.method { color: var(--ink-2); min-width: 14rem; }
+.results-compact { min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
 
 .facts { display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin: 0 0 1rem; }
 .facts > div { padding: 0.85rem 1rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: -0 -1px -1px 0; }

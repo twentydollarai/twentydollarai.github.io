@@ -73,6 +73,10 @@ export const benchmarkSchema = z
       .min(1, 'List at least one model'),
     prompt: z.string().min(1),
     promptLabel: z.string().min(1).optional(),
+    // Optional: show results as a short Metric / Value table (no model or method columns).
+    compactResults: z.boolean().default(false),
+    // Optional: replaces the default note above the results table.
+    resultsNote: z.string().min(1).optional(),
     results: z
       .array(
         z.object({
