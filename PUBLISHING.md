@@ -20,6 +20,11 @@ You never need to touch the site's code to publish. Every article is one Markdow
    Blog posts can also have an optional **At a glance** box (`glance:` in the template) with a short summary,
    what was tested, the result and the cost. Each line shows only if you fill it in. Leave out anything you
    didn't actually record.
+   **Benchmark results** show by default as a short Metric / Value table near the top of the page, so they fit
+   on one screen without scrolling. Keep them to four rows: **Time, Tokens, Cost, Weekly usage**, plus one
+   `resultsNote` line saying where the numbers came from. Per-row `method` text isn't shown in this format.
+   (`compactResults: false` brings back the old wide table with Model and "How it was measured" columns;
+   then every row needs a `method`.)
 4. **Write the body** below the second `---` in normal Markdown.
    Use `##` for main sections. A blog post with 4 or more `##` sections gets an automatic contents list,
    and every post shows an estimated reading time.
@@ -53,14 +58,15 @@ npm run dev:demo   # also shows drafts and demo entries
 The build stops with a clear error, so nothing broken goes live, if:
 
 - a benchmark shows a **price without a source**,
-- a benchmark result names a model that isn't in its `models` list, or has no `method`,
+- a benchmark result names a model that isn't in its `models` list, or has no `method` when the page uses the
+  wide table (`compactResults: false`),
 - an image has no alt text, or a required field (title, description, date…) is missing,
 - an experiment `outcome` isn't one of `worked`, `partial`, `failed`, `in-progress`,
 - a project `repoUrl` isn't a `https://github.com/<user>/<repo>` link.
 
 ## Integrity checklist before publishing
 
-- [ ] Every number in `results` was actually measured, and `method` says how.
+- [ ] Every number in `results` was actually measured, and `resultsNote` says where the numbers came from.
 - [ ] Opinions are in the body ("My take"), not in `results`.
 - [ ] Prices have a source and, ideally, a `checked` date.
 - [ ] Time and usage were recorded during the run, not guessed afterwards.

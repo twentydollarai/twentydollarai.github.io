@@ -9,25 +9,20 @@ models:
 # The owner's prompt and data are private. Do not paraphrase or reconstruct the prompt.
 prompt: "Private: the owner’s own prompt and data, not published."
 promptLabel: "Private"
-compactResults: true
 resultsNote: "Figures from the Grok CLI’s end-of-run summary."
 results:
   - model: "Grok 4.7 High"
     metric: "Time (total runtime)"
     value: "36m 34s"
-    method: "Grok CLI end-of-run summary."
   - model: "Grok 4.7 High"
     metric: "Tokens (total)"
     value: "4.77M"
-    method: "Grok CLI end-of-run summary."
   - model: "Grok 4.7 High"
     metric: "Cost (API-equivalent, not an extra charge)"
     value: "$3.2425"
-    method: "Grok CLI end-of-run summary."
   - model: "Grok 4.7 High"
     metric: "Weekly usage"
     value: "About 2%"
-    method: "Grok CLI end-of-run summary."
 evidence:
   - type: video
     src: /images/benchmarks/grok-4-7-high-maltese-meadow.mp4

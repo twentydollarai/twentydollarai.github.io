@@ -73,9 +73,10 @@ export const benchmarkSchema = z
       .min(1, 'List at least one model'),
     prompt: z.string().min(1),
     promptLabel: z.string().min(1).optional(),
-    // Optional: show results as a short Metric / Value table (no model or method columns).
-    compactResults: z.boolean().default(false),
-    // Optional: replaces the default note above the results table.
+    // Default: results show as a short Metric / Value table (no Model or "How it was measured" column).
+    // Set compactResults: false for the older wide table, which shows model and method on every row.
+    compactResults: z.boolean().default(true),
+    // One short source line shown above the results table, e.g. "Figures from the Grok CLI's end-of-run summary.".
     resultsNote: z.string().min(1).optional(),
     results: z
       .array(
@@ -84,7 +85,8 @@ export const benchmarkSchema = z
           metric: z.string().min(1),
           value: z.union([z.number(), z.string().min(1)]),
           unit: z.string().optional(),
-          method: z.string().min(1, 'Say how this was measured'),
+          // Not displayed in the default compact table. Required only when compactResults: false.
+          method: z.string().min(1, 'Say how this was measured').optional(),
         }),
       )
       .default([]),
@@ -102,6 +104,17 @@ export const benchmarkSchema = z
         });
       }
     });
+    if (!data.compactResults) {
+      data.results.forEach((r, i) => {
+        if (!r.method) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['results', i, 'method'],
+            message: `Result "${r.metric}" has no method. With compactResults: false every result needs a method (how it was measured).`,
+          });
+        }
+      });
+    }
     const names = new Set(data.models.map((m) => m.name));
     data.results.forEach((r, i) => {
       if (!names.has(r.model)) {

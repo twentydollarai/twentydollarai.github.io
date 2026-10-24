@@ -9,7 +9,11 @@
 # RULES the build enforces (it stops with an error if broken):
 #  • A price must have a source, or the build fails.
 #  • Every result's "model" must match a name in the models list.
-#  • Every result needs a "method" (how you measured it).
+#
+# RESULTS FORMAT (the default): a short Metric / Value table that fits on one screen.
+#  • Show just four things: Time, Tokens, Cost, Weekly usage.
+#  • Put where the numbers came from in ONE line: resultsNote.
+#  • No per-row "how it was measured" text. It isn't shown in this format.
 # ─────────────────────────────────────────────────────────────────────────
 
 title: "What you tested, in plain words"
@@ -37,20 +41,27 @@ prompt: |
   Paste the exact prompt here.
   Multiple lines are fine.
 
-# Measured results only: things you timed, counted, or checked.
-# Opinions go in the text below the second ---, not here.
-# value can be a number (42) or short text ("Pass").
+# Where the numbers came from, in one short line. Shown above the results table.
+resultsNote: "Figures from the tool's end-of-run summary."
+
+# Measured results only: things you timed, counted, or checked. Keep to the four metrics below.
+# Delete a row you didn't record; never guess a number. Opinions go in the text below the second ---.
+# value can be a number (42) or short text ("About 2%").
+# Optional: compactResults: false switches to the old wide table with Model and
+# "How it was measured" columns. Then every row also needs  method: "how you measured it".
 results:
   - model: "Model or product name"   # must match a name above
-    metric: "Time to first full answer"
-    value: 0                         # replace with what you measured
-    unit: "seconds"                  # optional
-    method: "Stopwatch from pressing send to the last word appearing"
-  - model: "Second model"
-    metric: "Time to first full answer"
+    metric: "Time"
+    value: "0m 0s"                   # replace with what you measured
+  - model: "Model or product name"
+    metric: "Tokens"
     value: 0
-    unit: "seconds"
-    method: "Stopwatch from pressing send to the last word appearing"
+  - model: "Model or product name"
+    metric: "Cost"
+    value: "$0.00"
+  - model: "Model or product name"
+    metric: "Weekly usage"
+    value: "0%"
 
 # Screenshots, videos and links that back up the results.
 #   type: image  -> file in public/images/benchmarks/, src starts with /images/benchmarks/

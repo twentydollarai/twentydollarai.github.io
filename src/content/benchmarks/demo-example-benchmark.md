@@ -12,19 +12,20 @@ models:
 prompt: |
   EXAMPLE PROMPT. This box shows the exact prompt, word for word.
   Line breaks are kept.
+resultsNote: "Placeholder rows. No measurement was taken."
 results:
   - model: "Example Model A"
-    metric: "Example metric"
+    metric: "Time"
     value: "EXAMPLE"
-    method: "Placeholder row. No measurement was taken."
-  - model: "Example Model B"
-    metric: "Example metric"
+  - model: "Example Model A"
+    metric: "Tokens"
     value: "EXAMPLE"
-    method: "Placeholder row. No measurement was taken."
-  - model: "Example Model C"
-    metric: "Example metric"
+  - model: "Example Model A"
+    metric: "Cost"
     value: "EXAMPLE"
-    method: "Placeholder row. No measurement was taken."
+  - model: "Example Model A"
+    metric: "Weekly usage"
+    value: "EXAMPLE"
 evidence:
   - type: image
     src: /images/demo/example-screenshot.svg

@@ -99,6 +99,10 @@ try {
   const bench = await read('benchmarks/test-benchmark/index.html');
   r.check(bench.includes('TEST model A') && bench.includes('chip-measured') && bench.includes('chip-opinion') && bench.includes('TEST note: not a real price'),
     'benchmark page renders models, price source, Measured and Opinion sections');
+  r.check(bench.includes('results-compact') && !bench.includes('How it was measured') && !bench.includes('table-scroll'),
+    'benchmark from template uses the compact Metric / Value results table by default');
+  r.check(bench.indexOf('id="results-title"') > -1 && bench.indexOf('id="results-title"') < bench.indexOf('id="models-title"'),
+    'benchmark results come before the Models tested card');
   r.check((await read('benchmarks/index.html')).includes('href="/benchmarks/test-benchmark/"'), 'benchmarks list links the benchmark');
   const exp = await read('experiments/test-experiment/index.html');
   r.check(exp.includes('TEST tool') && exp.includes('Outcome: In progress') && exp.includes('First limitation'), 'experiment page renders tool, outcome, limitations');
@@ -130,7 +134,8 @@ try {
     ['blog', 'bad-missing-date.md', sub(blog, [['date: 2026-01-31\n', '']]), /YYYY-MM-DD/],
     ['blog', 'bad-image-no-alt.md', sub(blog, [['#cover:\n#  src: /og-default.png\n#  alt: "Describe what the image shows"', 'cover:\n  src: /og-default.png']]), /cover\.alt|alt/i],
     ['benchmarks', 'bad-price.md', sub(await readFile(path.join(tmp, 'src/content/benchmarks/test-benchmark.md'), 'utf8'), [['      source: "TEST note: not a real price"   # REQUIRED with a price: a URL or a note like "My receipt, Jan 2026"\n', '']]), /has no source/],
-    ['benchmarks', 'bad-no-method.md', sub(await readFile(path.join(tmp, 'src/content/benchmarks/test-benchmark.md'), 'utf8'), [['    method: "Stopwatch from pressing send to the last word appearing"\n  - model: "TEST model B"', '  - model: "TEST model B"']]), /method/],
+    // The compact table is the default and needs no method; the wide table (compactResults: false) still does.
+    ['benchmarks', 'bad-no-method.md', sub(await readFile(path.join(tmp, 'src/content/benchmarks/test-benchmark.md'), 'utf8'), [['\nresultsNote: ', '\ncompactResults: false\nresultsNote: ']]), /method/],
     ['experiments', 'bad-outcome.md', sub(await readFile(path.join(tmp, 'src/content/experiments/test-experiment.md'), 'utf8'), [['outcome: in-progress', 'outcome: great']]), /outcome/],
     ['projects', 'bad-repo.md', sub(await readFile(path.join(tmp, 'src/content/projects/test-project.md'), 'utf8'), [['# repoUrl: "https://github.com/YOUR-USERNAME/your-repo"', 'repoUrl: "https://example.com/not-github"']]), /repoUrl/],
   ];

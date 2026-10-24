@@ -29,8 +29,14 @@ check('price with source passes',
 check('result for unlisted model is rejected',
   !benchmarkSchema.safeParse({ ...bench, results: [{ model: 'Z', metric: 'm', value: 1, method: 'x' }] }).success);
 
-check('result without method is rejected',
-  !benchmarkSchema.safeParse({ ...bench, results: [{ model: 'A', metric: 'm', value: 1 }] }).success);
+check('compact results are the default',
+  benchmarkSchema.parse(bench).compactResults === true);
+
+check('result without method passes in the default compact table',
+  benchmarkSchema.safeParse({ ...bench, results: [{ model: 'A', metric: 'm', value: 1 }] }).success);
+
+check('result without method is rejected when compactResults: false',
+  !benchmarkSchema.safeParse({ ...bench, compactResults: false, results: [{ model: 'A', metric: 'm', value: 1 }] }).success);
 
 const noDate = blogSchema.safeParse({ title: 't', description: 'd' });
 check('missing date is rejected with a clear message', !noDate.success && noDate.error.issues.some((i) => /YYYY-MM-DD/.test(i.message)),

@@ -16,6 +16,12 @@ The live site is rebuilt and redeployed automatically on every push to `main`: h
 3. Reference images as `/images/<section>/<file>` and always give them alt text. Keep images small (well under 1 MB), and host videos on YouTube, X or Vimeo.
 4. Set `status: published`, then commit and push.
 
+**Benchmark results format (default):** a two-column Metric / Value table shown right after the title, before
+the Models tested card, so it fits on the first screen on desktop and mobile. Use four metrics (Time, Tokens,
+Cost, Weekly usage) and one source line in `resultsNote`. `method` is optional and not displayed unless a page
+sets `compactResults: false` (the old wide table with Model and "How it was measured" columns, where `method`
+is required again). With more than one model, each compact row is labelled "Model · Metric".
+
 **In the GitHub website:**
 1. Open the template under `templates/` and copy its text.
 2. In the target folder, choose **Add file → Create new file**, name it, paste, edit, and **Commit changes**.
