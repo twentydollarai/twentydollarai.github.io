@@ -341,7 +341,8 @@ html:not(.js) .theme-toggle { display: none; }
 .bench .results-compact tr:last-child > * { border-bottom: 1px solid var(--line); }
 .bench .prompt-box { background: none; border: 0; border-radius: 0; padding: 0; max-width: none; }
 .model-lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.2rem; }
-.model-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 1rem; }
+.model-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.5rem; }
+.ml-sep { color: var(--ink-2); }
 .ml-label { color: var(--ink-2); }
 .ml-label::after { content: ':'; }
 .bench .evidence { grid-template-columns: minmax(0, 1fr); }

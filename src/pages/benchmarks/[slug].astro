@@ -69,8 +69,10 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
             {d.models.map((m) => (
               <li class="model-line">
                 <strong>{m.name}</strong>
-                <span><span class="ml-label">Plan</span> {m.plan ?? 'Not recorded'}</span>
+                <span class="ml-sep" aria-hidden="true">·</span>
+                <span><span class="visually-hidden">Plan: </span>{m.plan ?? 'Not recorded'}</span>
                 {m.price && (
+                  <span class="ml-sep" aria-hidden="true">·</span>
                   <span><span class="ml-label">Price</span> <span class="price">{money(m.price.amount, m.price.currency)}</span> / {m.price.period} ({isUrl(m.price.source!) ? <a href={m.price.source} rel="noopener noreferrer" target="_blank">source<span class="visually-hidden"> (opens in a new tab)</span></a> : m.price.source}{m.price.checked && <>, checked <time datetime={isoDate(m.price.checked)}>{formatDate(m.price.checked)}</time></>})</span>
                 )}
               </li>

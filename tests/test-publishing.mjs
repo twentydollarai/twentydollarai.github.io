@@ -105,6 +105,8 @@ try {
     'benchmark page renders models, price source, and separate Results and My take sections with plain headings');
   r.check(!/class="chip/.test(bench) && !bench.includes('Personal judgment, not a measurement'),
     'benchmark page has no label chips or repeated labels (plain headings only)');
+  r.check(bench.includes('<span class="visually-hidden">Plan: </span>') && !/class="ml-label">Plan</.test(bench),
+    'Models tested row reads "Model · plan" with the Plan label kept only for screen readers');
   r.check(bench.includes('results-compact') && !bench.includes('How it was measured') && !bench.includes('table-scroll'),
     'benchmark from template uses the compact Metric / Value results table by default');
   r.check(bench.indexOf('id="results-title"') > -1 && bench.indexOf('id="results-title"') < bench.indexOf('id="models-title"'),
