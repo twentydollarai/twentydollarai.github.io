@@ -5,6 +5,8 @@ import DemoBanner from '../../components/DemoBanner.astro';
 import Evidence from '../../components/Evidence.astro';
 import { getVisible, url, formatDate, isoDate } from '../../lib/content';
 import { siteConfig } from '../../site.config.mjs';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 
 export async function getStaticPaths() {
   const items = await getVisible('benchmarks');
@@ -19,8 +21,11 @@ const money = (amount: number, currency: string) =>
 // The compact table has no Model column, so name the model in the row when more than one was tested.
 const multiModel = d.models.length > 1;
 const isUrl = (s: string) => /^https?:\/\//.test(s);
+// Share card (1200x630) made by scripts/make-og-cards.mjs. Until it exists, the page falls back to og-default.png.
+const card = `/og/benchmarks/${entry.id}.png`;
+const hasCard = !d.demo && existsSync(path.join(process.cwd(), 'public', card));
 ---
-<Base title={d.title} description={d.description} type="article" published={d.date}>
+<Base title={d.title} description={d.description} type="article" published={d.date} image={hasCard ? card : undefined} imageWidth={hasCard ? 1200 : undefined} imageHeight={hasCard ? 630 : undefined}>
   <article class="wrap bench">
     <header class="article-head bench-head">
       <DemoBanner status={d.status} demo={d.demo} />

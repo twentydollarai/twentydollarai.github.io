@@ -18,6 +18,7 @@ const steps = [
   ['axe accessibility', 'node', ['axe.mjs']],
   ['links', 'node', ['links.mjs']],
   ['RSS + sitemap', 'node', ['feeds.mjs']],
+  ['share images (og:image)', 'node', ['og-cards.mjs']],
   ['security review', 'node', ['security.mjs']],
   ['publishing workflow', 'node', ['test-publishing.mjs']],
   ['GitHub Pages URL structure', 'node', ['base-path.mjs']],
