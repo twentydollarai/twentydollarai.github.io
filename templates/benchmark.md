@@ -16,6 +16,8 @@
 #  • Put where the numbers came from in ONE line: resultsNote.
 #  • No per-row "how it was measured" text. It isn't shown in this format.
 #
+# LAYOUT LOCKED (owner-approved Oct 24, 2026): a new benchmark page is data only. No layout changes without my approval.
+#
 # THE WHOLE PAGE FITS ON ONE LAPTOP SCREEN (1280x800). On desktop: the title block across the top, then
 # two columns (about 40/60). Left: Results, Models tested, The prompt, My take. Right: the evidence clip or
 # screenshot, as large as the column (the biggest thing on the page), with its one-line caption.
