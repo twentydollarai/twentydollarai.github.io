@@ -54,7 +54,7 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
     </section>
 
     <section class="block" aria-labelledby="prompt-title">
-      <div class="block-head"><h2 id="prompt-title">The prompt</h2><span class="chip">Verbatim</span></div>
+      <div class="block-head"><h2 id="prompt-title">The prompt</h2><span class="chip">{d.promptLabel ?? 'Verbatim'}</span></div>
       <pre class="prompt-box">{d.prompt}</pre>
     </section>
 

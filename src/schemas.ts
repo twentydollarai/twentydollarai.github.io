@@ -72,6 +72,7 @@ export const benchmarkSchema = z
       )
       .min(1, 'List at least one model'),
     prompt: z.string().min(1),
+    promptLabel: z.string().min(1).optional(),
     results: z
       .array(
         z.object({

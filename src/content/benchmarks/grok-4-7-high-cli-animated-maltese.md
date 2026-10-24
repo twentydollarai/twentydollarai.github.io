@@ -1,10 +1,4 @@
 ---
-# TODO (not rendered): stats pending verification against CLI output.
-# Every number under `results` that says "owner-reported" comes from the owner's
-# table (Oct 2026) and has not yet been checked against the Grok CLI's end-of-run
-# summary. Check each figure, then delete this comment.
-# TODO (not rendered): replace `prompt` with the exact prompt, word for word, once
-# the owner supplies it. The box on the page is labeled "Verbatim".
 title: "Grok 4.7 High in the Grok CLI: an animated Maltese in a meadow"
 description: "One creative coding task run on Grok 4.7 High through the Grok CLI: animate a white Maltese running through a meadow with a toy. Runtime, token counts, usage and the reported cost, plus the output."
 date: 2026-10-19
@@ -12,9 +6,8 @@ models:
   - name: "Grok 4.7 High"
     # plan left out: the subscription tier wasn't recorded, so the page shows "Not recorded".
     # No price block: $3.2425 is an API-equivalent figure, not a subscription price (see results).
-prompt: |
-  Exact prompt not yet published. The task, as described by the owner:
-  Generate an animated white Maltese dog running through a meadow carrying a toy.
+prompt: "Generate an animated white Maltese dog running through a meadow carrying a toy."
+promptLabel: "Task (summary)"
 results:
   - model: "Grok 4.7 High"
     metric: "Interface"
@@ -75,7 +68,7 @@ evidence:
   - type: image
     src: /images/benchmarks/grok-4-7-high-maltese-meadow-still.webp
     caption: "Still from the output: a fluffy white dog carrying a yellow-and-red striped toy through a green meadow with white daisies, rolling hills, round trees, clouds and a pale sun in a sky fading to peach near the horizon."
-status: draft
+status: published
 demo: false
 ---
 
