@@ -107,6 +107,8 @@ try {
     'benchmark page has no label chips or repeated labels (plain headings only)');
   r.check(bench.includes('<span class="visually-hidden">Plan: </span>') && !/class="ml-label">Plan</.test(bench),
     'Models tested row reads "Model · plan" with the Plan label kept only for screen readers');
+  r.check(/<div class="article-meta">\s*<span>Run <time/.test(bench) && !/\d+ models?<\/span>/.test(bench),
+    'benchmark meta line shows the run date and no model count');
   r.check(bench.includes('results-compact') && !bench.includes('How it was measured') && !bench.includes('table-scroll'),
     'benchmark from template uses the compact Metric / Value results table by default');
   r.check(bench.indexOf('id="results-title"') > -1 && bench.indexOf('id="results-title"') < bench.indexOf('id="models-title"'),

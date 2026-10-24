@@ -30,7 +30,6 @@ const isUrl = (s: string) => /^https?:\/\//.test(s);
       <div class="article-meta">
         <span>Run <time datetime={isoDate(d.date)}>{formatDate(d.date)}</time></span>
         {d.updated && <span>Updated <time datetime={isoDate(d.updated)}>{formatDate(d.updated)}</time></span>}
-        <span>{d.models.length} model{d.models.length === 1 ? '' : 's'}</span>
       </div>
     </header>
 
