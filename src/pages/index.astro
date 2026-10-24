@@ -16,7 +16,7 @@ const counts = {
 const plural = (n: number, w: string) => (n === 0 ? `No ${w}s yet` : `${n} ${w}${n === 1 ? '' : 's'}`);
 const sections = [
   { href: '/blog/', title: 'Blog', text: 'First-person notes on learning AI, building things, and whether a subscription earned its keep.', count: plural(counts.blog, 'post') },
-  { href: '/benchmarks/', title: 'Benchmarks', text: 'Same prompt, several models. Measured results kept apart from opinions.', count: plural(counts.benchmarks, 'benchmark') },
+  { href: '/benchmarks/', title: 'Benchmarks', text: 'One task, one model so far. Measured results kept apart from opinions.', count: plural(counts.benchmarks, 'benchmark') },
   { href: '/experiments/', title: 'Agent experiments', text: 'Real assignments handed to AI agents like Grok Bot and Muse: time, usage, outcome, limits.', count: plural(counts.experiments, 'experiment') },
   { href: '/projects/', title: 'Projects', text: 'Things built along the way, with links to their public GitHub repositories.', count: plural(counts.projects, 'project') },
 ];
