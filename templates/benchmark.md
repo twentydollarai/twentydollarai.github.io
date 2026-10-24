@@ -19,7 +19,7 @@
 # THE WHOLE PAGE FITS ON ONE LAPTOP SCREEN (1280x800). On desktop: the title block across the top, then
 # two columns (about 40/60). Left: Results, Models tested, The prompt, My take. Right: the evidence clip or
 # screenshot, as large as the column (the biggest thing on the page), with its one-line caption.
-# On phones it stacks: title, results, evidence, my take.
+# On phones it stacks: title, results, model and prompt, evidence, my take.
 #  • Keep the title short enough for one line (about 65 characters).
 #  • One evidence item works best: a short .mp4 clip (it plays by itself, muted and looping) or one screenshot.
 #    Keep its caption to one line (about 90 characters).
