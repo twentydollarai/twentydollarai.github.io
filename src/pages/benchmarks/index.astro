@@ -22,12 +22,12 @@ const items = await getVisible('benchmarks');
         title="What each benchmark will include"
         expect={[
           'The models tested and the plan each one was on',
-          'The exact prompt, word for word',
-          'Measured results: runtime, usage, and pass/fail checks',
+          'The prompt by name only (my benchmark prompts are private)',
+          'Measured results: time, tokens, cost and weekly usage',
           'Screenshots or video of the actual outputs',
         ]}
         integrity={[
-          'Measured results are labeled Measured and show how they were measured',
+          'Measured results are labeled Measured and say where the numbers came from',
           'Personal judgments are labeled Opinion and kept in their own section',
           'A price is only shown with a source; the site build rejects it otherwise',
         ]}

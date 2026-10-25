@@ -22,8 +22,8 @@ You never need to touch the site's code to publish. Every article is one Markdow
    didn't actually record.
    **Benchmark results** show by default as a short Metric / Value table near the top of the page, so they fit
    on one screen without scrolling. Keep them to four rows: **Time, Tokens, Cost, Weekly usage**, plus one
-   `resultsNote` line saying where the numbers came from. If the prompt is private (or your standard benchmark prompt), write only its name or
-   "Private". Never summarize or paraphrase it. Per-row `method` text isn't shown in this format.
+   `resultsNote` line saying where the numbers came from. Benchmark prompts are private: write only the prompt's name or
+   "Private". Never paste, summarize or paraphrase it. Per-row `method` text isn't shown in this format.
    **The benchmark layout is locked (owner-approved Oct 24, 2026):** a new benchmark page is data only, with no layout changes without my approval.
    **Share card:** after adding or changing a benchmark, run `node scripts/make-og-cards.mjs` and commit the PNG it writes to `public/og/benchmarks/` (the image X and other sites show for the link). The tests fail if it's missing or out of date. The card shows the page's plan followed by the tool ("X Premium ($30/mo) · Grok CLI"), so write the plan as the subscription people would recognise, price included; a "Cost (API-equivalent)" row reads "API-equivalent cost" on the card, with "Not the subscription price" under a measured figure.
    The whole benchmark page should fit on one laptop screen (1280x800), with the results and My take on the left

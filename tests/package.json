@@ -13,6 +13,7 @@
     "links": "node links.mjs",
     "feeds": "node feeds.mjs",
     "og-cards": "node og-cards.mjs",
+    "copy-claims": "node copy-claims.mjs",
     "security": "node security.mjs",
     "publishing": "node test-publishing.mjs",
     "base-path": "node base-path.mjs",

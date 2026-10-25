@@ -9,9 +9,7 @@ models:
     plan: "Example plan (placeholder)"
   - name: "Example Model C"
     plan: "Example plan (placeholder)"
-prompt: |
-  EXAMPLE PROMPT. This box shows the exact prompt, word for word.
-  Line breaks are kept.
+prompt: "Example prompt name (placeholder). Prompts are private, so only the name is shown."
 resultsNote: "Placeholder rows. No measurement was taken."
 results:
   - model: "Example Model A"

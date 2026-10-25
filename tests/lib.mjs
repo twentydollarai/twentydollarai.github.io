@@ -72,7 +72,9 @@ export async function serve({ dir, port, basePath = '/' }) {
     res.end(await readFile(path.join(root, '404.html')).catch(() => 'Not found'));
   }
   await new Promise((ok) => server.listen(port, '127.0.0.1', ok));
-  return { url: `http://localhost:${port}`, stop: () => server.close() };
+  // stop() also drops kept-alive sockets, so a later server on the same port never gets requests
+  // meant for it answered by this one (that made the base-path demo crawl flaky).
+  return { url: `http://localhost:${port}`, stop: () => { server.closeAllConnections(); server.close(); } };
 }
 
 /** Start `astro preview` (only one per project at a time) and wait until it answers. */
