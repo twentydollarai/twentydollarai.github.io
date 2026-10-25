@@ -9,7 +9,7 @@ models:
 # My standard benchmark prompt and data are private. Show only its name; never describe,
 # paraphrase or reconstruct the prompt.
 prompt: "Standard TwentyDollarAI Benchmarking"
-resultsNote: "Quota from my usage meter."
+resultsNote: "Quota from my usage meter. Nothing else was measured."
 results:
   - model: "Claude Opus 5.5"
     metric: "Time (total runtime)"
@@ -27,10 +27,14 @@ results:
   - model: "Claude Opus 5.5"
     metric: "Weekly usage"
     value: "Shared quota"
-# No evidence yet: the recording supplied as Opus 5.5's output is frame-for-frame the same animation as
-# the Grok 4.7 High output (grok-4-7-high-maltese-meadow.mp4). Add the video only once the right file is confirmed.
-evidence: []
-# Draft until the real Opus 5.5 recording is confirmed (the supplied file matches the Grok 4.7 High output).
+# The owner's recording of the Opus 5.5 output (Oct 25, 2026 file), cropped to 16:9, silent. Content is as recorded:
+# a browser tooltip and the cursor show for the first second.
+evidence:
+  - type: video
+    src: /images/benchmarks/claude-opus-5-5-maltese-meadow.mp4
+    poster: /images/benchmarks/claude-opus-5-5-maltese-meadow-still.webp
+    caption: "The output: a fluffy white dog running through a wildflower meadow with a yellow toy, mountains and butterflies behind (about 5 seconds, silent). A browser tooltip and the cursor show in the first second of the recording."
+# Draft until the owner approves publishing. Tested with status: published (see the run-all log).
 status: draft
 demo: false
 ---

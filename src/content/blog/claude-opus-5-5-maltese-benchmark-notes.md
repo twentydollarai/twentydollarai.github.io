@@ -8,7 +8,7 @@ glance:
   tested: "My standard Maltese visual animation benchmark: a 16:9 animated scene of my white Maltese running through a wildflower meadow with his yellow chicken toy, based on a reference photo."
   result: "Animation delivered. Preliminary visual score 7.4/10 (my subjective review). Independent performance check still pending."
   cost: "Time, tokens and API-equivalent cost: not measured. Plan: not recorded."
-# Draft until the real Opus 5.5 recording is confirmed (the supplied file matches the Grok 4.7 High output).
+# Draft until the owner approves publishing. Tested with status: published (see the run-all log).
 status: draft
 demo: false
 ---
@@ -65,10 +65,20 @@ These are my own subjective scores from watching the recording. They're not auto
 
 Grok Bot, my AI agent, watched the recording separately. It gave no scores; my scores above are unchanged.
 
-- **Confirmed:** a cohesive 2D vector style with a gradient sky, sun and clouds, and layered parallax (fast foreground flowers, slower rolling hills with round trees). The dog stays consistent with no warping. Legs cycle, the body and head bob, and the ears and tail flap. The toy stays in the mouth for the whole loop. No loop pops, flicker or layering errors.
-- **Confirmed weaknesses:** the dog runs in place while the background scrolls. The motion is rigid, puppet-style rotation at the joints. The dog looks like a generic stock-style Maltese. The toy reads as a yellow striped tube with a fringed end, not clearly a chicken. A small dark rectangle sits at the top edge of the sky, top center, for the whole video.
-- **One difference:** the backdrop reads as rolling green hills, not mountains.
-- **Not confirmed:** fidelity to the reference photo (the review didn't have it), and the frame rate and render time, which aren't visible in the recording.
+**Confirmed:**
+
+- **Scene:** layered meadow with hills and distant mountains, sun top-left with light rays, puffy clouds, floating pollen and purple and orange butterflies. Clear parallax: the foreground flowers move faster than the hills.
+- **Dog:** a recognizable white fluffy Maltese with a black nose and a curled tail, consistent throughout.
+- **Running:** the dog runs in place at the center while the scene scrolls right to left. The legs cycle through distinct stride poses but pivot stiffly, like a puppet rig.
+- **Fur and tail:** the fur moves as one mass, the tail stays curled and still, and the ears only bounce with the body.
+- **Toy:** stays at the mouth, but it's a glowing yellow-orange blob with heavy glow. No beak, eyes or chicken shape.
+- **Clean frame:** no window borders, private info or frame-rate overlay.
+- **Start of the recording:** a browser tooltip ("Click or press Space to pause") shows in the sky for about the first 1.3 seconds, and the mouse cursor for about the first second. They're part of the screen recording, not the animation. I left the recording as it was.
+
+**Uncertain:**
+
+- Whether the dog looks generic. That's subjective.
+- How true it is to my reference photo, which isn't shown here.
 
 ## Usage limits
 
