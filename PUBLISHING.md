@@ -22,8 +22,8 @@ You never need to touch the site's code to publish. Every article is one Markdow
    didn't actually record.
    **Benchmark results** show by default as a short Metric / Value table near the top of the page, so they fit
    on one screen without scrolling. Keep them to four rows: **Time, Tokens, Cost, Weekly usage**, plus one
-   `resultsNote` line saying where the numbers came from. If the prompt is private (or your standard benchmark prompt), write only its name or
-   "Private". Never summarize or paraphrase it. Per-row `method` text isn't shown in this format.
+   `resultsNote` line saying where the numbers came from. Benchmark prompts are private: write only the prompt's name or
+   "Private". Never paste, summarize or paraphrase it. Per-row `method` text isn't shown in this format.
    **The benchmark layout is locked (owner-approved Oct 24, 2026):** a new benchmark page is data only, with no layout changes without my approval.
    The whole benchmark page should fit on one laptop screen (1280x800), with the results and My take on the left
    and the evidence large on the right: a one-line title, one evidence item

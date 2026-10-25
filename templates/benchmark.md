@@ -49,13 +49,10 @@ models:
   - name: "Second model"
     plan: "Its tier"
 
-# The exact prompt, word for word. Keep the "|" and indent every line by two spaces.
-# PRIVATE or STANDARD prompt? Write only its name or "Private", never a summary, e.g.
+# The prompt's NAME only. Benchmark prompts are private: write its name or "Private", e.g.
 #   prompt: "Standard TwentyDollarAI Benchmarking"
-# Never describe, summarize, paraphrase or reconstruct a private prompt.
-prompt: |
-  Paste the exact prompt here.
-  Multiple lines are fine.
+# Never paste, describe, summarize, paraphrase or reconstruct the prompt itself.
+prompt: "Your prompt's name"
 
 # Optional: where the numbers came from, in one short line, shown above the results table.
 # Delete the # and replace FILL IN with the real source. Never claim a source you didn't use.
