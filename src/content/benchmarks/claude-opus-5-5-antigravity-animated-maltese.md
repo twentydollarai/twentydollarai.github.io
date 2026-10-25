@@ -26,14 +26,14 @@ results:
   # Not a single number: the weekly quota is shared with Sonnet and GPT-OSS models.
   - model: "Claude Opus 5.5"
     metric: "Weekly usage"
-    value: "Shared quota"
+    value: "Shared (see notes)"
 # The owner's recording of the Opus 5.5 output (Oct 25, 2026 file), cropped to 16:9, silent. Content is as recorded:
 # a browser tooltip and the cursor show for the first second.
 evidence:
   - type: video
     src: /images/benchmarks/claude-opus-5-5-maltese-meadow.mp4
     poster: /images/benchmarks/claude-opus-5-5-maltese-meadow-still.webp
-    caption: "The output: a fluffy white dog running through a wildflower meadow with a yellow toy, mountains and butterflies behind (about 5 seconds, silent). A browser tooltip and the cursor show in the first second of the recording."
+    caption: "The output, as recorded (about 5 seconds, silent). A browser tooltip and the mouse cursor show in the first second of the recording, then disappear."
 # Draft until the owner approves publishing. Tested with status: published (see the run-all log).
 status: draft
 demo: false
@@ -41,4 +41,4 @@ demo: false
 
 - **Attractive scene:** recognizable Maltese, rich meadow.
 - **Weaker fidelity:** toy and dog less true to the reference.
-- **Limits matter:** testing stopped. [Scores and notes](/blog/claude-opus-5-5-maltese-benchmark-notes/)
+- **Limits matter:** testing paused. [Scores and notes](/blog/claude-opus-5-5-maltese-benchmark-notes/)

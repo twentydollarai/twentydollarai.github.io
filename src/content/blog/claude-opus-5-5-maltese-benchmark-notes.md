@@ -4,8 +4,8 @@ description: "The full notes behind my Claude Opus 5.5 benchmark in Google Antig
 date: 2026-10-25
 categories: ["Benchmarks"]
 glance:
-  summary: "Claude Opus 5.5 in Google Antigravity made an attractive, recognizable Maltese animation with a detailed scene. Fidelity to the reference, especially the chicken toy, was weaker. The five-hour usage limit interrupted testing."
-  tested: "My standard Maltese visual animation benchmark: a 16:9 animated scene of my white Maltese running through a wildflower meadow with his yellow chicken toy, based on a reference photo."
+  summary: "Claude Opus 5.5 in Antigravity made an attractive, recognizable Maltese animation with a detailed scene. Fidelity to the reference, especially the chicken toy, was weaker. The five-hour usage limit interrupted testing."
+  tested: "My standard Maltese visual animation benchmark. The prompt is private."
   result: "Animation delivered. Preliminary visual score 7.4/10 (my subjective review). Independent performance check still pending."
   cost: "Time, tokens and API-equivalent cost: not measured. Plan: not recorded."
 # Draft until the owner approves publishing. Tested with status: published (see the run-all log).
@@ -17,10 +17,9 @@ These are the notes behind the [Claude Opus 5.5 benchmark page](/benchmarks/clau
 
 ## How I ran it
 
-- **Model:** Claude Opus 5.5. **Environment:** Google Antigravity.
+- **Model:** Claude Opus 5.5. **Environment:** Antigravity.
 - **Test:** my standard Maltese visual animation benchmark. The prompt is private.
-- **Goal:** a 16:9 animated scene of my white Maltese running through a wildflower meadow carrying his yellow chicken toy, based on a reference photo.
-- **Deliverable:** a single HTML file (`index.html`), about 70 KB, with no external assets. The scene is drawn by code, not cut out of the photo.
+- **Deliverable:** per my run notes, a single `index.html` file with no external assets. The scene is drawn by code, not cut out of the photo.
 
 ## What the agent reported (not verified)
 
@@ -28,6 +27,7 @@ The agent reported these numbers. I haven't checked them independently yet, and 
 
 | Item | Reported by the agent |
 | --- | --- |
+| File size | About 70 KB |
 | Browser | Microsoft Edge |
 | Frame rate | About 120 FPS |
 | Render time | About 3 ms per frame |
