@@ -4,8 +4,8 @@ description: "Time, tokens, cost and weekly usage for one run, plus the output."
 date: 2026-10-19
 models:
   - name: "Grok 4.7 High"
-    # My plan for this run: $30 (confirmed 2026-10-24). Owner, Oct 25, 2026 (relayed): the plan is X Premium, $30/month.
-    plan: "X Premium ($30/mo)"
+    # My plan for this run: $30 (confirmed 2026-10-24). Owner, Oct 25, 2026: "X premium", "keep the $30".
+    plan: "X Premium ($30)"
     # No price block: $3.2425 is an API-equivalent figure, not a subscription price (see results).
 # My standard benchmark prompt and data are private. Show only its name; never describe,
 # paraphrase or reconstruct the prompt.

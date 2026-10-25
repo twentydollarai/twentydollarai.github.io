@@ -7,7 +7,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { reporter, arg, ROOT, SITE, launch } from './lib.mjs';
 import { cardTemplate, fitCard } from '../scripts/og-card-html.mjs';
-import { cardData, cardHash, cardAlt, pngInfo, CARD_KEY } from '../scripts/og-card-data.mjs';
+import { cardData, cardHash, cardAlt, cardHeading, pngInfo, CARD_KEY } from '../scripts/og-card-data.mjs';
 
 const dir = path.resolve(ROOT, arg('dir', 'dist'));
 const prefix = arg('site', SITE).replace(/\/$/, '') + arg('base', '/');
@@ -42,6 +42,7 @@ for (const f of benchPages) {
   const ogAlt = metas(html, 'property', 'og:image:alt').map(decodeAttr), twAlt = metas(html, 'name', 'twitter:image:alt').map(decodeAttr);
   r.check(ogAlt.length === 1 && twAlt.length === 1 && ogAlt[0] === twAlt[0] && ogAlt[0].length > 0, `${slug}: og:image:alt and twitter:image:alt exist and match ("${ogAlt[0] ?? ''}")`);
   r.check(ogAlt[0] === cardAlt(d), `${slug}: alt text is built from the page's title, plan and results`);
+  r.check(d.models.length !== 1 || ogAlt[0]?.startsWith(`${d.cardTitle} on ${d.models[0].plan}: `), `${slug}: alt text reads "<title> on <plan>: …" without repeating the tool`);
   r.check(d.results.length > 0 && d.results.every((x) => ogAlt[0]?.includes(x.value)) && d.models.every((m) => ogAlt[0]?.includes(m.plan)),
     `${slug}: alt text contains every result value and the plan (${d.results.map((x) => x.value).join(', ')})`);
   const cost = d.results.filter((x) => /Cost \(API-equivalent\)$/.test(x.label));
@@ -75,6 +76,9 @@ r.check(bad.length === 0, `${htmlFiles.length - benchPages.length} other pages u
     await page.setContent(html(d, d.video ? still : null), { waitUntil: 'load' });
     const bad = await fitCard(page);
     r.check(bad.length === 0, `${name}: every text on the card fits its tile (no overflow) ${bad.join('; ')}`);
+    const t = await page.evaluate(() => { const h = document.querySelector('h1'), cs = getComputedStyle(h);
+      return { text: h.textContent, lines: Math.round(h.getBoundingClientRect().height / parseFloat(cs.lineHeight)), plan: document.querySelector('.plan').textContent }; });
+    r.check(t.lines === 1 && t.text === cardHeading(d.models), `${name}: card title is the model name on one line ("${t.text}", ${t.lines} line(s)); plan line "${t.plan}"`);
   }
   await browser.close();
 }

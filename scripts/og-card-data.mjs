@@ -52,7 +52,7 @@ export function withPngText(buf, key, value) {
 /** The tool, from a "Model in Tool" card title (the part after the last " in "), or null. */
 export const toolOf = (cardTitle) => (cardTitle.includes(' in ') ? cardTitle.slice(cardTitle.lastIndexOf(' in ') + 4) : null);
 
-/** The card's plan line for one model: the page's plan, then the tool ("X Premium ($30/mo) · Grok CLI"). */
+/** The card's plan line for one model: the page's plan, then the tool ("X Premium ($30) · Grok CLI"). */
 export const planLine = (plan, tool) => (tool && !plan.includes(tool) ? `${plan} · ${tool}` : plan);
 
 /**
@@ -67,12 +67,17 @@ export function cardResult({ label, value }) {
   return { label: `${m[1] ? `${m[1]} · ` : ''}API-equivalent cost`, value, note: measured ? 'Not the subscription price' : null };
 }
 
-/** Alt text for the share card, from the same data and in the same words: title, plan line(s), each result. */
+/** The card's one-line title: the model name(s) only ("Grok 4.7 High"). The tool is on the plan line. */
+export const cardHeading = (models) => models.map((m) => m.name).join(' · ');
+
+/**
+ * Alt text for the share card, from the same data and in the same words:
+ * "<page title before ': '> on <plan>: <each result>." The title already names the tool, so it isn't repeated.
+ */
 export function cardAlt({ cardTitle, models, results, video }) {
-  const tool = toolOf(cardTitle);
-  const plans = models.length === 1 ? planLine(models[0].plan, tool) : models.map((m) => `${m.name} · ${planLine(m.plan, tool)}`).join('; ');
+  const plans = models.length === 1 ? models[0].plan : models.map((m) => `${m.name} · ${m.plan}`).join('; ');
   const res = results.map(cardResult).map((r) => `${r.label} ${r.value}${r.note ? ` (${r.note.toLowerCase()})` : ''}`).join(', ');
-  return `${cardTitle}, ${plans}${res ? `: ${res}` : ''}.${video ? ' With a still from the output video.' : ''}`;
+  return `${cardTitle} on ${plans}${res ? `: ${res}` : ''}.${video ? ' With a still from the output video.' : ''}`;
 }
 
 /** The page's card title: the part of the title before ": " (model + tool), or the whole title. */

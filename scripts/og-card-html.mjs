@@ -2,7 +2,7 @@
 // (checks nothing on it overflows). Colors, fonts, logo and site name come from the site itself.
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { toolOf, planLine, cardResult } from './og-card-data.mjs';
+import { toolOf, planLine, cardResult, cardHeading } from './og-card-data.mjs';
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -42,7 +42,8 @@ body{background:${C.paper};color:${C.ink};font-family:Inter,sans-serif;padding:4
 .text{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
 .site{display:flex;align-items:center;gap:12px;font-weight:600;font-size:30px;letter-spacing:-0.01em}
 .site img{width:42px;height:42px}
-h1{font-weight:700;font-size:56px;line-height:1.06;letter-spacing:-0.02em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* One line: the model name only. */
+h1{font-weight:700;font-size:56px;line-height:1.06;letter-spacing:-0.02em;white-space:nowrap;overflow:hidden}
 .plan{font-size:38px;color:${C.ink2};margin-top:10px}
 .still{height:100%;flex:none;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:${C.line}}
 .still img{width:100%;height:100%;object-fit:cover;display:block}
@@ -56,7 +57,7 @@ h1{font-weight:700;font-size:56px;line-height:1.06;letter-spacing:-0.02em;displa
 </style></head><body>
 <div class="top">
   <div class="text"><div class="site"><img src="${logo}" alt="">${esc(siteName)}</div>
-  <div><h1>${esc(d.cardTitle)}</h1>
+  <div><h1>${esc(cardHeading(d.models))}</h1>
   <div class="plan">${d.models.length === 1 ? esc(planLine(d.models[0].plan, tool)) : d.models.map((m) => `${esc(m.name)} · ${esc(planLine(m.plan, tool))}`).join('<br>')}</div></div></div>
   ${still ? `<div class="still"><img src="${still}" alt=""></div>` : ''}
 </div>
@@ -82,8 +83,7 @@ export async function fitCard(page) {
     for (const el of document.querySelectorAll('.label, .value, .note, .plan, .site'))
       if (over(el)) bad.push(`${el.className} "${el.textContent}" is ${el.scrollWidth}px wide in ${el.clientWidth}px`);
     const h1 = document.querySelector('h1');
-    // The title is clamped to 2 lines; a third line means it is cut off.
-    if (h1 && h1.scrollHeight > h1.clientHeight + parseFloat(getComputedStyle(h1).lineHeight) / 2) bad.push(`title "${h1.textContent}" is cut off`);
+    if (h1 && h1.scrollWidth > h1.clientWidth + 0.5) bad.push(`title "${h1.textContent}" is wider than its space (${h1.scrollWidth}px in ${h1.clientWidth}px)`);
     const text = document.querySelector('.text');
     if (text && text.scrollHeight > text.clientHeight + 0.5) bad.push('title and plan are taller than their space');
     for (const el of document.querySelectorAll('.cell')) {
