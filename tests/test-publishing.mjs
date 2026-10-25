@@ -50,7 +50,10 @@ try {
     ['status: draft', 'status: published'],
     ['/images/blog/your-image.png', '/og-default.png'],
   ]);
-  await put('blog', 'test-post.md', blog);
+  // The entries the homepage check looks for get a far-future fixture date so they always sort first in the
+  // Latest feed, however many real entries are published. They exist only in this temporary copy.
+  const FEED_DATE = 'date: 2099-12-31';
+  await put('blog', 'test-post.md', sub(blog, [['date: 2026-01-31', FEED_DATE]]));
   await put('blog', 'test-draft.md', sub(blog, [['TEST post from template', 'TEST draft entry'], ['status: published', 'status: draft']]));
   // Follow the template's own instructions for its commented blocks: delete only the leading # on the
   // cover and glance lines. The result must be valid YAML that builds and renders.
@@ -67,6 +70,7 @@ try {
     ['/images/benchmarks/your-screenshot.png', '/og-default.png'],
     ['status: draft', 'status: published'],
     ['value: "FILL IN"', 'value: "TEST value"'],
+    ['date: 2026-01-31', FEED_DATE],
   ]));
 
   await put('experiments', 'test-experiment.md', sub(await tpl('experiment.md'), [
@@ -77,6 +81,7 @@ try {
     ['"e.g. what the usage meter showed before and after"', '"TEST value"'],
     ['/images/experiments/your-screenshot.png', '/og-default.png'],
     ['status: draft', 'status: published'],
+    ['date: 2026-01-31', FEED_DATE],
   ]));
 
   await put('projects', 'test-project.md', sub(await tpl('project.md'), [
