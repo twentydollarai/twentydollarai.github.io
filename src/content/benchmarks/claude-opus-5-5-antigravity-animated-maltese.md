@@ -37,8 +37,8 @@ evidence:
     src: /images/benchmarks/claude-opus-5-5-maltese-meadow.mp4
     poster: /images/benchmarks/claude-opus-5-5-maltese-meadow-still.webp
     caption: "Watch the toy: a glowing yellow blob, not my dog's chicken. The tooltip and cursor in the first second are from my screen recording, not the animation."
-# Draft until the owner approves publishing. Tested with status: published (see the run-all log).
-status: draft
+# Owner approved publishing, Oct 25, 2026.
+status: published
 demo: false
 ---
 

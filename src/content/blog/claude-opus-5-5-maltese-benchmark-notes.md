@@ -8,8 +8,8 @@ glance:
   tested: "My standard Maltese visual animation benchmark. The prompt is private."
   result: "Animation delivered. Preliminary visual score 7.4/10 (my subjective review). Independent performance check still pending."
   cost: "About 24 minutes total run time (my estimate). Plan: Google Pro plan. Tokens and API-equivalent cost: not measured."
-# Draft until the owner approves publishing. Tested with status: published (see the run-all log).
-status: draft
+# Owner approved publishing, Oct 25, 2026.
+status: published
 demo: false
 ---
 
