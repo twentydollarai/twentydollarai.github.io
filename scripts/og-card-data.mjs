@@ -49,10 +49,29 @@ export function withPngText(buf, key, value) {
   return Buffer.concat([buf.subarray(0, 33), chunk, buf.subarray(33)]);
 }
 
-/** Alt text for the share card, from the same data: title, plan(s), each result as "label value". */
+/** The tool, from a "Model in Tool" card title (the part after the last " in "), or null. */
+export const toolOf = (cardTitle) => (cardTitle.includes(' in ') ? cardTitle.slice(cardTitle.lastIndexOf(' in ') + 4) : null);
+
+/** The card's plan line for one model: the page's plan, then the tool ("$30/month Grok plan · Grok CLI"). */
+export const planLine = (plan, tool) => (tool && !plan.includes(tool) ? `${plan} · ${tool}` : plan);
+
+/**
+ * How a result reads on the card. The page's "Cost (API-equivalent)" row becomes "API-equivalent cost",
+ * and when it has a figure the card adds "Not the subscription price" (so the cost is never read as the plan's price).
+ * Every other label and every value is exactly as the page shows it.
+ */
+export function cardResult({ label, value }) {
+  const m = label.match(/^(?:(.+) · )?Cost \(API-equivalent\)$/);
+  if (!m) return { label, value, note: null };
+  const measured = /\d/.test(value) && !/^not\b/i.test(value);
+  return { label: `${m[1] ? `${m[1]} · ` : ''}API-equivalent cost`, value, note: measured ? 'Not the subscription price' : null };
+}
+
+/** Alt text for the share card, from the same data and in the same words: title, plan line(s), each result. */
 export function cardAlt({ cardTitle, models, results, video }) {
-  const plans = models.length === 1 ? models[0].plan : models.map((m) => `${m.name} · ${m.plan}`).join('; ');
-  const res = results.map((r) => `${r.label} ${r.value}`).join(', ');
+  const tool = toolOf(cardTitle);
+  const plans = models.length === 1 ? planLine(models[0].plan, tool) : models.map((m) => `${m.name} · ${planLine(m.plan, tool)}`).join('; ');
+  const res = results.map(cardResult).map((r) => `${r.label} ${r.value}${r.note ? ` (${r.note.toLowerCase()})` : ''}`).join(', ');
   return `${cardTitle}, ${plans}${res ? `: ${res}` : ''}.${video ? ' With a still from the output video.' : ''}`;
 }
 

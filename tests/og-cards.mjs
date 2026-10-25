@@ -43,6 +43,9 @@ for (const f of benchPages) {
   r.check(ogAlt[0] === cardAlt(d), `${slug}: alt text is built from the page's title, plan and results`);
   r.check(d.results.length > 0 && d.results.every((x) => ogAlt[0]?.includes(x.value)) && d.models.every((m) => ogAlt[0]?.includes(m.plan)),
     `${slug}: alt text contains every result value and the plan (${d.results.map((x) => x.value).join(', ')})`);
+  const cost = d.results.filter((x) => /Cost \(API-equivalent\)$/.test(x.label));
+  r.check(cost.every((x) => ogAlt[0]?.includes(`API-equivalent cost ${x.value}`)) && !/(^|[^-])\bCost \(/.test(ogAlt[0] ?? ''),
+    `${slug}: card and alt call the cost "API-equivalent cost" (never just "Cost"), with the page's figure${cost.length ? ` (${cost.map((x) => x.value).join(', ')})` : ''}`);
   r.check(d.results.length > 0 && d.models.length > 0, `${slug}: card data read from the page (${d.models.map((m) => m.plan).join(', ')}; ${d.results.map((x) => x.value).join(', ')})`);
 }
 
