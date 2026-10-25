@@ -23,9 +23,10 @@ const money = (amount: number, currency: string) =>
 // The compact table has no Model column, so name the model in the row when more than one was tested.
 const multiModel = d.models.length > 1;
 const isUrl = (s: string) => /^https?:\/\//.test(s);
-// Share card (1200x630) made by scripts/make-og-cards.mjs. Until it exists, the page falls back to og-default.png.
+// Share card (1200x630) made by scripts/make-og-cards.mjs, only for pages with shareCard: true.
+// Other pages, and an opted-in page whose card doesn't exist yet, use og-default.png.
 const card = `/og/benchmarks/${entry.id}.png`;
-const hasCard = !d.demo && existsSync(path.join(process.cwd(), 'public', card));
+const hasCard = d.shareCard && !d.demo && existsSync(path.join(process.cwd(), 'public', card));
 // Alt text from the same data the card shows (as the page shows it).
 const cardAltText = cardAlt({
   cardTitle: cardTitleOf(d.title),

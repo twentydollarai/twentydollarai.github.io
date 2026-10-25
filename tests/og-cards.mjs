@@ -7,7 +7,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { reporter, arg, ROOT, SITE, launch } from './lib.mjs';
 import { cardTemplate, fitCard } from '../scripts/og-card-html.mjs';
-import { cardData, cardHash, cardAlt, cardHeading, pngInfo, CARD_KEY } from '../scripts/og-card-data.mjs';
+import { cardData, cardHash, cardAlt, cardHeading, pngInfo, CARD_KEY, wantsCard } from '../scripts/og-card-data.mjs';
+import { existsSync } from 'node:fs';
 
 const dir = path.resolve(ROOT, arg('dir', 'dist'));
 const prefix = arg('site', SITE).replace(/\/$/, '') + arg('base', '/');
@@ -22,9 +23,25 @@ r.check(benchPages.length > 0, `found ${benchPages.length} benchmark page(s)`);
 const def = pngInfo(await readFile(path.join(dir, 'og-default.png')));
 r.check(def?.width === 1200 && def?.height === 630, `og-default.png is a 1200x630 PNG (${def?.width}x${def?.height})`);
 
+// Only benchmarks with shareCard: true (owner-approved) get their own card; the rest use og-default.png.
+const optedIn = new Set();
+for (const f of benchPages) {
+  const slug = f.split(/[\/\\]/)[1];
+  if (wantsCard(await readFile(path.join(ROOT, 'src/content/benchmarks', `${slug}.md`), 'utf8').catch(() => ''))) optedIn.add(f);
+}
+r.check(optedIn.size > 0, `benchmark pages with shareCard: true: ${[...optedIn].map((f) => f.split(/[\/\\]/)[1]).join(', ')}`);
 for (const f of benchPages) {
   const slug = f.split(/[\/\\]/)[1];
   const html = await readFile(path.join(dir, f), 'utf8');
+  if (!optedIn.has(f)) {
+    const og = metas(html, 'property', 'og:image'), tw = metas(html, 'name', 'twitter:image');
+    r.check(og.length === 1 && og[0] === `${prefix}og-default.png` && tw.length === 1 && tw[0] === og[0]
+      && metas(html, 'property', 'og:image:width').join() === '1200' && metas(html, 'property', 'og:image:height').join() === '630' && !/image:alt/.test(html),
+      `${slug}: no shareCard, so og:image and twitter:image are og-default.png (1200x630) with no card alt text (${og.join(' ')})`);
+    r.check(!existsSync(path.join(ROOT, 'public/og/benchmarks', `${slug}.png`)) && !existsSync(path.join(dir, 'og/benchmarks', `${slug}.png`)),
+      `${slug}: no card PNG is committed or built for it`);
+    continue;
+  }
   const og = metas(html, 'property', 'og:image'), tw = metas(html, 'name', 'twitter:image');
   const want = `${prefix}og/benchmarks/${slug}.png`;
   r.check(og.length === 1 && og[0] === want, `${slug}: og:image is its own card (${og.join(' ') || 'none'})`);
@@ -69,7 +86,7 @@ r.check(bad.length === 0, `${htmlFiles.length - benchPages.length} other pages u
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
   const still = `data:image/webp;base64,${(await readFile(path.join(ROOT, 'public/images/benchmarks/grok-4-7-high-maltese-meadow-still.webp'))).toString('base64')}`;
   const cases = [];
-  for (const f of benchPages) cases.push([f.split(/[\/\\]/)[1], cardData(await readFile(path.join(dir, f), 'utf8'))]);
+  for (const f of optedIn) cases.push([f.split(/[\/\\]/)[1], cardData(await readFile(path.join(dir, f), 'utf8'))]);
   cases.push(['five-result fixture (Opus-style)', { cardTitle: 'Claude Opus 5.5 in Antigravity', models: [{ name: 'Claude Opus 5.5', plan: 'Google Pro plan' }],
     results: [['Time (total runtime)', 'About 24m'], ['Tokens (total)', 'Not measured'], ['Cost (API-equivalent)', 'Not measured'], ['Five-hour limit', 'Hit mid-test'], ['Weekly usage', 'Shared (see notes)']].map(([label, value]) => ({ label, value })), video: 'x' }]);
   for (const [name, d] of cases) {

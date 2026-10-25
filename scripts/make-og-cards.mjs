@@ -1,14 +1,14 @@
 // Makes the 1200x630 share card (og:image / twitter:image) for every published benchmark.
 // Run after adding or changing a benchmark:  node scripts/make-og-cards.mjs
 // Needs: npm ci here and in tests/ (it uses the tests' Playwright Chromium), and ffmpeg for the video still.
-// Writes public/og/benchmarks/<slug>.png and commits nothing itself. Commit the PNGs with the benchmark.
+// Only for benchmarks with shareCard: true. Writes public/og/benchmarks/<slug>.png and commits nothing itself. Commit the PNGs with the benchmark.
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
 import { readFile, writeFile, readdir, mkdir, rm, mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cardData, cardHash, withPngText, CARD_KEY } from './og-card-data.mjs';
+import { cardData, cardHash, withPngText, CARD_KEY, wantsCard } from './og-card-data.mjs';
 import { cardTemplate, fitCard } from './og-card-html.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -22,7 +22,10 @@ const html = await cardTemplate(ROOT);
 
 build();
 const dist = path.join(ROOT, 'dist/benchmarks');
-const slugs = (await readdir(dist, { withFileTypes: true })).filter((e) => e.isDirectory()).map((e) => e.name);
+// Only pages that opt in (shareCard: true in the benchmark's Markdown) get a card.
+const src = (slug) => readFile(path.join(ROOT, 'src/content/benchmarks', `${slug}.md`), 'utf8').catch(() => '');
+const slugs = [];
+for (const e of await readdir(dist, { withFileTypes: true })) if (e.isDirectory() && wantsCard(await src(e.name))) slugs.push(e.name);
 await mkdir(OUT, { recursive: true });
 const tmp = await mkdtemp(path.join(tmpdir(), 'og-'));
 const browser = await chromium.launch();

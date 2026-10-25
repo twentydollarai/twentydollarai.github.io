@@ -10,6 +10,8 @@ models:
 # My standard benchmark prompt and data are private. Show only its name; never describe,
 # paraphrase or reconstruct the prompt.
 prompt: "Standard TwentyDollarAI Benchmarking"
+# Owner approved this page's own share card, Oct 25, 2026.
+shareCard: true
 resultsNote: "Figures from the Grok CLI’s end-of-run summary."
 results:
   - model: "Grok 4.7 High"

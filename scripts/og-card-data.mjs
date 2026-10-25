@@ -49,6 +49,9 @@ export function withPngText(buf, key, value) {
   return Buffer.concat([buf.subarray(0, 33), chunk, buf.subarray(33)]);
 }
 
+/** True when a benchmark's source Markdown opts in to its own share card (frontmatter shareCard: true). */
+export const wantsCard = (md) => /^shareCard:\s*true\s*(?:#.*)?$/m.test(md.split(/^---\s*$/m)[1] ?? '');
+
 /** The tool, from a "Model in Tool" card title (the part after the last " in "), or null. */
 export const toolOf = (cardTitle) => (cardTitle.includes(' in ') ? cardTitle.slice(cardTitle.lastIndexOf(' in ') + 4) : null);
 

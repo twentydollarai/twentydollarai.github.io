@@ -81,6 +81,9 @@ export const benchmarkSchema = z
     // Default: results show as a short Metric / Value table (no Model or "How it was measured" column).
     // Set compactResults: false for the older wide table, which shows model and method on every row.
     compactResults: z.boolean().default(true),
+    // Opt-in, per page and only with my approval: true gives the page its own 1200x630 share card
+    // (made by scripts/make-og-cards.mjs). Otherwise the page shares og-default.png like the rest of the site.
+    shareCard: z.boolean().default(false),
     // One short source line shown above the results table, e.g. "Figures from the Grok CLI's end-of-run summary.".
     resultsNote: z.string().min(1).optional(),
     results: z
