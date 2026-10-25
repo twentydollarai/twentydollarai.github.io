@@ -52,7 +52,7 @@ export function withPngText(buf, key, value) {
 /** The tool, from a "Model in Tool" card title (the part after the last " in "), or null. */
 export const toolOf = (cardTitle) => (cardTitle.includes(' in ') ? cardTitle.slice(cardTitle.lastIndexOf(' in ') + 4) : null);
 
-/** The card's plan line for one model: the page's plan, then the tool ("$30/month Grok plan · Grok CLI"). */
+/** The card's plan line for one model: the page's plan, then the tool ("X Premium ($30/mo) · Grok CLI"). */
 export const planLine = (plan, tool) => (tool && !plan.includes(tool) ? `${plan} · ${tool}` : plan);
 
 /**

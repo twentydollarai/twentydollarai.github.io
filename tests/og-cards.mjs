@@ -5,7 +5,8 @@
 // Usage: node og-cards.mjs [--dir=dist] [--site=https://twentydollarai.github.io] [--base=/]
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { reporter, arg, ROOT, SITE } from './lib.mjs';
+import { reporter, arg, ROOT, SITE, launch } from './lib.mjs';
+import { cardTemplate, fitCard } from '../scripts/og-card-html.mjs';
 import { cardData, cardHash, cardAlt, pngInfo, CARD_KEY } from '../scripts/og-card-data.mjs';
 
 const dir = path.resolve(ROOT, arg('dir', 'dist'));
@@ -59,4 +60,22 @@ for (const f of htmlFiles.filter((x) => !benchPages.includes(x))) {
   if (!ok || og[0].includes('/og/benchmarks/') || /image:alt/.test(html)) bad.push(`${f}: ${og.join(' ')}`);
 }
 r.check(bad.length === 0, `${htmlFiles.length - benchPages.length} other pages use og-default.png (1200x630), or a blog post's own cover, and no card alt text ${bad.join('; ')}`);
+// Nothing on a card may run past its tile: render each page's card (and a five-result card like the Opus page,
+// with its longest values) the way make-og-cards.mjs does and measure every text after shrink-to-fit.
+{
+  const html = await cardTemplate(ROOT);
+  const browser = await launch('chromium');
+  const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
+  const still = `data:image/webp;base64,${(await readFile(path.join(ROOT, 'public/images/benchmarks/grok-4-7-high-maltese-meadow-still.webp'))).toString('base64')}`;
+  const cases = [];
+  for (const f of benchPages) cases.push([f.split(/[\/\\]/)[1], cardData(await readFile(path.join(dir, f), 'utf8'))]);
+  cases.push(['five-result fixture (Opus-style)', { cardTitle: 'Claude Opus 5.5 in Antigravity', models: [{ name: 'Claude Opus 5.5', plan: 'Google Pro plan' }],
+    results: [['Time (total runtime)', 'About 24m'], ['Tokens (total)', 'Not measured'], ['Cost (API-equivalent)', 'Not measured'], ['Five-hour limit', 'Hit mid-test'], ['Weekly usage', 'Shared (see notes)']].map(([label, value]) => ({ label, value })), video: 'x' }]);
+  for (const [name, d] of cases) {
+    await page.setContent(html(d, d.video ? still : null), { waitUntil: 'load' });
+    const bad = await fitCard(page);
+    r.check(bad.length === 0, `${name}: every text on the card fits its tile (no overflow) ${bad.join('; ')}`);
+  }
+  await browser.close();
+}
 process.exit(r.done() ? 1 : 0);
