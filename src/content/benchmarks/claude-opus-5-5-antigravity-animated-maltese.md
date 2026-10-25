@@ -11,7 +11,7 @@ models:
 # My standard benchmark prompt and data are private. Show only its name; never describe,
 # paraphrase or reconstruct the prompt.
 prompt: "Standard TwentyDollarAI Benchmarking"
-resultsNote: "Time from my notes. Quota from my Google Pro usage meter."
+resultsNote: "Time is my estimate. Quota from my Google Pro usage meter."
 results:
   - model: "Claude Opus 5.5"
     metric: "Time (total runtime)"

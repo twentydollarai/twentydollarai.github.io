@@ -7,7 +7,7 @@ glance:
   summary: "Claude Opus 5.5 in Antigravity made an attractive, recognizable Maltese animation with a detailed scene. Fidelity to the reference, especially the chicken toy, was weaker. The five-hour usage limit interrupted testing."
   tested: "My standard Maltese visual animation benchmark. The prompt is private."
   result: "Animation delivered. Preliminary visual score 7.4/10 (my subjective review). Independent performance check still pending."
-  cost: "About 24 minutes total run time, from my notes. Plan: Google Pro plan. Tokens and API-equivalent cost: not measured."
+  cost: "About 24 minutes total run time (my estimate). Plan: Google Pro plan. Tokens and API-equivalent cost: not measured."
 # Draft until the owner approves publishing. Tested with status: published (see the run-all log).
 status: draft
 demo: false
@@ -19,7 +19,7 @@ These are the notes behind the [Claude Opus 5.5 benchmark page](/benchmarks/clau
 
 - **Model:** Claude Opus 5.5. **Environment:** Antigravity.
 - **Plan:** my Google Pro plan. Opus ran through Antigravity on it, not on a Claude subscription.
-- **Time:** about 24 minutes total run time, from my notes.
+- **Time:** about 24 minutes total run time (my estimate).
 - **Test:** my standard Maltese visual animation benchmark. The prompt is private.
 - **Deliverable:** per my run notes, a single `index.html` file with no external assets. The scene is drawn by code, not cut out of the photo.
 
