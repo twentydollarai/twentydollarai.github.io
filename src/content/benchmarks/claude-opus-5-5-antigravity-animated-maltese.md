@@ -5,15 +5,18 @@ description: "Interrupted by the five-hour limit. Usage notes, plus the output."
 date: 2026-10-24
 models:
   - name: "Claude Opus 5.5"
-    # No plan: the plan for this run wasn't recorded (shows "Not recorded"). Never guess it.
+    # Owner, Oct 25, 2026: Opus ran through Antigravity on his Google Pro plan, not a Claude subscription.
+    # No price or tier beyond his words.
+    plan: "Google Pro plan"
 # My standard benchmark prompt and data are private. Show only its name; never describe,
 # paraphrase or reconstruct the prompt.
 prompt: "Standard TwentyDollarAI Benchmarking"
-resultsNote: "Quota from my usage meter. Nothing else was measured."
+resultsNote: "Time from my notes. Quota from my Google Pro usage meter."
 results:
   - model: "Claude Opus 5.5"
     metric: "Time (total runtime)"
-    value: "Not measured"
+    # Owner, Oct 25, 2026: "Call it 24 mins of total run time" - approximate.
+    value: "About 24m"
   - model: "Claude Opus 5.5"
     metric: "Tokens (total)"
     value: "Not measured"
@@ -23,7 +26,7 @@ results:
   - model: "Claude Opus 5.5"
     metric: "Five-hour limit"
     value: "Hit mid-test"
-  # Not a single number: the weekly quota is shared with Sonnet and GPT-OSS models.
+  # Not a single number: the Google quota in Antigravity is shared with Claude Sonnet and GPT-OSS models.
   - model: "Claude Opus 5.5"
     metric: "Weekly usage"
     value: "Shared (see notes)"

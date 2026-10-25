@@ -7,7 +7,7 @@ glance:
   summary: "Claude Opus 5.5 in Antigravity made an attractive, recognizable Maltese animation with a detailed scene. Fidelity to the reference, especially the chicken toy, was weaker. The five-hour usage limit interrupted testing."
   tested: "My standard Maltese visual animation benchmark. The prompt is private."
   result: "Animation delivered. Preliminary visual score 7.4/10 (my subjective review). Independent performance check still pending."
-  cost: "Time, tokens and API-equivalent cost: not measured. Plan: not recorded."
+  cost: "About 24 minutes total run time, from my notes. Plan: Google Pro plan. Tokens and API-equivalent cost: not measured."
 # Draft until the owner approves publishing. Tested with status: published (see the run-all log).
 status: draft
 demo: false
@@ -18,6 +18,8 @@ These are the notes behind the [Claude Opus 5.5 benchmark page](/benchmarks/clau
 ## How I ran it
 
 - **Model:** Claude Opus 5.5. **Environment:** Antigravity.
+- **Plan:** my Google Pro plan. Opus ran through Antigravity on it, not on a Claude subscription.
+- **Time:** about 24 minutes total run time, from my notes.
 - **Test:** my standard Maltese visual animation benchmark. The prompt is private.
 - **Deliverable:** per my run notes, a single `index.html` file with no external assets. The scene is drawn by code, not cut out of the photo.
 
@@ -82,7 +84,9 @@ Grok Bot, my AI agent, watched the recording separately. It gave no scores; my s
 
 ## Usage limits
 
-Testing was interrupted: Opus 5.5 hit its five-hour usage limit mid-test. That's a limit on using the plan, not a fault in the animation. I [posted about it on X](https://x.com/TwentyDollarAI/status/2114146295615205824) when it happened.
+Testing was interrupted: Opus 5.5 hit the five-hour usage limit mid-test. That's a limit on using the plan, not a fault in the animation. I [posted about it on X](https://x.com/TwentyDollarAI/status/2114146295615205824) when it happened.
+
+I ran Opus through Antigravity on my Google Pro plan, not a Claude subscription, so the only usage view I have is Google's quota meter.
 
 | Meter reading | Weekly remaining | Five-hour remaining | Five-hour reset in |
 | --- | --- | --- | --- |
@@ -91,14 +95,14 @@ Testing was interrupted: Opus 5.5 hit its five-hour usage limit mid-test. That's
 
 Between the two snapshots, weekly remaining fell 37.77 points. Before reading anything into that:
 
-- The quota is shared across Claude Opus, Claude Sonnet and GPT-OSS models, so the drop can't all be put down to Opus 5.5.
+- The Google quota is shared across Claude Opus, Claude Sonnet and GPT-OSS models in Antigravity, so the drop can't all be put down to Opus 5.5.
 - These are percentages of a quota, not tokens or dollars.
 - A five-hour reset happened between the two snapshots.
 
 ## Not measured yet
 
-- Active run time, token use and API-equivalent cost.
-- The plan this ran on.
+- Token use and API-equivalent cost.
+- The price of my Google Pro plan.
 - An independent check of the reported frame rate and render time.
 
 ## My take
